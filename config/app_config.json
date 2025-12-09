@@ -1,0 +1,42 @@
+{
+    "modelPath": "models/yolo11n-seg_best.onnx",
+    "isSegmentation": true,
+    "inputSize": 640,
+    "confidenceThreshold": 0.5,
+    "frameWidth": 640,
+    "frameHeight": 640,
+    "fps": 60,
+    "captureDirectory": "output/captures",
+    "debugDirectory": "output/debug",
+    "boxColor": [0, 255, 0],
+    "textColor": [0, 0, 0],
+    "lineThickness": 2,
+    "fontSize": 0.8,
+    "maskOpacity": 0.4,
+    "maskColors": [
+        [128, 0, 128],
+        [0, 128, 255],
+        [255, 0, 0],
+        [0, 0, 255],
+        [255, 255, 0],
+        [255, 0, 255],
+        [0, 255, 255],
+        [128, 255, 0],
+        [255, 128, 0],
+        [0, 255, 0]
+    ],
+    "jpegQuality": 95,
+    "classNames": ["label"],
+    "filterSettings": {
+        "maxAreaRatio": 0.15,
+        "topNDetections": 1
+    },
+    "performanceLogging": {
+        "enabled": true,
+        "logInterval": 1,
+        "showInStatusBar": true
+    },
+    "maxCameraSearch": 2,
+    "windowMinWidth": 1000,
+    "windowMinHeight": 700
+}

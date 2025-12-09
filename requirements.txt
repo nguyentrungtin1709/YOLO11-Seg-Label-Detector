@@ -1,0 +1,38 @@
+# Label Detector - Python Dependencies
+# =====================================
+# Sử dụng: pip install -r requirements.txt
+# 
+# Khuyến nghị: Tạo virtual environment trước khi cài đặt
+#   python -m venv .venv
+#   source .venv/bin/activate  # Linux/macOS
+#   .venv\Scripts\activate     # Windows
+
+# ========== GUI Framework ==========
+# PySide6: Official Qt6 binding for Python
+# - Hỗ trợ QVideoWidget, QCamera cho video display
+# - Cross-platform: Windows, Linux, macOS
+# - LGPL License
+PySide6>=6.5.0
+
+# ========== Computer Vision ==========
+# OpenCV: Video capture và image processing
+# - opencv-python-headless: Không bao gồm GUI (sử dụng Qt thay thế)
+opencv-python-headless>=4.8.0
+
+# ========== ML Inference ==========
+# ONNX Runtime: High-performance inference engine
+# - Hỗ trợ CPU/GPU acceleration
+# - Nhẹ hơn PyTorch/TensorFlow
+onnxruntime>=1.16.0
+
+# ========== Numeric Computing ==========
+# NumPy: Array processing
+numpy>=1.24.0
+
+# ========== Image Processing ==========
+# Pillow: Image manipulation (backup cho việc lưu ảnh)
+Pillow>=10.0.0
+
+# ========== Optional: GPU Support ==========
+# Nếu cần GPU acceleration, uncomment dòng dưới và comment onnxruntime ở trên
+# onnxruntime-gpu>=1.16.0
