@@ -169,5 +169,6 @@ Khi bật `performanceLogging.enabled`, ứng dụng hiển thị:
 
 - [SPECIFICATION.md](SPECIFICATION.md) - Đặc tả hệ thống
 - [CHANGELOG.md](CHANGELOG.md) - Lịch sử thay đổi
+- [VERSIONS.md](metadata/VERSIONS.md) - Thông tin phiên bản các tài nguyên ML (dataset, model, notebook, experiments)
 
 
