@@ -7,46 +7,24 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [1.0.0] - 2025-12-05
+## [1.0.0] - 2025-12-13
 
 ### Tổng quan
-Phiên bản đầu tiên của ứng dụng **Label Detector** - công cụ desktop phát hiện nhãn sản phẩm trong thời gian thực sử dụng mô hình YOLO11n.
+Phiên bản đầu tiên của ứng dụng **Label Detector** - công cụ desktop phát hiện và phân đoạn nhãn sản phẩm trong thời gian thực sử dụng mô hình YOLO11n-seg (Instance Segmentation).
 
 ### Added
-
-#### Kiến trúc
-- Thiết kế kiến trúc 4 tầng theo nguyên tắc SOLID (UI → Service → Core → Infrastructure)
-- Hệ thống Dependency Injection để quản lý các thành phần
-- Cấu hình linh hoạt qua file JSON (`config/app_config.json`)
-
-#### Tính năng Camera
-- Tự động phát hiện và liệt kê camera trong hệ thống
-- Chọn camera từ dropdown
-- Bật/Tắt camera qua toggle switch
-- Hiển thị video stream real-time
-
-#### Tính năng Phát hiện
-- Tích hợp model YOLO11n (định dạng ONNX) để phát hiện nhãn sản phẩm
-- Bật/Tắt chức năng detection
-- Điều chỉnh ngưỡng confidence (0.0 - 1.0)
-- Hiển thị bounding box và label trên video
-
-#### Tính năng Lưu ảnh
-- Chụp và lưu ảnh gốc (không annotation) vào `output/captures/`
-- Chế độ Debug: tự động lưu ảnh có annotation vào `output/debug/`
-- Giới hạn tần suất lưu debug (1 giây/ảnh) để tránh quá tải
-
-#### Giao diện
-- Giao diện desktop với PySide6
-- Dark theme
-- Custom toggle switch widget kiểu iOS
-- Status bar hiển thị thông báo
+- Kiến trúc 3 tầng (Core → Service → UI) theo nguyên tắc SOLID
+- Phát hiện và phân đoạn nhãn với YOLO11n-seg (ONNX)
+- Hiển thị segmentation mask với opacity tùy chỉnh
+- Lọc kết quả theo kích thước (maxAreaRatio) và Top N detection
+- Chế độ Debug: lưu ảnh annotated, crop bbox, crop mask (transparent), tọa độ contour
+- Performance logging với FPS display trên status bar
+- Giao diện dark theme với PySide6
+- Cấu hình linh hoạt qua file JSON
 
 ### Technical
-- Python 3.8+
-- PySide6 cho GUI
-- OpenCV cho xử lý video
-- ONNX Runtime cho inference model
-- Kích thước frame: 640x640 (khớp với input model)
+- Python 3.12+
+- PySide6, OpenCV, ONNX Runtime
+- Model: yolo11n-seg-version-1.0.1.onnx
 
 ---

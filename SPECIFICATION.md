@@ -15,7 +15,7 @@
 
 ### 2.1 Bố cục tổng thể
 
-![Giao diện ứng dụng](Template.png)
+![Giao diện ứng dụng](assets/template.png)
 
 Giao diện ứng dụng được thiết kế với bố cục ngang, gồm 2 phần chính:
 
@@ -114,8 +114,8 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
 | F14 | Chụp ảnh thủ công | Lưu frame hiện tại dưới dạng ảnh gốc (không có bounding box và mask) khi nhấn nút Capture |
-| F15 | Chế độ Debug | Khi bật, tự động lưu frame có chứa đối tượng được phát hiện (có vẽ segmentation mask và bounding box) |
-| F16 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 ảnh mỗi giây để tránh quá tải |
+| F15 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask (transparent), và tọa độ contour |
+| F16 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
 
 ### 3.4 Điều khiển ứng dụng
 
@@ -123,6 +123,7 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 |----|-----------|-------|
 | F17 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
 | F18 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F19 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
 
 ## 4. Định dạng lưu trữ
 
@@ -130,20 +131,49 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 
 ```
 output/
-├── captures/          # Ảnh chụp thủ công (ảnh gốc)
+├── captures/              # Ảnh chụp thủ công (ảnh gốc)
 │   └── capture_YYYYMMDD_HHMMSS_mmm.jpg
-└── debug/             # Ảnh debug tự động (có bounding box)
-    └── debug_YYYYMMDD_HHMMSS_mmm.jpg
+└── debug/                 # Ảnh debug tự động
+    ├── display/           # Ảnh với annotation (mask + bbox + label)
+    │   └── debug_YYYYMMDD_HHMMSS_mmm.jpg
+    ├── original/          # Ảnh gốc không annotation
+    │   └── frame_YYYYMMDD_HHMMSS_mmm.png
+    ├── bbox/              # Crop theo bounding box
+    │   └── bbox_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
+    ├── mask/              # Crop theo mask với alpha channel
+    │   └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.png
+    └── txt/               # Tọa độ contour của mask
+        └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
 ```
 
 ### 4.2 Quy tắc đặt tên file
 
 | Loại | Thư mục | Định dạng tên | Nội dung |
 |------|---------|---------------|----------|
-| Capture | `output/captures/` | `capture_{timestamp}.jpg` | Ảnh gốc từ camera (không có annotation) |
-| Debug | `output/debug/` | `debug_{timestamp}.jpg` | Ảnh có vẽ segmentation mask (opacity 40%) và bounding box với label |
+| Capture | `captures/` | `capture_{timestamp}.jpg` | Ảnh gốc từ camera (không có annotation) |
+| Display | `debug/display/` | `debug_{timestamp}.jpg` | Ảnh có vẽ segmentation mask và bounding box |
+| Original | `debug/original/` | `frame_{timestamp}.png` | Ảnh gốc tại thời điểm phát hiện |
+| BBox Crop | `debug/bbox/` | `bbox_{timestamp}_{idx}.jpg` | Crop ảnh theo bounding box |
+| Mask Crop | `debug/mask/` | `mask_{timestamp}_{idx}.png` | Crop ảnh theo mask với nền trong suốt (BGRA) |
+| Contour | `debug/txt/` | `mask_{timestamp}_{idx}.txt` | Tọa độ x,y của contour mask |
 
 *Timestamp format: YYYYMMDD_HHMMSS_mmm (năm-tháng-ngày_giờ-phút-giây_miligiây)*
+*idx: Index của detection trong frame (0, 1, 2, ...)*
+
+### 4.3 Định dạng file TXT (Contour Coordinates)
+
+```
+# Class: label
+# Confidence: 0.8765
+# BBox: 100,50,300,250
+# Format: x,y coordinates of contour points
+#
+# Contour 0 (150 points)
+120,55
+121,56
+...
+#
+```
 
 ## 5. Thông tin Model
 
@@ -153,7 +183,7 @@ output/
 | Định dạng | ONNX |
 | Kích thước input | 640 x 640 pixels |
 | Số class | 1 (label) |
-| File model | `models/yolo11n-seg_best.onnx` |
+| File model | `models/yolo11n-seg-version-1.0.1.onnx` |
 | **Output 1** | **Bounding boxes + Mask coefficients: [1, 116, 8400]** |
 | **Output 2** | **Proto masks: [1, 32, 160, 160]** |
 | **Visualization** | **Colored masks với opacity cấu hình + Bounding boxes** |
@@ -179,15 +209,17 @@ output/
 ### 8.1 Hiệu năng
 - Xử lý real-time với FPS >= 15 trên CPU
 - Độ trễ phát hiện < 100ms
+- Target FPS có thể cấu hình (mặc định: 60 FPS)
+- Performance logging tùy chọn với FPS display trên status bar
 
 ### 8.2 Giao diện
 - Giao diện tối (dark theme)
 - Responsive khi resize cửa sổ
-- Kích thước cửa sổ tối thiểu: 900 x 700 pixels
+- Kích thước cửa sổ tối thiểu: 900 x 700 pixels (cấu hình được)
 
 ### 8.3 Tương thích
 - Hệ điều hành: Windows, Linux, macOS
-- Python 3.8+
+- Python 3.12+
 - Hỗ trợ nhiều loại camera (USB, built-in)
 
 ## 9. Xử lý các trường hợp đặc biệt
