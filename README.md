@@ -55,9 +55,10 @@ pip install -r requirements.txt
 ### Bước 4: Kiểm tra model
 
 Đảm bảo file model YOLO đã có trong thư mục `models/`:
-```
+```bash
+# x-x-x là phiên bản model hiện tại. Ví dụ: 1-0-0
 models/
-└── yolo11n-seg-version-1.0.1.onnx
+└── yolo11n-seg-version-x-x-x.onnx
 ```
 
 ## Khởi chạy ứng dụng
