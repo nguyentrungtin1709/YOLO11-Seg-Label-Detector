@@ -1,5 +1,5 @@
 {
-    "modelPath": "models/yolo11n-seg-version-1.0.1.onnx",
+    "modelPath": "models/yolo11n-seg-version-1-0-0.onnx",
     "isSegmentation": true,
     "inputSize": 640,
     "confidenceThreshold": 0.5,
