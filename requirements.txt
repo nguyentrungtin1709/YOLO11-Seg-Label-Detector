@@ -33,6 +33,15 @@ numpy>=1.24.0
 # Pillow: Image manipulation (backup cho việc lưu ảnh)
 Pillow>=10.0.0
 
+# ========== Document Preprocessing ==========
+# PaddleOCR: Document orientation classification
+# - Sử dụng cho việc phát hiện và sửa hướng tài liệu (0°, 90°, 180°, 270°)
+paddleocr>=2.7.0
+
+# PaddlePaddle: Deep learning framework for PaddleOCR
+# - Backend cho PaddleOCR
+paddlepaddle>=2.5.0
+
 # ========== Optional: GPU Support ==========
 # Nếu cần GPU acceleration, uncomment dòng dưới và comment onnxruntime ở trên
 # onnxruntime-gpu>=1.16.0

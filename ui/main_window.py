@@ -20,6 +20,7 @@ from ui.widgets.config_panel import ConfigPanel
 from services.camera_service import CameraService
 from services.detection_service import DetectionService
 from services.image_saver_service import ImageSaverService
+from services.preprocessing_service import PreprocessingService
 
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ class MainWindow(QMainWindow):
         cameraService: CameraService,
         detectionService: DetectionService,
         imageSaverService: ImageSaverService,
+        preprocessingService: PreprocessingService,
         config: dict
     ):
         """
@@ -47,6 +49,7 @@ class MainWindow(QMainWindow):
             cameraService: Camera service instance.
             detectionService: Detection service instance.
             imageSaverService: Image saver service instance.
+            preprocessingService: Preprocessing service instance.
             config: Application configuration dictionary.
         """
         super().__init__()
@@ -54,6 +57,7 @@ class MainWindow(QMainWindow):
         self._cameraService = cameraService
         self._detectionService = detectionService
         self._imageSaverService = imageSaverService
+        self._preprocessingService = preprocessingService
         self._config = config
         
         # Frame update timer
@@ -338,11 +342,28 @@ class MainWindow(QMainWindow):
         # Update camera widget
         self._cameraWidget.updateFrame(frame, detections)
         
-        # Auto-save in debug mode when detections found (with 1 second cooldown)
+        # Run preprocessing on first detection and update UI
+        preprocessedImage = None
+        if detections and self._preprocessingService.isEnabled:
+            result = self._preprocessingService.processFirstDetection(frame, detections)
+            if result and result.success and result.image is not None:
+                preprocessedImage = result.image
+                self._configPanel.updatePreprocessedImage(preprocessedImage)
+            else:
+                self._configPanel.clearPreprocessedImage()
+        else:
+            self._configPanel.clearPreprocessedImage()
+        
+        # Auto-save in debug mode when detections found (with cooldown)
         if self._cameraWidget.isDebugMode() and detections:
             currentTime = time.time()
             if currentTime - self._lastDebugSave >= self._debugSaveCooldown:
                 self._imageSaverService.saveDebugFrame(frame, detections)
+                
+                # Also save preprocessed image if available
+                if preprocessedImage is not None:
+                    self._imageSaverService.savePreprocessedImage(preprocessedImage, 0)
+                
                 self._lastDebugSave = currentTime
                 self._statusBar.showMessage(f"Debug: saved frame with {len(detections)} detection(s)")
             else:

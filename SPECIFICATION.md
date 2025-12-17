@@ -7,6 +7,7 @@
 ### 1.1 Tính năng nổi bật
 
 - **Instance Segmentation**: Phân đoạn pixel-level cho từng đối tượng
+- **Image Preprocessing**: Crop, rotate và sửa hướng ảnh nhãn tự động bằng AI
 - **Lọc theo kích thước**: Chỉ hiển thị các đối tượng có diện tích nhỏ hơn ngưỡng
 - **Top N Detection**: Chỉ hiển thị N đối tượng có confidence cao nhất
 - **Màu sắc tùy chỉnh**: Màu mask và bounding box có thể cấu hình từ file config
@@ -35,6 +36,11 @@ Giao diện ứng dụng được thiết kế với bố cục ngang, gồm 2 p
 │                                             │  │ Enable Detection [●━]   │  │
 │           "Camera not connected"            │  │ Debug Mode       [●━]   │  │
 │            (Khi camera chưa bật)            │  │ Confidence      [0.50]  │  │
+│                                             │  └─────────────────────────┘  │
+│                                             │                               │
+│                                             │  ┌─────────────────────────┐  │
+│                                             │  │  Preprocessed Image     │  │
+│                                             │  │  (Cropped & Rotated)    │  │
 │                                             │  └─────────────────────────┘  │
 │                                             │                               │
 │                                             │  ┌─────────────────────────┐  │
@@ -77,7 +83,16 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | Debug Mode | Toggle Switch (màu xanh dương) | Bật/Tắt chế độ debug (tự động lưu ảnh) | OFF |
 | Confidence | SpinBox (0.00 - 1.00) | Ngưỡng độ tin cậy để lọc kết quả | 0.50 |
 
-##### c) Các nút hành động
+##### c) Vùng hiển thị ảnh đã xử lý (Preprocessed Image)
+
+| Thuộc tính | Mô tả |
+|------------|-------|
+| Kích thước | 230 x 100 pixels (cấu hình được) |
+| Nền mặc định | Màu tối với text "Preprocessed Label" |
+| Khi có detection | Hiển thị ảnh nhãn đã được crop, rotate và sửa hướng |
+| Scale | Tự động fit theo kích thước giữ tỷ lệ |
+
+##### d) Các nút hành động
 
 | Thành phần | Màu sắc | Mô tả |
 |------------|---------|-------|
@@ -109,21 +124,31 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | F12 | Lọc theo kích thước | Lọc bỏ các đối tượng có diện tích > maxAreaRatio (% diện tích ảnh) |
 | F13 | Chọn Top N | Chỉ hiển thị N đối tượng có confidence cao nhất |
 
-### 3.3 Chụp và lưu ảnh
+### 3.3 Tiền xử lý ảnh (Image Preprocessing)
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F14 | Chụp ảnh thủ công | Lưu frame hiện tại dưới dạng ảnh gốc (không có bounding box và mask) khi nhấn nút Capture |
-| F15 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask (transparent), và tọa độ contour |
-| F16 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
+| F14 | Crop theo mask | Crop ảnh nhãn dựa trên minimum area rectangle từ segmentation mask |
+| F15 | Rotate | Xoay ảnh để nhãn nằm thẳng |
+| F16 | Force Landscape | Tự động xoay ảnh về hướng ngang (width >= height) |
+| F17 | AI Orientation Fix | Sử dụng PaddleOCR (PP-LCNet) để phát hiện và sửa ảnh bị ngược 180° |
+| F18 | Hiển thị kết quả | Hiển thị ảnh đã xử lý trong widget bên dưới Detection config |
 
-### 3.4 Điều khiển ứng dụng
+### 3.4 Chụp và lưu ảnh
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F17 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
-| F18 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
-| F19 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F19 | Chụp ảnh thủ công | Lưu frame hiện tại dưới dạng ảnh gốc (không có bounding box và mask) khi nhấn nút Capture |
+| F20 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask, ảnh đã xử lý, và tọa độ contour |
+| F21 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
+
+### 3.5 Điều khiển ứng dụng
+
+| ID | Tính năng | Mô tả |
+|----|-----------|-------|
+| F22 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
+| F23 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F24 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
 
 ## 4. Định dạng lưu trữ
 
@@ -142,6 +167,8 @@ output/
     │   └── bbox_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
     ├── mask/              # Crop theo mask với alpha channel
     │   └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.png
+    ├── preprocessing/     # Ảnh đã xử lý (crop, rotate, orientation fix)
+    │   └── preprocessed_YYYYMMDD_HHMMSS_mmm.jpg
     └── txt/               # Tọa độ contour của mask
         └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
 ```
@@ -155,6 +182,7 @@ output/
 | Original | `debug/original/` | `frame_{timestamp}.png` | Ảnh gốc tại thời điểm phát hiện |
 | BBox Crop | `debug/bbox/` | `bbox_{timestamp}_{idx}.jpg` | Crop ảnh theo bounding box |
 | Mask Crop | `debug/mask/` | `mask_{timestamp}_{idx}.png` | Crop ảnh theo mask với nền trong suốt (BGRA) |
+| Preprocessed | `debug/preprocessing/` | `preprocessed_{timestamp}.jpg` | Ảnh đã xử lý (crop, rotate, orientation fix) |
 | Contour | `debug/txt/` | `mask_{timestamp}_{idx}.txt` | Tọa độ x,y của contour mask |
 
 *Timestamp format: YYYYMMDD_HHMMSS_mmm (năm-tháng-ngày_giờ-phút-giây_miligiây)*
@@ -177,16 +205,28 @@ output/
 
 ## 5. Thông tin Model
 
+### 5.1 YOLO Model (Instance Segmentation)
+
 | Thuộc tính | Giá trị |
-|------------|---------|
+|------------|----------|
 | Kiến trúc | YOLO11n-seg (nano - Instance Segmentation) |
 | Định dạng | ONNX |
 | Kích thước input | 640 x 640 pixels |
 | Số class | 1 (label) |
-| File model | `models/yolo11n-seg-version-1.0.1.onnx` |
+| File model | `models/yolo11n-seg-version-x-x-x.onnx` |
 | **Output 1** | **Bounding boxes + Mask coefficients: [1, 116, 8400]** |
 | **Output 2** | **Proto masks: [1, 32, 160, 160]** |
 | **Visualization** | **Colored masks với opacity cấu hình + Bounding boxes** |
+
+### 5.2 PaddleOCR Model (Orientation Classification)
+
+| Thuộc tính | Giá trị |
+|------------|----------|
+| Model | PP-LCNet_x1_0_doc_ori |
+| Framework | PaddlePaddle |
+| Chức năng | Phân loại hướng ảnh tài liệu (0°, 90°, 180°, 270°) |
+| Sử dụng | Phát hiện và sửa ảnh bị ngược 180° |
+| Đường dẫn | `models/paddle/PP-LCNet_x1_0_doc_ori/` |
 
 ## 6. Cấu hình lọc kết quả (Filter Settings)
 
@@ -204,31 +244,44 @@ output/
 | `maskOpacity` | float | Độ trong suốt của mask (0.0 - 1.0) |
 | `maskColors` | [[B,G,R], ...] | Danh sách màu cho mask theo thứ tự đối tượng |
 
-## 8. Yêu cầu phi chức năng
+## 8. Cấu hình Preprocessing
 
-### 8.1 Hiệu năng
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `preprocessing.enabled` | bool | true | Bật/tắt chức năng preprocessing |
+| `preprocessing.forceLandscape` | bool | true | Tự động xoay ảnh về hướng ngang |
+| `preprocessing.aiOrientationFix` | bool | true | Sử dụng AI để sửa ảnh ngược 180° |
+| `preprocessing.aiConfidenceThreshold` | float | 0.6 | Ngưỡng confidence cho AI orientation fix |
+| `preprocessing.paddleModelPath` | string | models/paddle/PP-LCNet_x1_0_doc_ori | Đường dẫn model PaddleOCR |
+| `preprocessing.displayWidth` | int | 230 | Chiều rộng widget hiển thị |
+| `preprocessing.displayHeight` | int | 100 | Chiều cao widget hiển thị |
+
+## 9. Yêu cầu phi chức năng
+
+### 9.1 Hiệu năng
 - Xử lý real-time với FPS >= 15 trên CPU
 - Độ trễ phát hiện < 100ms
 - Target FPS có thể cấu hình (mặc định: 60 FPS)
 - Performance logging tùy chọn với FPS display trên status bar
 
-### 8.2 Giao diện
+### 9.2 Giao diện
 - Giao diện tối (dark theme)
 - Responsive khi resize cửa sổ
 - Kích thước cửa sổ tối thiểu: 900 x 700 pixels (cấu hình được)
 
-### 8.3 Tương thích
+### 9.3 Tương thích
 - Hệ điều hành: Windows, Linux, macOS
 - Python 3.12+
 - Hỗ trợ nhiều loại camera (USB, built-in)
 
-## 9. Xử lý các trường hợp đặc biệt
+## 10. Xử lý các trường hợp đặc biệt
 
 | Tình huống | Xử lý |
 |------------|-------|
 | Không tìm thấy camera | Hiển thị "No cameras found" trong dropdown |
 | Camera không mở được | Hiển thị thông báo lỗi, tắt toggle Camera Power |
-| Không load được model | Hiển thị cảnh báo khi khởi động |
+| Không load được YOLO model | Hiển thị cảnh báo khi khởi động |
+| Không load được PaddleOCR model | Vô hiệu hóa AI orientation fix, sử dụng các bước khác |
 | Thư mục output không tồn tại | Tự động tạo thư mục khi lưu ảnh |
 | Nút Capture khi camera tắt | Nút bị vô hiệu hóa (disabled) |
 

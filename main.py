@@ -19,9 +19,13 @@ sys.path.insert(0, PROJECT_ROOT)
 from core.camera.opencv_camera import OpenCVCamera
 from core.detector.yolo_detector import YOLODetector
 from core.writer.local_writer import LocalImageWriter
+from core.preprocessor.geometric_transformer import GeometricTransformer
+from core.preprocessor.orientation_corrector import OrientationCorrector
+from core.preprocessor.document_preprocessor import DocumentPreprocessor
 from services.camera_service import CameraService
 from services.detection_service import DetectionService
 from services.image_saver_service import ImageSaverService
+from services.preprocessing_service import PreprocessingService
 from services.performance_logger import PerformanceLogger
 from ui.main_window import MainWindow
 
@@ -135,11 +139,36 @@ def createApplication(config: dict) -> tuple:
         maskColors=config.get("maskColors", None)
     )
     
+    # Create Preprocessing Service
+    preprocessingConfig = config.get("preprocessing", {})
+    geometricTransformer = GeometricTransformer()
+    
+    # Resolve paddle model path (relative to project root or absolute)
+    paddleModelPath = preprocessingConfig.get("paddleModelPath")
+    if paddleModelPath and not os.path.isabs(paddleModelPath):
+        paddleModelPath = os.path.join(PROJECT_ROOT, paddleModelPath)
+    
+    orientationCorrector = OrientationCorrector(
+        aiConfidenceThreshold=preprocessingConfig.get("aiConfidenceThreshold", 0.6),
+        modelPath=paddleModelPath
+    )
+    documentPreprocessor = DocumentPreprocessor(
+        geometricTransformer=geometricTransformer,
+        orientationCorrector=orientationCorrector
+    )
+    preprocessingService = PreprocessingService(
+        preprocessor=documentPreprocessor,
+        enabled=preprocessingConfig.get("enabled", True),
+        forceLandscape=preprocessingConfig.get("forceLandscape", True),
+        aiOrientationFix=preprocessingConfig.get("aiOrientationFix", True)
+    )
+    
     # Create Main Window (UI Layer)
     mainWindow = MainWindow(
         cameraService=cameraService,
         detectionService=detectionService,
         imageSaverService=imageSaverService,
+        preprocessingService=preprocessingService,
         config=config
     )
     
