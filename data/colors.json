@@ -1,0 +1,4904 @@
+[
+  {
+    "name": "ADMIRAL BLUE",
+    "hex": "#0f1857",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "AIRFORCE BLUE",
+    "hex": "#8487d7",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ALPINE GREEN",
+    "hex": "#2f5b56",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "AMBER",
+    "hex": "#e7a434",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "AMETHYST",
+    "hex": "#ccc1d6",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "ANTIQUE CHERRY RED",
+    "hex": "#971b2f",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "ANTIQUE HELICONIA",
+    "hex": "#AA0061",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "ANTIQUE IRISH GREEN",
+    "hex": "#00843D",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ANTIQUE JADE DOME",
+    "hex": "#02898e",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ANTIQUE ORANGE",
+    "hex": "#B33D26",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "ANTIQUE ROYAL",
+    "hex": "#003087",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ANTIQUE SAPPHIRE",
+    "hex": "#006A8E",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "ANTIQUE WHITE",
+    "hex": "#f8efde",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "APPLE",
+    "hex": "#66b447",
+    "basic_color": "xanh táo",
+    "path": "colors/xanh-tao.wav"
+  },
+  {
+    "name": "AQUA",
+    "hex": "#00ffff",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "AQUA TRIBLEND",
+    "hex": "#55a9bf",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "AQUATIC BLUE",
+    "hex": "#3cd3d0",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "ARCTIC BLUE",
+    "hex": "#7ca6bf",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ARCTIC WHITE",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "ARMY",
+    "hex": "#615e3e",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "ARMY BROWN",
+    "hex": "#544437",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "ARMY GREEN",
+    "hex": "#4b4722",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ARMY HEATHER",
+    "hex": "#42422e",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "ARMY/BLACK ZIPPER",
+    "hex": "#4b5320",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "ASH",
+    "hex": "#25282A",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "ASH GREY",
+    "hex": "#b2beb5",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "ASPHALT",
+    "hex": "#595959",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "ASPHALT SLUB",
+    "hex": "#6a6873",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "ATHLETIC CARDINAL",
+    "hex": "#740015",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "ATHLETIC CRIMSON",
+    "hex": "#bd1a2d",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "ATHLETIC DARK GREEN",
+    "hex": "#344f48",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ATHLETIC GOLD",
+    "hex": "#e0cb9e",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "ATHLETIC GREY TRIBLEND",
+    "hex": "#adadaf",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "ATHLETIC HEATHER",
+    "hex": "#b3b5b6",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "ATHLETIC NAVY",
+    "hex": "#1f1f37",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "ATHLETIC PURPLE",
+    "hex": "#462773",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "ATHLETIC RED",
+    "hex": "#fd1b27",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "ATHLETIC ROYAL",
+    "hex": "#273d76",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ATHLETIC TEAL",
+    "hex": "#01ccc8",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "ATHLETIC YELLOW",
+    "hex": "#fde638",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "ATLANTIC",
+    "hex": "#183a44",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "AUTUMN",
+    "hex": "#a44422",
+    "basic_color": "cam đậm",
+    "path": "colors/cam-dam.wav"
+  },
+  {
+    "name": "AZALEA",
+    "hex": "#DD74A1",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "BABY BLUE",
+    "hex": "#89cff0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BABY PINK",
+    "hex": "#f3dddf",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "BALLERINA",
+    "hex": "#f0dee0",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "BANANA",
+    "hex": "#f3e6bb",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "BAY",
+    "hex": "#bbc2ba",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "BEACON BLUE",
+    "hex": "#18659d",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BEEHIVE",
+    "hex": "#e0a03d",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "BERRY",
+    "hex": "#7F2952",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "BERRY TRIBLEND",
+    "hex": "#d14a85",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "BLACK",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK CAMO",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK CAMO HEATHER",
+    "hex": "#50535a",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK CRYSTAL",
+    "hex": "#0c0e0f",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK HEATHER",
+    "hex": "#24252a",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK HEATHER TRIBLEND",
+    "hex": "#2e2e2e",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK HEATHER/ BLACK",
+    "hex": "#29252a",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK INK",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK LEOPARD",
+    "hex": "#343434",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK SMOKE",
+    "hex": "#3c3c3d",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK/ RED",
+    "hex": "#b21e38",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "BLACK/ TRUE ROYAL",
+    "hex": "#2665a8",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "BLACK/DEEP HEATHER",
+    "hex": "#1f1c23",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK/NATURAL",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACK/WHITE",
+    "hex": "#1f1c23",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLACKBERRY",
+    "hex": "#221C35",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "BLOSSOM",
+    "hex": "#feb6c4",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "BLUE",
+    "hex": "#0000ff",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE AQUA",
+    "hex": "#05c3dd",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "BLUE DUSK",
+    "hex": "#253746",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE HEATHER",
+    "hex": "#687f9f",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE HORIZON",
+    "hex": "#8bd4ec",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE JEAN",
+    "hex": "#526886",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE LAGOON",
+    "hex": "#00ACD7",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE MIST",
+    "hex": "#b6cbce",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE SAGE",
+    "hex": "#617e77",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE SPRUCE",
+    "hex": "#49cfd0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE STORM",
+    "hex": "#636968",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUE TRIBLEND",
+    "hex": "#4257f5",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "BLUSH",
+    "hex": "#d46a89",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "BLUSH PINK",
+    "hex": "#de5d83",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "BODY BLUSH",
+    "hex": "#dcd4d1",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "BONE",
+    "hex": "#e3dac9",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "BOTTLE GREEN",
+    "hex": "#2b6141",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "BOYSENBERRY",
+    "hex": "#df50a1",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "BRICK",
+    "hex": "#513626",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "BRIGHT ORANGE",
+    "hex": "#e26e40",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "BRIGHT PINK",
+    "hex": "#ff5085",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "BRIGHT ROYAL",
+    "hex": "#3e1dd5",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "BRIGHT SALMON",
+    "hex": "#e29075",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "BRIGHT WHITE",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "BROWN",
+    "hex": "#a52a2a",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "BROWN LEOPARD",
+    "hex": "#bda17a",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "BROWN SAVANA",
+    "hex": "#7A6855",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "BURGUNDY",
+    "hex": "#6c1c2f",
+    "basic_color": "đỏ rượu vang",
+    "path": "colors/do-ruou-vang.wav"
+  },
+  {
+    "name": "BURNT ORANGE",
+    "hex": "#d46c34",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "BUTTER",
+    "hex": "#f5e8aa",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "BUTTERCREAM",
+    "hex": "#e7d6bc",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "CALIFORNIA BLUE",
+    "hex": "#0094ae",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "CANDY ORANGE",
+    "hex": "#ffba97",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "CANTALOUPE",
+    "hex": "#fd9864",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "CANVAS RED",
+    "hex": "#8d1821",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "CARAMEL BROWN",
+    "hex": "#bd773b",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "CARAMEL TOFFEE",
+    "hex": "#a87b3b",
+    "basic_color": "cam đậm",
+    "path": "colors/cam-dam.wav"
+  },
+  {
+    "name": "CARDINAL",
+    "hex": "#c41e3a",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "CARDINAL RED",
+    "hex": "#8A1538",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "CARIBBEAN",
+    "hex": "#00cc99",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "CARIBBEAN BLUE",
+    "hex": "#00A9CE",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "CAROLINA BLUE",
+    "hex": "#91b6e1",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "CAROLINA HEATHER",
+    "hex": "#84b3e7",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "CASSIS",
+    "hex": "#eb4b85",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "CELADON",
+    "hex": "#d9ddab",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "CEMENT",
+    "hex": "#b9b4b1",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "CHALKY MINT",
+    "hex": "#93d0c7",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "CHAMBRAY",
+    "hex": "#baccd8",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "CHARCOAL",
+    "hex": "#36454f",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "CHARCOAL BLACK TRIBLEND",
+    "hex": "#333333",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "CHARCOAL GREY",
+    "hex": "#6c6868",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "CHARCOAL GREY HEATHER",
+    "hex": "#645c65",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "CHARCOAL HEATHER",
+    "hex": "#383f45",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "CHARISMA CORAL",
+    "hex": "#e97179",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "CHARITY PINK",
+    "hex": "#f27b9b",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "CHERRY RED",
+    "hex": "#cc252c",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "CHESTNUT",
+    "hex": "#7d5d5c",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "CHILI",
+    "hex": "#b03c4f",
+    "basic_color": "đỏ rượu vang",
+    "path": "colors/do-ruou-vang.wav"
+  },
+  {
+    "name": "CHILL",
+    "hex": "#b6e6ea",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "CHINA BLUE",
+    "hex": "#537da3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "CHOCOLATE",
+    "hex": "#d2691e",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "CHOCOLATE BROWN",
+    "hex": "#513528",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "CITRINE",
+    "hex": "#f2e4cb",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "CITRON",
+    "hex": "#f3f17e",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "CITRUS",
+    "hex": "#f1c036",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "CLASSIC NAVY",
+    "hex": "#313b7b",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "CLASSIC NAVY HEATHER",
+    "hex": "#31343d",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "CLASSIC PINK",
+    "hex": "#f898c8",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "CLASSIC RED",
+    "hex": "#cb153b",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "CLAY",
+    "hex": "#d89ca2",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "CLAY TRIBLEND",
+    "hex": "#9b5341",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "CLEAN MINT",
+    "hex": "#bce0d8",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "CLOVER",
+    "hex": "#29603a",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "COAL",
+    "hex": "#61625d",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "COBALT",
+    "hex": "#171C8F",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "COCOA",
+    "hex": "#6B3D2E",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "COLLEGIATE GOLD",
+    "hex": "#f5b324",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "COLLEGIATE GREEN",
+    "hex": "#005749",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "COLLEGIATE NAVY",
+    "hex": "#1d283c",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "COLLEGIATE ROYAL",
+    "hex": "#063b7f",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "COLUMBIA BLUE",
+    "hex": "#6991c4",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "CONCRETE",
+    "hex": "#808076",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "COOL MINT",
+    "hex": "#8ad5b6",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "CORAL",
+    "hex": "#ff7f50",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "CORAL SILK",
+    "hex": "#FB637E",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "CORNSILK",
+    "hex": "#F0EC74",
+    "basic_color": "vàng chanh",
+    "path": "colors/vang-chanh.wav"
+  },
+  {
+    "name": "CRANBERRY",
+    "hex": "#a1233b",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "CREAM",
+    "hex": "#fffdd0",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "CREME",
+    "hex": "#efdfd0",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "CRIMSON",
+    "hex": "#dc143c",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "CRUNCHBERRY",
+    "hex": "#c67490",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "CUMIN",
+    "hex": "#dc7a7b",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "CYBER PINK",
+    "hex": "#f41fc6",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "CYPRESS",
+    "hex": "#4b7b5b",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "DAFFODIL YELLOW",
+    "hex": "#e9ce87",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "DAISY",
+    "hex": "#fdca3b",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "DARK ASH",
+    "hex": "#b5b5b5",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "DARK CHOCOLATE",
+    "hex": "#382F2D",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "DARK GREEN",
+    "hex": "#162b26",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "DARK GREY",
+    "hex": "#a9a9a9",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "DARK GREY HEATHER",
+    "hex": "#6a6868",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "DARK HEATHER",
+    "hex": "#425563",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "DARK HEATHER GREY",
+    "hex": "#555c64",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "DARK LAVENDER",
+    "hex": "#b590fa",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "DARK NAVY",
+    "hex": "#2d3041",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "DARK OLIVE",
+    "hex": "#437044",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "DEEP BLACK",
+    "hex": "#1f1f1f",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "DEEP FOREST",
+    "hex": "#11501e",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "DEEP HEATHER",
+    "hex": "#6f6d6d",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "DEEP HEATHER/BLACK",
+    "hex": "#2e2e2e",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "DEEP PURPLE",
+    "hex": "#570861",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "DEEP RED",
+    "hex": "#850101",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "DEEP ROYAL",
+    "hex": "#122560",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "DEEP TEAL",
+    "hex": "#005f5f",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "DENIM",
+    "hex": "#1560a9",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "DENIM BLUE",
+    "hex": "#485b7b",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "DENIM TRIBLEND",
+    "hex": "#7b8d99",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "DESERT SAND",
+    "hex": "#c8bfa6",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "DOLPHIN",
+    "hex": "#bfbeb9",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "DTG BLACK",
+    "hex": "#07000b",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "DTG DARK GREY",
+    "hex": "#606565",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "DTG WHITE",
+    "hex": "#f1f0f8",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "DUSTY BLUE",
+    "hex": "#bdd8eb",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "DUSTY BLUE TRIBLEND",
+    "hex": "#a7bdb5",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "DUSTY GREEN",
+    "hex": "#59876d",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "DUSTY PINK",
+    "hex": "#dcacb4",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "DUSTY ROSE",
+    "hex": "#E1BBB4",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "ECRU",
+    "hex": "#bcac7c",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "EGG PLANT",
+    "hex": "#46255a",
+    "basic_color": "tím đậm",
+    "path": "colors/tim-dam.wav"
+  },
+  {
+    "name": "ELECTRIC BLUE",
+    "hex": "#0987b0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ELECTRIC GREEN",
+    "hex": "#43B02A",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ELECTRIC ORANGE",
+    "hex": "#ca6f3a",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "ELECTRIC YELLOW",
+    "hex": "#fefd33",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "EMERALD",
+    "hex": "#477875",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "EMERALD GREEN",
+    "hex": "#00615B",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "EMERALD TRIBLEND",
+    "hex": "#1f322c",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "ESPRESSO",
+    "hex": "#6f5846",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "ETERNITY",
+    "hex": "#f58387",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "EVERGREEN",
+    "hex": "#224c33",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "FADED BLACK",
+    "hex": "#433f40",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "FADED BLUE",
+    "hex": "#a7b4c1",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "FADED SLATE",
+    "hex": "#51616e",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "FADED WINE",
+    "hex": "#897083",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "FATIGUE GREEN",
+    "hex": "#4b4b3f",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "FERN",
+    "hex": "#d4d8c9",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "FESTIVAL",
+    "hex": "#faf067",
+    "basic_color": "vàng chanh",
+    "path": "colors/vang-chanh.wav"
+  },
+  {
+    "name": "FIERY RED",
+    "hex": "#e6061e",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "FIERY RED HEATHER",
+    "hex": "#cb333b",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "FIRE RED",
+    "hex": "#f60002",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "FIRE RED/ARCTIC WHITE",
+    "hex": "#ca0b18",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "FLO BLUE",
+    "hex": "#5168ae",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "FOREST",
+    "hex": "#547340",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "FOREST CAMO",
+    "hex": "#466a3e",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "FOREST CAMO HEATHER",
+    "hex": "#3d3a31",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "FOREST GREEN",
+    "hex": "#273B33",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "FRENCH NAVY",
+    "hex": "#043c77",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "FRENCH VANILLA",
+    "hex": "#e9dea6",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "FRESH OLIVE",
+    "hex": "#5d593e",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "FUCHSIA FROST",
+    "hex": "#f45a8e",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "Fiji Blue",
+    "hex": "#69b3e7",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "Fuchsia",
+    "hex": "#ff00ff",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "GALAPAGOS BLUE",
+    "hex": "#096479",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "GARNET",
+    "hex": "#7D2935",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "GINGER",
+    "hex": "#f7f2de",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "GOLD",
+    "hex": "#EEAD1A",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "GOLD GLINT",
+    "hex": "#CF7A21",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "GRANITE",
+    "hex": "#54637a",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "GRANITE GREY HEATHER",
+    "hex": "#cacac8",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GRANITE HEATHER",
+    "hex": "#827d83",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GRAPE",
+    "hex": "#84769a",
+    "basic_color": "tím nhạt",
+    "path": "colors/tim-nhat.wav"
+  },
+  {
+    "name": "GRAPHITE",
+    "hex": "#41424c",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "GRAPHITE HEATHER",
+    "hex": "#707372",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GRASS",
+    "hex": "#348c31",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "GRAVEL",
+    "hex": "#888B8D",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREEN CAMO",
+    "hex": "#3b4635",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "GREEN TRIBLEND",
+    "hex": "#71ad77",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "GREY",
+    "hex": "#808080",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREY ACID WASH",
+    "hex": "#5d6268",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREY CAMO",
+    "hex": "#a9a9a9",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREY FROST",
+    "hex": "#939393",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREY HEATHER",
+    "hex": "#3f3b38",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GREY TRIBLEND",
+    "hex": "#000000",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "GUNMETAL HEATHER",
+    "hex": "#8d8b8b",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "Grey/ Charcoal Black Triblend",
+    "hex": "#7c7d78",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "Grey/ Maroon Triblend",
+    "hex": "#5a3446",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "Grey/ Navy Triblend",
+    "hex": "#2d3559",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "Grey/ Red Triblend",
+    "hex": "#6f706b",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "Grey/ True Royal Triblend",
+    "hex": "#2a60a7",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "HAWAIIAN BLUE",
+    "hex": "#38aeb3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HAZY RAINBOW",
+    "hex": "#eea5cc",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "HEATHER",
+    "hex": "#717584",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER AQUA",
+    "hex": "#59b0c1",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "HEATHER ARCTIC",
+    "hex": "#6F9BA4",
+    "basic_color": "xanh navy nhạt",
+    "path": "colors/xanh-navy-nhat.wav"
+  },
+  {
+    "name": "HEATHER AUTUMN",
+    "hex": "#b95434",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "HEATHER BERRY",
+    "hex": "#994878",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "HEATHER BLUE",
+    "hex": "#3A5DAE",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER BLUE LAGOON",
+    "hex": "#85a1a2",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER BLUSH",
+    "hex": "#CCA1A6",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "HEATHER BONE",
+    "hex": "#D9C0A9",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "HEATHER BRIGHT TURQUOISE",
+    "hex": "#359ad0",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "HEATHER BROWN",
+    "hex": "#574235",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "HEATHER BURGUNDY",
+    "hex": "#6c1d23",
+    "basic_color": "đỏ rượu vang",
+    "path": "colors/do-ruou-vang.wav"
+  },
+  {
+    "name": "HEATHER CANTALOUPE",
+    "hex": "#faa270",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "HEATHER CARDINAL",
+    "hex": "#6b2f31",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "HEATHER CASSIS",
+    "hex": "#c485a0",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "HEATHER CHARCOAL",
+    "hex": "#3c3636",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "HEATHER CHARITY PINK",
+    "hex": "#fc86aa",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "HEATHER CLAY",
+    "hex": "#7e4536",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "HEATHER COLUMBIA BLUE",
+    "hex": "#6c87c0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER COOL GREY",
+    "hex": "#dbd1d0",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER CUCUMBER",
+    "hex": "#B5C1A5",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "HEATHER DARK GREY",
+    "hex": "#53535A",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER DEEP TEAL",
+    "hex": "#52869e",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "HEATHER DENIM",
+    "hex": "#324259",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "HEATHER DUST",
+    "hex": "#ead9c8",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "HEATHER DUSTY BLUE",
+    "hex": "#728d84",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER FOREST",
+    "hex": "#3e4941",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "HEATHER GALAPAGOS BLUE",
+    "hex": "#0093B2",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER GRAPHITE",
+    "hex": "#4d4d4d",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "HEATHER GRASS GREEN",
+    "hex": "#36765a",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER GREEN",
+    "hex": "#52664f",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER GREY",
+    "hex": "#4f4f4f",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER GREY/BLACK",
+    "hex": "#c6c4d1",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "HEATHER HELICONIA",
+    "hex": "#E24585",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "HEATHER ICE BLUE",
+    "hex": "#d4edf0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER INDIGO",
+    "hex": "#4D6995",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "HEATHER IRISH GREEN",
+    "hex": "#5CAA7F",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER KELLY",
+    "hex": "#33cfab",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "HEATHER KELLY GREEN",
+    "hex": "#4a9368",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER KHAKI",
+    "hex": "#A39382",
+    "basic_color": "kaki",
+    "path": "colors/kaki.wav"
+  },
+  {
+    "name": "HEATHER LIGHT BLUE",
+    "hex": "#8BB8E8",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER LILAC",
+    "hex": "#BDB0D0",
+    "basic_color": "tím nhạt",
+    "path": "colors/tim-nhat.wav"
+  },
+  {
+    "name": "HEATHER MAROON",
+    "hex": "#672E45",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "HEATHER MAUVE",
+    "hex": "#8a7c93",
+    "basic_color": "tím nhạt",
+    "path": "colors/tim-nhat.wav"
+  },
+  {
+    "name": "HEATHER MELLOW YELLOW",
+    "hex": "#e8b124",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "HEATHER MIDNIGHT NAVY",
+    "hex": "#3e4148",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "HEATHER MILITARY GREEN",
+    "hex": "#7E7F74",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER MINT",
+    "hex": "#9ae3b8",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "HEATHER MUSTARD",
+    "hex": "#df971e",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "HEATHER NAVY",
+    "hex": "#333f48",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "HEATHER NEO MINT",
+    "hex": "#bae1c0",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "HEATHER OLIVE",
+    "hex": "#8ea172",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "HEATHER ORANGE",
+    "hex": "#e4652e",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "HEATHER PEACH",
+    "hex": "#f3c5ab",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "HEATHER PRISM DUSTY BLUE",
+    "hex": "#a2b8ab",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER PRISM ICE BLUE",
+    "hex": "#d2eaea",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER PRISM LILAC",
+    "hex": "#e7bde3",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "HEATHER PRISM MINT",
+    "hex": "#8fb491",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "HEATHER PRISM NATURAL",
+    "hex": "#e0daca",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "HEATHER PRISM PEACH",
+    "hex": "#d2aea2",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "HEATHER PRISM SUNSET",
+    "hex": "#eca58f",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "HEATHER PURIST BLUE",
+    "hex": "#a3e2f5",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "HEATHER PURPLE",
+    "hex": "#614b79",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "HEATHER RADIANT ORCHID",
+    "hex": "#A15A95",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "HEATHER RASPBERRY",
+    "hex": "#a03f52",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "HEATHER RED",
+    "hex": "#BF0D3E",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "HEATHER ROYAL",
+    "hex": "#307fe2",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "HEATHER ROYAL BLUE",
+    "hex": "#4c68a8",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "HEATHER RUST",
+    "hex": "#A15D44",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "HEATHER SAND DUNE",
+    "hex": "#e9caab",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "HEATHER SAPPHIRE",
+    "hex": "#43a5c5",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "HEATHER SEA GREEN",
+    "hex": "#44ddc1",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER SLATE",
+    "hex": "#62727f",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "HEATHER SPORT DARK GREEN",
+    "hex": "#43695B",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HEATHER SPORT DARK MAROON",
+    "hex": "#651D32",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "HEATHER SPORT DARK NAVY",
+    "hex": "#595478",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "HEATHER SPORT ROYAL",
+    "hex": "#1D4F91",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "HEATHER SPORT SCARLET RED",
+    "hex": "#b4243d",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "HEATHER STONE",
+    "hex": "#a89e9c",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER STORM",
+    "hex": "#8d8b96",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "HEATHER SUNSET",
+    "hex": "#ea9986",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "HEATHER TAN",
+    "hex": "#baa68d",
+    "basic_color": "nâu nhạt",
+    "path": "colors/nau-nhat.wav"
+  },
+  {
+    "name": "HEATHER TEAM PURPLE",
+    "hex": "#614762",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "HEATHER TRUE ROYAL",
+    "hex": "#4f5d9e",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "HEATHER TURQUOISE",
+    "hex": "#027fad",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "HEATHER WHITE/ENVY",
+    "hex": "#d3d3dd",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "HEATHER WHITE/VT BLACK",
+    "hex": "#dddddd",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "HEATHER WHITE/VT PINK",
+    "hex": "#dcdcdc",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "HEATHER WHITE/VT RED",
+    "hex": "#fbf7fc",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "HEATHER YELLOW GOLD",
+    "hex": "#fcc153",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "HEATHERED NAVY",
+    "hex": "#343e5f",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "HELICONIA",
+    "hex": "#E24585",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "HEMP",
+    "hex": "#48503b",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "HERB GREEN",
+    "hex": "#393b2d",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HOT CHOCOLATE",
+    "hex": "#4b3b34",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "HOT CORAL",
+    "hex": "#ff2647",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "HOT PINK",
+    "hex": "#ff69b4",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "HUNTER GREEN",
+    "hex": "#19503d",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "HYDRANGEA",
+    "hex": "#b5def4",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "Hibiscus",
+    "hex": "#f46b92",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "ICE BLUE",
+    "hex": "#c3e1e3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ICE BLUE TRIBLEND",
+    "hex": "#a7b5b8",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "ICE GREY",
+    "hex": "#D7D2CB",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "INDEPENDENCE RED",
+    "hex": "#7a2836",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "INDIGO",
+    "hex": "#3e40a1",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "INDIGO BLUE",
+    "hex": "#486D87",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "IRIS",
+    "hex": "#3975B7",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "IRISH GREEN",
+    "hex": "#00A74A",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "IRISH KELLY",
+    "hex": "#1db663",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ISLAND GREEN",
+    "hex": "#00bea2",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "ISLAND REEF",
+    "hex": "#abceae",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "IVORY",
+    "hex": "#f9eedc",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "J NAVY",
+    "hex": "#323447",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "JADE",
+    "hex": "#144244",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "JADE DOME",
+    "hex": "#04888d",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "JET BLACK",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "JET BLACK/FIRE RED",
+    "hex": "#480202",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "JET BLACK/WHITE",
+    "hex": "#000000",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "KELLY",
+    "hex": "#015130",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "KELLY GREEN",
+    "hex": "#00805E",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "KEY LIME",
+    "hex": "#e8f48c",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "KHAKI",
+    "hex": "#94917e",
+    "basic_color": "kaki",
+    "path": "colors/kaki.wav"
+  },
+  {
+    "name": "KIWI",
+    "hex": "#89A84F",
+    "basic_color": "xanh táo",
+    "path": "colors/xanh-tao.wav"
+  },
+  {
+    "name": "LAGOON",
+    "hex": "#75cfd0",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "LAGOON BLUE",
+    "hex": "#4AC3E0",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "LAPIS",
+    "hex": "#2b3b82",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "LATE NIGHT BLUE",
+    "hex": "#212f4a",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "LAVENDER",
+    "hex": "#e6e6fa",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "LAVENDER BLUE",
+    "hex": "#ccccff",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "LAVENDER DUST",
+    "hex": "#dbd6dc",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "LEAF",
+    "hex": "#4d7840",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "LEMON MERINGUE",
+    "hex": "#e2d9a4",
+    "basic_color": "vàng chanh",
+    "path": "colors/vang-chanh.wav"
+  },
+  {
+    "name": "LEMON YELLOW",
+    "hex": "#fbf796",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "LIGHT BLUE",
+    "hex": "#add8e6",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "LIGHT GREEN",
+    "hex": "#5b8778",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "LIGHT GREY MARBLE",
+    "hex": "#d2d2d2",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "LIGHT HEATHER GREY",
+    "hex": "#ababab",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "LIGHT PINK",
+    "hex": "#fac4d1",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "LIGHT STEEL",
+    "hex": "#d5d7db",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "LIGHT TURQUOISE",
+    "hex": "#2eb3dc",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "LIGHT VIOLET",
+    "hex": "#a49ca2",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "LIGHT YELLOW",
+    "hex": "#ffe8b3",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "LILAC",
+    "hex": "#d9b1cc",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "LILAC TRIBLEND",
+    "hex": "#e3b1cc",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "LIME",
+    "hex": "#72c865",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "LIME GREEN",
+    "hex": "#c0dd67",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "LODEN",
+    "hex": "#6b6d50",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "MAGENTA MAGIC",
+    "hex": "#a02564",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "MAIZE YELLOW",
+    "hex": "#f6db6a",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "MANZANITA",
+    "hex": "#894659",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "MAROON",
+    "hex": "#5B2B42",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "MAROON TRIBLEND",
+    "hex": "#69414a",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "MAUVE",
+    "hex": "#c1807e",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "MAUVELOUS",
+    "hex": "#d79794",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "MAUVELOUS SPOT",
+    "hex": "#f2acb6",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "MEERKAT",
+    "hex": "#d6753e",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "MELON",
+    "hex": "#ff884b",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "METEORITE",
+    "hex": "#816c55",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "METRO BLUE",
+    "hex": "#464E7E",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "MICHELANGELO",
+    "hex": "#db541a",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "MIDNIGHT",
+    "hex": "#47566d",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "MIDNIGHT BLUE",
+    "hex": "#33228c",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "MILITARY GREEN",
+    "hex": "#5E7461",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "MILITARY GREEN TRIBLEND",
+    "hex": "#5b5549",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "MINERAL BLACK",
+    "hex": "#393633",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "MINERAL GRAY",
+    "hex": "#000000",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "MINERAL NAVY",
+    "hex": "#353c4c",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "MINERAL PURPLE",
+    "hex": "#000000",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "MINT",
+    "hex": "#bde4c5",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "MINT GREEN",
+    "hex": "#A0CFA8",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "MINT TRIBLEND",
+    "hex": "#94ceac",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "MOSS",
+    "hex": "#768e71",
+    "basic_color": "xanh olive nhạt",
+    "path": "colors/xanh-olive-nhat.wav"
+  },
+  {
+    "name": "MULTI BLACK",
+    "hex": "#474747",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "MULTI BLUE",
+    "hex": "#224e90",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "MUSHROOM",
+    "hex": "#d8ba9e",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "MUSTARD",
+    "hex": "#eed091",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "MUSTARD HEATHER",
+    "hex": "#e39b23",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "MYSTIC BLUE",
+    "hex": "#6182b8",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "NATURAL",
+    "hex": "#f1e8d9",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "NATURAL HEATHER",
+    "hex": "#dfddd0",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "NATURAL LEOPARD",
+    "hex": "#cec8bc",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "NATURAL/BLACK",
+    "hex": "#e7dbcb",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "NATURAL/MAROON",
+    "hex": "#eaddd0",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "NATURAL/MIDNIGHT NAVY",
+    "hex": "#ece0d2",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NAVY",
+    "hex": "#263147",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NAVY HEATHER",
+    "hex": "#3b5a6c",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NAVY TRIBLEND",
+    "hex": "#2a2a51",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NEO MINT",
+    "hex": "#a5f7c6",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "NEON BLUE",
+    "hex": "#0C51A3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "NEON CANTALOUPE",
+    "hex": "#ffbe88",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "NEON GREEN",
+    "hex": "#aaef60",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "NEON LEMON",
+    "hex": "#edeaa5",
+    "basic_color": "vàng chanh",
+    "path": "colors/vang-chanh.wav"
+  },
+  {
+    "name": "NEON PINK",
+    "hex": "#fe679e",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "NEON RED ORANGE",
+    "hex": "#ff5f1f",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "NEON VIOLET",
+    "hex": "#dca2d5",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "NEON YELLOW",
+    "hex": "#ceff82",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "NEW NAVY",
+    "hex": "#032137",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NEW SILVER",
+    "hex": "#c4c8c9",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "NIAGARA BLUE",
+    "hex": "#51839f",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "NIGHT SKY NAVY",
+    "hex": "#262837",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "NUDE",
+    "hex": "#dfc6ba",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "OATMEAL HEATHER",
+    "hex": "#cfcfcf",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "OATMEAL TRIBLEND",
+    "hex": "#f0e8e5",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "OCEAN",
+    "hex": "#47556c",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "OCEAN BLUE",
+    "hex": "#76b3d2",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "OCEANIC TEAL",
+    "hex": "#36878b",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "OFF WHITE",
+    "hex": "#F5ECD2",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "OLD GOLD",
+    "hex": "#C39367",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "OLIVE",
+    "hex": "#6a5751",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "OLIVE GREEN",
+    "hex": "#7c7c00",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "OLIVE TRIBLEND",
+    "hex": "#6f6856",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "ORANGE",
+    "hex": "#F4633A",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "ORANGE CRUSH",
+    "hex": "#c1550d",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "ORCHID",
+    "hex": "#e0cfdf",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "OXBLOOD BLACK",
+    "hex": "#221414",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "OXFORD",
+    "hex": "#7f7b7c",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "OXFORD GREY",
+    "hex": "#8d8a87",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "OXFORD NAVY",
+    "hex": "#314a64",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "PACIFIC",
+    "hex": "#2c2932",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "PACIFIC BLUE",
+    "hex": "#416477",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "PALE PINK",
+    "hex": "#e7d1d4",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "PALE YELLOW",
+    "hex": "#ffffa7",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "PALE YELLOW TRIBLEND",
+    "hex": "#f6e1a2",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "PAPRIKA",
+    "hex": "#ff3e51",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "PARAGON",
+    "hex": "#948794",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "PEACH",
+    "hex": "#ffcba4",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "PEACHY",
+    "hex": "#f9cbb4",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "PEBBLE",
+    "hex": "#756363",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "PEONY",
+    "hex": "#ff96ac",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "PEPPER",
+    "hex": "#383838",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "PEPPERMINT",
+    "hex": "#b2eae9",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "PERIWINKLE",
+    "hex": "#656ea7",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "PETROL BLUE",
+    "hex": "#3f5060",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "PIGMENT ALPINE GREEN",
+    "hex": "#678c8b",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "PIGMENT BLACK",
+    "hex": "#4a4a4d",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "PIGMENT DUSTY PINK",
+    "hex": "#eccbc6",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "PIGMENT LIGHT BLUE",
+    "hex": "#92b6e6",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "PIGMENT MAROON",
+    "hex": "#af2737",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "PIGMENT MINT",
+    "hex": "#577063",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "PIGMENT SANDSTONE",
+    "hex": "#c7ad96",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "PIGMENT SLATE BLUE",
+    "hex": "#81a0bb",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "PINE GREEN",
+    "hex": "#045318",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "PINK",
+    "hex": "#ffc0cb",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "PINK CANDY",
+    "hex": "#f2bbd8",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "PINK LEMONADE",
+    "hex": "#F04E98",
+    "basic_color": "vàng chanh",
+    "path": "colors/vang-chanh.wav"
+  },
+  {
+    "name": "PINK TRIBLEND",
+    "hex": "#a84880",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "PISTACHIO",
+    "hex": "#A9C47F",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "PLUMROSE",
+    "hex": "#C9809E",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "POPPY",
+    "hex": "#fe2617",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "POWDER BLUE",
+    "hex": "#bed8e5",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "POWER RED",
+    "hex": "#b0142c",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "PRAIRIE DUST",
+    "hex": "#897a63",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "PREPARED FOR DYE",
+    "hex": "#e7e8e7",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "PURPLE",
+    "hex": "#464E7E",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "RAINBOW STRIPE",
+    "hex": "#f4eeec",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "RASPBERRY",
+    "hex": "#df5588",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "RED",
+    "hex": "#D50032",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "RED HOT CHILLI",
+    "hex": "#6d0528",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "RED RIVER CLAY",
+    "hex": "#b63a30",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "RED TRIBLEND",
+    "hex": "#b92222",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "RETRO HEATHER CORAL",
+    "hex": "#ff775f",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "RETRO HEATHER GREEN",
+    "hex": "#27916d",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "RETRO HEATHER PINK",
+    "hex": "#d043b2",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "RETRO HEATHER PURPLE",
+    "hex": "#8a5cb7",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "RETRO HEATHER ROYAL",
+    "hex": "#5370a8",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "REVOLUTION RED",
+    "hex": "#ac272a",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "ROCK",
+    "hex": "#3d1f29",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "ROUGE",
+    "hex": "#bb6c73",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "ROYAL",
+    "hex": "#224D8F",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL BLUE",
+    "hex": "#1e3e79",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL BLUE HEATHER",
+    "hex": "#4c68a8",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL BLUE/HEATHER GREY",
+    "hex": "#274d8b",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL CARIBE",
+    "hex": "#055f91",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL HEATHER",
+    "hex": "#4769b1",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "ROYAL PURPLE",
+    "hex": "#734e84",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "RUSSET",
+    "hex": "#512F2E",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "RUST",
+    "hex": "#823022",
+    "basic_color": "đỏ rượu vang",
+    "path": "colors/do-ruou-vang.wav"
+  },
+  {
+    "name": "SAFARI",
+    "hex": "#b19e8c",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "SAFETY GREEN",
+    "hex": "#d6eb52",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SAFETY ORANGE",
+    "hex": "#ff7900",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SAFETY PINK",
+    "hex": "#ff819e",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SAFETY YELLOW",
+    "hex": "#dcff00",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "SAGE",
+    "hex": "#819E87",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "SALTWATER",
+    "hex": "#a1b3be",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "SAND",
+    "hex": "#CABFAD",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SAND DUNE",
+    "hex": "#f0d0aa",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "SANDSTONE",
+    "hex": "#d6c6b1",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "SANGRIA",
+    "hex": "#c24273",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "SAPPHIRE",
+    "hex": "#0095c8",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SAPPHIRE BLUE",
+    "hex": "#13689b",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SCARLET",
+    "hex": "#b02131",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "SCUBA BLUE",
+    "hex": "#48e5f9",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SEA BLUE",
+    "hex": "#0951b3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SEAFOAM",
+    "hex": "#487A7B",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "SEAFOAM BLUE",
+    "hex": "#89b9ae",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SHADOW STRIPE",
+    "hex": "#f5f5f7",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SILVER",
+    "hex": "#c0c0c0",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SILVER GREY",
+    "hex": "#dcddd9",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SKY",
+    "hex": "#71c5e8",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SKY BLUE",
+    "hex": "#cdd5dc",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SLATE",
+    "hex": "#adacb4",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SLATE BLUE",
+    "hex": "#364b8d",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SLATE SPOT",
+    "hex": "#524d53",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SMOKE",
+    "hex": "#423e3b",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SMOKE GRAY",
+    "hex": "#535353",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SMOKE GREY",
+    "hex": "#708c98",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SMOKE/ GRAPHITE",
+    "hex": "#d5d5d5",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SOFT CREAM",
+    "hex": "#f9efd6",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOFT PINK",
+    "hex": "#ebced2",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID ANTIQUE GOLD",
+    "hex": "#da9122",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "SOLID APPLE GREEN",
+    "hex": "#95c891",
+    "basic_color": "xanh táo",
+    "path": "colors/xanh-tao.wav"
+  },
+  {
+    "name": "SOLID ASPHALT TRIBLEND",
+    "hex": "#555555",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SOLID ATHLETIC GREY",
+    "hex": "#acaead",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID BABY BLUE BLEND",
+    "hex": "#a1caf1",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID BANANA CREAM",
+    "hex": "#f3e3b0",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "SOLID BLACK",
+    "hex": "#232323",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID BLACK BLEND",
+    "hex": "#1b1b1d",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID BLACK TRIBLEND",
+    "hex": "#1e1a1b",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID BLUE TRIBLEND",
+    "hex": "#7f97c3",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID BONDI BLUE",
+    "hex": "#35b3c9",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID CANCUN",
+    "hex": "#75bdcb",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "SOLID CARDINAL",
+    "hex": "#861e35",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "SOLID CARDINAL RED",
+    "hex": "#74192d",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID CAROLINA BLUE TRIBLEND",
+    "hex": "#82b2e4",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID CHARCOAL",
+    "hex": "#424745",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SOLID CLASSIC ORANGE",
+    "hex": "#fe5d02",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SOLID COOL BLUE",
+    "hex": "#354570",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID CREAM",
+    "hex": "#ede4d3",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID DARK CHOCOLATE",
+    "hex": "#382a29",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "SOLID DARK GREY",
+    "hex": "#3c373e",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID DARK GREY TRIBLEND",
+    "hex": "#3b3331",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID DARK HEATHER GREY",
+    "hex": "#acaba6",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID DESERT PINK",
+    "hex": "#f6d5cc",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID ENVY SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#389274",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID ENVY SLEEVES/ PREMIUM HEATHER BODY",
+    "hex": "#a69fa7",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID ESPRESSO",
+    "hex": "#574541",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "SOLID FOREST GREEN",
+    "hex": "#263c37",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SOLID FOREST TRIBLEND",
+    "hex": "#34493e",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "SOLID GOLD",
+    "hex": "#ffb219",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "SOLID GOLD TRIBLEND",
+    "hex": "#feae2b",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "SOLID GRAPHITE BLACK",
+    "hex": "#353036",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID HEATHER BLACK",
+    "hex": "#606163",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID HEATHER COLUMBIA BLUE",
+    "hex": "#afc7df",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID HEATHER COOL BLUE",
+    "hex": "#3c6c9e",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID HEATHER FOREST GREEN",
+    "hex": "#2b4641",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SOLID HEATHER GREY",
+    "hex": "#cbcbcb",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID HEATHER HEAVY METAL",
+    "hex": "#625e5b",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SOLID HEATHER MAROON",
+    "hex": "#7b3d4e",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "SOLID HEATHER MAUVE",
+    "hex": "#cc6e79",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "SOLID HEATHER PACIFIC",
+    "hex": "#8cabb0",
+    "basic_color": "xanh dương nhạt",
+    "path": "colors/xanh-duong-nhat.wav"
+  },
+  {
+    "name": "SOLID HEATHER WHITE",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID HEATHER WHITE/ VINTAGE BLACK",
+    "hex": "#dcdbdf",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID HEAVY METAL",
+    "hex": "#46473e",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "SOLID HOT PINK",
+    "hex": "#fe8eb6",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID ICE BLUE",
+    "hex": "#b5d0d9",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID INDIGO",
+    "hex": "#55616d",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "SOLID INDIGO SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#1b3664",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID KELLY GREEN",
+    "hex": "#078767",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SOLID KELLY TRIBLEND",
+    "hex": "#085833",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID LIGHT BLUE",
+    "hex": "#b6c4cf",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID LIGHT GREY",
+    "hex": "#a9a59d",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID LIGHT OLIVE",
+    "hex": "#a29e7a",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "SOLID LIGHT ORANGE",
+    "hex": "#ff643d",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SOLID LIGHT PINK",
+    "hex": "#e7acbc",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID LILAC",
+    "hex": "#c299b9",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "SOLID LUSH",
+    "hex": "#af4689",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID MAROON",
+    "hex": "#621539",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "SOLID MAROON TRIBLEND",
+    "hex": "#7b2b38",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "SOLID MIDNIGHT NAVY",
+    "hex": "#202632",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SOLID MILITARY GREEN",
+    "hex": "#81755d",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SOLID MINT",
+    "hex": "#a0c5ab",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "SOLID NATURAL",
+    "hex": "#d5cebe",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SOLID NATURAL BLEND",
+    "hex": "#f4eee1",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID NATURAL TRIBLEND",
+    "hex": "#fdf6ee",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID NAVY BLEND",
+    "hex": "#161d30",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SOLID NAVY TRIBLEND",
+    "hex": "#33363d",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SOLID NEON HEATHER GREEN",
+    "hex": "#89e681",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SOLID NEON YELLOW",
+    "hex": "#d0fd84",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "SOLID OATMEAL",
+    "hex": "#ece9e4",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID ORANGE",
+    "hex": "#dd7f39",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SOLID ORANGE TRIBLEND",
+    "hex": "#fc6230",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SOLID OXBLOOD",
+    "hex": "#551a2c",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID PINK BLEND",
+    "hex": "#ffc1cc",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID PLUM",
+    "hex": "#603d53",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "SOLID PREMIUM HEATHER",
+    "hex": "#73706b",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID PREMIUM HEATHER SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#4d4b54",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID PREMIUM HEATHER SLEEVES/ VINTAGE BLACK BODY",
+    "hex": "#858587",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID PURPLE BERRY",
+    "hex": "#5c13a4",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID PURPLE RUSH",
+    "hex": "#4c3c6d",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID PURPLE RUSH SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#3b2a58",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID RASPBERRY",
+    "hex": "#ec588a",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "SOLID RED",
+    "hex": "#ab0b2f",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID RED BLEND",
+    "hex": "#b42a25",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID RED TRIBLEND",
+    "hex": "#d23a3d",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID ROYAL",
+    "hex": "#295596",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID ROYAL PINE",
+    "hex": "#345e4a",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID SAND",
+    "hex": "#e8d5cf",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID SILK",
+    "hex": "#c8bfbc",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SOLID SILVER TRIBLEND",
+    "hex": "#cccdc9",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "SOLID SLATE TRIBLEND",
+    "hex": "#5c6c79",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "SOLID STONE GREY",
+    "hex": "#a7a49f",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID STONEWASH DENIM",
+    "hex": "#93a9b4",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "SOLID STORM",
+    "hex": "#3e3d5d",
+    "basic_color": "tím nhạt",
+    "path": "colors/tim-nhat.wav"
+  },
+  {
+    "name": "SOLID TAHITI BLUE",
+    "hex": "#28949e",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID TAHITI BLUE SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#bdcfdd",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SOLID TEAL",
+    "hex": "#0491a2",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "SOLID TEAM PURPLE TRIBLEND",
+    "hex": "#391462",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID TRUE ROYAL TRIBLEND",
+    "hex": "#000000",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID TURQUOISE",
+    "hex": "#0098d5",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "SOLID VIBRANT YELLOW",
+    "hex": "#efcf56",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "SOLID VINTAGE BLACK",
+    "hex": "#262722",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID VINTAGE BLACK SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#bebebf",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID VINTAGE BLACK SLEEVES/ PREMIUM HEATHER BODY",
+    "hex": "#8b868c",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID VINTAGE BLACK SLEEVES/ VINTAGE BLACK BODY",
+    "hex": "#1f1e25",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SOLID VINTAGE NAVY",
+    "hex": "#4b4c6b",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SOLID VINTAGE NAVY SLEEVES/ PREMIUM HEATHER BODY",
+    "hex": "#4a4c58",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SOLID VINTAGE PINK SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#c37f92",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SOLID VINTAGE PURPLE",
+    "hex": "#635056",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID VINTAGE PURPLE SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#593687",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SOLID VINTAGE RED",
+    "hex": "#b5313e",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID VINTAGE RED SLEEVES/ PREMIUM HEATHER BODY",
+    "hex": "#ee374b",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID VINTAGE RED SLEEVES/ VINTAGE BLACK BODY",
+    "hex": "#aa343c",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SOLID VINTAGE ROYAL",
+    "hex": "#3f5385",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID VINTAGE ROYAL SLEEVES/ HEATHER WHITE BODY",
+    "hex": "#2c3a79",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID VINTAGE ROYAL SLEEVES/ PREMIUM HEATHER BODY",
+    "hex": "#283673",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SOLID WARM GREY",
+    "hex": "#848383",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SOLID WHITE",
+    "hex": "#fdfeff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID WHITE BLEND",
+    "hex": "#eeeeee",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SOLID WHITE TRIBLEND",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "SPIDER BABY BLUE",
+    "hex": "#95c0d7",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SPIDER BLACK",
+    "hex": "#4e5768",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SPIDER ORANGE",
+    "hex": "#da3100",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SPIDER PINK",
+    "hex": "#ee9dcd",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SPIDER PURPLE",
+    "hex": "#2d1b48",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SPIDER RED",
+    "hex": "#800012",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SPIDER ROYAL",
+    "hex": "#214294",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SPIDER TURQUOISE",
+    "hex": "#0178a7",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "SPORT DARK GREEN",
+    "hex": "#385c4c",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "SPORT DARK MAROON",
+    "hex": "#623641",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "SPORT DARK NAVY",
+    "hex": "#35374c",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SPORT GREY",
+    "hex": "#bab7bd",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "SPORT GREY/BLACK",
+    "hex": "#b7b7bb",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "SPORT GREY/NAVY",
+    "hex": "#363343",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SPORT GREY/RED",
+    "hex": "#bc2939",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SPORT GREY/ROYAL",
+    "hex": "#245290",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SPORT PURPLE",
+    "hex": "#5a3c86",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SPORT ROYAL",
+    "hex": "#418FDE",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "SPORT SCARLET RED",
+    "hex": "#b61735",
+    "basic_color": "đỏ cherry",
+    "path": "colors/do-cherry.wav"
+  },
+  {
+    "name": "STEEL BLUE",
+    "hex": "#4682b4",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "STEEL BLUE TRIBLEND",
+    "hex": "#000000",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "STEEL GREY",
+    "hex": "#615d64",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "STONE BLUE",
+    "hex": "#7b93ab",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "STORM",
+    "hex": "#9d949f",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "STORM BLUE",
+    "hex": "#60748c",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "STORM CAMO",
+    "hex": "#4d525a",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "STORM GREY",
+    "hex": "#898D8D",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "STROBE",
+    "hex": "#dfe06a",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "SUN YELLOW",
+    "hex": "#f9d800",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "SUNSET",
+    "hex": "#DC6B2F",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SUNSET CORAL",
+    "hex": "#d04745",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "SUNSET ORANGE",
+    "hex": "#f25c52",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "SUNSET TRIBLEND",
+    "hex": "#f1a68b",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "SUNSHINE",
+    "hex": "#f2d781",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "SUNWASHED MINT",
+    "hex": "#88ecb3",
+    "basic_color": "xanh mint",
+    "path": "colors/xanh-mint.wav"
+  },
+  {
+    "name": "SURF BLUE",
+    "hex": "#abbbdc",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "SURF OCEAN",
+    "hex": "#005e65",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "SURF PINK",
+    "hex": "#fe9290",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "SURF PURPLE",
+    "hex": "#503e58",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "SURF YELLOW",
+    "hex": "#f4d385",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "SWEET CREAM HEATHER",
+    "hex": "#f1e5d1",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "Sea Glass",
+    "hex": "#a0c4a6",
+    "basic_color": "xanh lá nhạt",
+    "path": "colors/xanh-la-nhat.wav"
+  },
+  {
+    "name": "TAHITI BLUE",
+    "hex": "#2ed3cd",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "TAN",
+    "hex": "#d0b7a3",
+    "basic_color": "nâu nhạt",
+    "path": "colors/nau-nhat.wav"
+  },
+  {
+    "name": "TAN TRIBLEND",
+    "hex": "#c4b097",
+    "basic_color": "nâu nhạt",
+    "path": "colors/nau-nhat.wav"
+  },
+  {
+    "name": "TANGERINE",
+    "hex": "#f18346",
+    "basic_color": "nâu nhạt",
+    "path": "colors/nau-nhat.wav"
+  },
+  {
+    "name": "TEAL",
+    "hex": "#008080",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "TEAL ICE",
+    "hex": "#B1E4E3",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "TEAL TRIBLEND",
+    "hex": "#037d82",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "TEAM CARDINAL",
+    "hex": "#8c2239",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "TEAM PURPLE",
+    "hex": "#381c4e",
+    "basic_color": "tím",
+    "path": "colors/tim.wav"
+  },
+  {
+    "name": "TECH OLIVE/LEGEND EARTH",
+    "hex": "#676e45",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "TEMPO TEAL",
+    "hex": "#027ba6",
+    "basic_color": "xanh ngọc",
+    "path": "colors/xanh-ngoc.wav"
+  },
+  {
+    "name": "TENNESSEE ORANGE",
+    "hex": "#de750c",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "TERRACOTTA",
+    "hex": "#fe9b84",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "TERRAIN GREY",
+    "hex": "#4f5352",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "TEXAS ORANGE",
+    "hex": "#99441f",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "THYME",
+    "hex": "#bdbbac",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "TIE DYE AQUA BLUE",
+    "hex": "#7ad5e8",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "TIE DYE BLACK",
+    "hex": "#0f0c07",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "TIE DYE COTTON CANDY",
+    "hex": "#f1d4f7",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "TIE DYE SUNSET SWIRL",
+    "hex": "#cfcbc1",
+    "basic_color": "xám nhạt",
+    "path": "colors/xam-nhat.wav"
+  },
+  {
+    "name": "TITANIUM",
+    "hex": "#b4b1ae",
+    "basic_color": "nâu nhạt",
+    "path": "colors/nau-nhat.wav"
+  },
+  {
+    "name": "TOAST",
+    "hex": "#cc8746",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "TOPAZ BLUE",
+    "hex": "#027381",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "TROPICAL BLUE",
+    "hex": "#00859B",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "TRUE NAVY",
+    "hex": "#3d4f73",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "TRUE RED",
+    "hex": "#BB1237",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "TRUE ROYAL",
+    "hex": "#364da3",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "TRUE ROYAL TRIBLEND",
+    "hex": "#364e80",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "TURF GREEN",
+    "hex": "#007A3E",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "TURQUOISE",
+    "hex": "#40e0d0",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "TURQUOISE HEATHER",
+    "hex": "#80e7f5",
+    "basic_color": "xanh ngọc biển",
+    "path": "colors/xanh-ngoc-bien.wav"
+  },
+  {
+    "name": "TWEED",
+    "hex": "#4B4F54",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "Umber",
+    "hex": "#e2af9a",
+    "basic_color": "cam nhạt",
+    "path": "colors/cam-nhat.wav"
+  },
+  {
+    "name": "VANILLA MILKSHAKE",
+    "hex": "#eedecf",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "VEGAS GOLD",
+    "hex": "#e9cd9e",
+    "basic_color": "vàng cam",
+    "path": "colors/vang-cam.wav"
+  },
+  {
+    "name": "VINEYARD",
+    "hex": "#744b59",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "VINTAGE BLACK",
+    "hex": "#292524",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "VINTAGE BROWN",
+    "hex": "#7e5b48",
+    "basic_color": "nâu",
+    "path": "colors/nau.wav"
+  },
+  {
+    "name": "VINTAGE CAMO",
+    "hex": "#6d6a68",
+    "basic_color": "xám",
+    "path": "colors/xam.wav"
+  },
+  {
+    "name": "VINTAGE DENIM",
+    "hex": "#515868",
+    "basic_color": "xanh royal nhạt",
+    "path": "colors/xanh-royal-nhat.wav"
+  },
+  {
+    "name": "VINTAGE GREEN",
+    "hex": "#008f51",
+    "basic_color": "xanh lá",
+    "path": "colors/xanh-la.wav"
+  },
+  {
+    "name": "VINTAGE HEATHER BLUE",
+    "hex": "#576894",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "VINTAGE HEATHER MAROON",
+    "hex": "#9c6175",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "VINTAGE HEATHER NAVY",
+    "hex": "#0a2043",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "VINTAGE HEATHER RED",
+    "hex": "#ac4e59",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "VINTAGE HOT PINK",
+    "hex": "#d7486f",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "VINTAGE NAVY",
+    "hex": "#2f3042",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "VINTAGE RED",
+    "hex": "#b91e3c",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "VINTAGE ROYAL",
+    "hex": "#4157c3",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "VINTAGE SMOKE",
+    "hex": "#595a5f",
+    "basic_color": "xám đậm",
+    "path": "colors/xam-dam.wav"
+  },
+  {
+    "name": "VINTAGE WHITE",
+    "hex": "#e5e5db",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "VIOLET",
+    "hex": "#7b00f7",
+    "basic_color": "tím lavender",
+    "path": "colors/tim-lavender.wav"
+  },
+  {
+    "name": "WASABI",
+    "hex": "#b1b694",
+    "basic_color": "vàng nhạt",
+    "path": "colors/vang-nhat.wav"
+  },
+  {
+    "name": "WASHED DENIM",
+    "hex": "#345576",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "WATERMELON",
+    "hex": "#c45454",
+    "basic_color": "đỏ nhạt",
+    "path": "colors/do-nhat.wav"
+  },
+  {
+    "name": "WHITE",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE FLECK TRIBLEND",
+    "hex": "#e7e3e0",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE HEATHER",
+    "hex": "#dcdcdc",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE MARBLE",
+    "hex": "#b5b6af",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE SAND",
+    "hex": "#f3f1e2",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE SPOT",
+    "hex": "#fbfbfb",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/ ASPHALT",
+    "hex": "#fafaf9",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/ASPHALT",
+    "hex": "#fafaf9",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/BLACK",
+    "hex": "#f4f3f8",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "WHITE/DEEP HEATHER",
+    "hex": "#f9f7fc",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/DENIM",
+    "hex": "#f9fafb",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/FOREST",
+    "hex": "#fdfdfc",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/GREY/BLACK",
+    "hex": "#9698a1",
+    "basic_color": "đen",
+    "path": "colors/den.wav"
+  },
+  {
+    "name": "WHITE/HEATHER OLIVE",
+    "hex": "#e6e6e8",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "WHITE/HEATHER PEACH",
+    "hex": "#dfdfdf",
+    "basic_color": "hồng đào",
+    "path": "colors/hong-dao.wav"
+  },
+  {
+    "name": "WHITE/HELICONIA",
+    "hex": "#ffffff",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/HOT PINK",
+    "hex": "#fdf7f8",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "WHITE/KELLY",
+    "hex": "#dcdcdc",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "WHITE/MAROON",
+    "hex": "#e9e8ed",
+    "basic_color": "đỏ đậm",
+    "path": "colors/do-dam.wav"
+  },
+  {
+    "name": "WHITE/NAVY",
+    "hex": "#dddddd",
+    "basic_color": "xanh navy",
+    "path": "colors/xanh-navy.wav"
+  },
+  {
+    "name": "WHITE/NEON PINK",
+    "hex": "#f8f7f8",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "WHITE/OLIVE OIL",
+    "hex": "#e6e3da",
+    "basic_color": "xanh olive",
+    "path": "colors/xanh-olive.wav"
+  },
+  {
+    "name": "WHITE/RED",
+    "hex": "#ffffff",
+    "basic_color": "đỏ",
+    "path": "colors/do.wav"
+  },
+  {
+    "name": "WHITE/ROYAL",
+    "hex": "#fefefe",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "WHITE/SKY BLUE",
+    "hex": "#e4eff5",
+    "basic_color": "xanh dương",
+    "path": "colors/xanh-duong.wav"
+  },
+  {
+    "name": "WHITE/TRUE ROYAL",
+    "hex": "#fcfcfd",
+    "basic_color": "xanh royal",
+    "path": "colors/xanh-royal.wav"
+  },
+  {
+    "name": "WINE",
+    "hex": "#897083",
+    "basic_color": "hồng phấn",
+    "path": "colors/hong-phan.wav"
+  },
+  {
+    "name": "WOW PINK",
+    "hex": "#d3518d",
+    "basic_color": "hồng",
+    "path": "colors/hong.wav"
+  },
+  {
+    "name": "White Fleck/ Charcoal Triblend",
+    "hex": "#ddded9",
+    "basic_color": "trắng",
+    "path": "colors/trang.wav"
+  },
+  {
+    "name": "YAM",
+    "hex": "#b76f3d",
+    "basic_color": "cam",
+    "path": "colors/cam.wav"
+  },
+  {
+    "name": "YELLOW",
+    "hex": "#ffff00",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  },
+  {
+    "name": "YELLOW HAZE",
+    "hex": "#F5E1A4",
+    "basic_color": "vàng",
+    "path": "colors/vang.wav"
+  }
+]

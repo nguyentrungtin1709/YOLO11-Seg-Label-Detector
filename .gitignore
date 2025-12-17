@@ -116,7 +116,7 @@ output/
 logs/
 
 # Data directory (external dataset - not part of this repo)
-data/
+# data/
 
 # Notebook directory (training notebook - separate project)
 notebook/

@@ -25,10 +25,15 @@ from core.preprocessor.document_preprocessor import DocumentPreprocessor
 from core.enhancer.brightness_enhancer import BrightnessEnhancer
 from core.enhancer.sharpness_enhancer import SharpnessEnhancer
 from core.enhancer.image_enhancer import ImageEnhancer
+from core.qr.zxing_qr_detector import ZxingQrDetector
+from core.extractor.label_component_extractor import LabelComponentExtractor
+from core.ocr.paddle_ocr_extractor import PaddleOcrExtractor
+from core.processor.label_text_processor import LabelTextProcessor
 from services.camera_service import CameraService
 from services.detection_service import DetectionService
 from services.image_saver_service import ImageSaverService
 from services.preprocessing_service import PreprocessingService
+from services.ocr_pipeline_service import OcrPipelineService
 from services.performance_logger import PerformanceLogger
 from ui.main_window import MainWindow
 
@@ -188,12 +193,61 @@ def createApplication(config: dict) -> tuple:
         sharpnessEnabled=enhancementConfig.get("sharpnessEnabled", True)
     )
     
+    # Create OCR Pipeline Service
+    ocrPipelineConfig = config.get("ocrPipeline", {})
+    ocrPipelineService = None
+    
+    if ocrPipelineConfig.get("enabled", False):
+        # Create OCR pipeline components
+        qrConfig = ocrPipelineConfig.get("qrDetector", {})
+        qrDetector = ZxingQrDetector(
+            tryRotate=qrConfig.get("tryRotate", True),
+            tryDownscale=qrConfig.get("tryDownscale", True)
+        )
+        
+        componentConfig = ocrPipelineConfig.get("componentExtractor", {})
+        componentExtractor = LabelComponentExtractor(
+            aboveQrWidthRatio=componentConfig.get("aboveQrWidthRatio", 0.35),
+            aboveQrHeightRatio=componentConfig.get("aboveQrHeightRatio", 0.20),
+            belowQrWidthRatio=componentConfig.get("belowQrWidthRatio", 0.65),
+            belowQrHeightRatio=componentConfig.get("belowQrHeightRatio", 0.45),
+            padding=componentConfig.get("padding", 5)
+        )
+        
+        ocrConfig = ocrPipelineConfig.get("ocr", {})
+        ocrExtractor = PaddleOcrExtractor(
+            lang=ocrConfig.get("lang", "en"),
+            useTextlineOrientation=ocrConfig.get("useTextlineOrientation", False),
+            textDetThresh=ocrConfig.get("textDetThresh", 0.3),
+            textDetBoxThresh=ocrConfig.get("textDetBoxThresh", 0.5),
+            textRecScoreThresh=ocrConfig.get("textRecScoreThresh", 0.5),
+            device=ocrConfig.get("device", "cpu")
+        )
+        
+        textProcessorConfig = ocrPipelineConfig.get("textProcessor", {})
+        textProcessor = LabelTextProcessor(
+            productsJsonPath=textProcessorConfig.get("productsJsonPath"),
+            sizesJsonPath=textProcessorConfig.get("sizesJsonPath"),
+            colorsJsonPath=textProcessorConfig.get("colorsJsonPath"),
+            minFuzzyScore=textProcessorConfig.get("minFuzzyScore", 0.75)
+        )
+        
+        ocrPipelineService = OcrPipelineService(
+            qrDetector=qrDetector,
+            componentExtractor=componentExtractor,
+            ocrExtractor=ocrExtractor,
+            textProcessor=textProcessor,
+            debugEnabled=False,  # Controlled by UI debug toggle
+            debugBasePath=ocrPipelineConfig.get("debugBasePath", "output/debug")
+        )
+    
     # Create Main Window (UI Layer)
     mainWindow = MainWindow(
         cameraService=cameraService,
         detectionService=detectionService,
         imageSaverService=imageSaverService,
         preprocessingService=preprocessingService,
+        ocrPipelineService=ocrPipelineService,
         config=config
     )
     

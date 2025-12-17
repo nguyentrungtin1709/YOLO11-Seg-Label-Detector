@@ -1,0 +1,138 @@
+[
+    {
+        "name": "0-3M",
+        "path": "Audio/0-3M.wav"
+    },
+    {
+        "name": "12M",
+        "path": "Audio/12M.wav"
+    },
+    {
+        "name": "12M-18M",
+        "path": "Audio/12M-18M.wav"
+    },
+    {
+        "name": "18M",
+        "path": "Audio/18M.wav"
+    },
+    {
+        "name": "18M-24M",
+        "path": "Audio/18M-24M.wav"
+    },
+    {
+        "name": "24M",
+        "path": "Audio/24M.wav"
+    },
+    {
+        "name": "2T",
+        "path": "Audio/2T.wav"
+    },
+    {
+        "name": "2XL",
+        "path": "Audio/2XL.wav"
+    },
+    {
+        "name": "2XLT",
+        "path": "Audio/2XLT.wav"
+    },
+    {
+        "name": "3-6M",
+        "path": "Audio/3-6M.wav"
+    },
+    {
+        "name": "3M-6M",
+        "path": "Audio/3-6M.wav"
+    },
+    {
+        "name": "3T",
+        "path": "Audio/3T.wav"
+    },
+    {
+        "name": "3XL",
+        "path": "Audio/3XL.wav"
+    },
+    {
+        "name": "3XLT",
+        "path": "Audio/3XLT.wav"
+    },
+    {
+        "name": "4T",
+        "path": "Audio/4T.wav"
+    },
+    {
+        "name": "4XL",
+        "path": "Audio/4XL.wav"
+    },
+    {
+        "name": "5/6T",
+        "path": "Audio/5per6T.wav"
+    },
+    {
+        "name": "5T",
+        "path": "Audio/5T.wav"
+    },
+    {
+        "name": "5XL",
+        "path": "Audio/5XL.wav"
+    },
+    {
+        "name": "6-9M",
+        "path": "Audio/6-9M.wav"
+    },
+    {
+        "name": "6M",
+        "path": "Audio/6M.wav"
+    },
+    {
+        "name": "6M-12M",
+        "path": "Audio/6-12M.wav"
+    },
+    {
+        "name": "6XL",
+        "path": "Audio/6XL.wav"
+    },
+    {
+        "name": "7T",
+        "path": "Audio/7T.wav"
+    },
+    {
+        "name": "L",
+        "path": "Audio/L.wav"
+    },
+    {
+        "name": "LT",
+        "path": "Audio/LT.wav"
+    },
+    {
+        "name": "M",
+        "path": "Audio/M.wav"
+    },
+    {
+        "name": "M/L",
+        "path": "Audio/MperL.wav"
+    },
+    {
+        "name": "NB",
+        "path": "Audio/NB.wav"
+    },
+    {
+        "name": "S",
+        "path": "Audio/S.wav"
+    },
+    {
+        "name": "XL",
+        "path": "Audio/XL.wav"
+    },
+    {
+        "name": "XLT",
+        "path": "Audio/XLT.wav"
+    },
+    {
+        "name": "XS",
+        "path": "Audio/XS.wav"
+    },
+    {
+        "name": "XS/S",
+        "path": "Audio/XSperS.wav"
+    }
+]

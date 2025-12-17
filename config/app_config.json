@@ -28,7 +28,7 @@
     "jpegQuality": 95,
     "classNames": ["label"],
     "filterSettings": {
-        "maxAreaRatio": 0.15,
+        "maxAreaRatio": 0.40,
         "topNDetections": 1
     },
     "performanceLogging": {
@@ -51,6 +51,35 @@
             "sharpnessEnabled": true,
             "sharpnessSigma": 1.0,
             "sharpnessAmount": 1.5
+        }
+    },
+    "ocrPipeline": {
+        "enabled": true,
+        "debugBasePath": "output/debug",
+        "qrDetector": {
+            "tryRotate": true,
+            "tryDownscale": true
+        },
+        "componentExtractor": {
+            "aboveQrWidthRatio": 0.35,
+            "aboveQrHeightRatio": 0.20,
+            "belowQrWidthRatio": 0.65,
+            "belowQrHeightRatio": 0.45,
+            "padding": 5
+        },
+        "ocr": {
+            "lang": "en",
+            "useTextlineOrientation": false,
+            "textDetThresh": 0.3,
+            "textDetBoxThresh": 0.5,
+            "textRecScoreThresh": 0.5,
+            "device": "cpu"
+        },
+        "textProcessor": {
+            "minFuzzyScore": 0.75,
+            "productsJsonPath": "data/products.json",
+            "sizesJsonPath": "data/sizes.json",
+            "colorsJsonPath": "data/colors.json"
         }
     },
     "maxCameraSearch": 2,

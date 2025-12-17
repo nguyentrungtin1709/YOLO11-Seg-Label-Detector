@@ -7,6 +7,41 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.2.0] - 2025-12-18
+
+### Tổng quan
+Phiên bản bổ sung **OCR Pipeline** hoàn chỉnh - trích xuất thông tin từ nhãn sản phẩm bao gồm QR code detection, component extraction, OCR text extraction, và post-processing với fuzzy matching.
+
+### Added
+- **QR Code Detection**: Phát hiện QR code bằng pyzbar, parse định dạng `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+- **Component Extraction**: Cắt vùng text dựa trên vị trí QR code (above QR = position/quantity, below QR = product/size/color)
+- **OCR Text Extraction**: Trích xuất text bằng PaddleOCR (CPU-only mode)
+- **Fuzzy Matching**: So khớp text với database bằng Levenshtein và Jaro-Winkler similarity
+- **Validation**: Kiểm tra position từ QR code khớp với position từ OCR
+- **OCR Result Widget**: Widget hiển thị kết quả OCR trong UI (QR info, extracted fields, validation status)
+- **Debug Output**: 
+  - `output/debug/qr-code/`: JSON kết quả QR detection
+  - `output/debug/components/`: Ảnh các vùng đã cắt
+  - `output/debug/ocr-raw-text/`: JSON kết quả OCR thô
+  - `output/debug/result/`: JSON kết quả cuối cùng
+- **Data Files**: Database colors.json (4904), products.json (2172), sizes.json (138)
+
+### Technical
+- Thêm Core Interfaces:
+  - `IQrDetector`, `IComponentExtractor`, `IOcrExtractor`, `ITextProcessor`
+  - Data classes: `QrDetectionResult`, `ComponentResult`, `OcrResult`, `TextBlock`, `LabelData`
+- Thêm Core Implementations:
+  - `core/qr/PyzbarQrDetector`
+  - `core/extractor/LabelComponentExtractor`
+  - `core/ocr/PaddleOcrExtractor`
+  - `core/processor/FuzzyMatcher`, `LabelTextProcessor`
+- Thêm Service layer: `OcrPipelineService` với `OcrPipelineResult`
+- Thêm UI: `OcrResultWidget`
+- Dependencies mới: `pyzbar>=0.1.9`
+- Config mới: `ocrPipeline.enabled`, `debugEnabled`, `qrDetector`, `componentExtractor`, `ocr`, `textProcessor`
+
+---
+
 ## [1.1.0] - 2025-12-17
 
 ### Tổng quan

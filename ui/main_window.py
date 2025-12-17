@@ -17,10 +17,12 @@ from PySide6.QtWidgets import (
 
 from ui.widgets.camera_widget import CameraWidget
 from ui.widgets.config_panel import ConfigPanel
+from ui.widgets.ocr_result_widget import OcrResultWidget
 from services.camera_service import CameraService
 from services.detection_service import DetectionService
 from services.image_saver_service import ImageSaverService
 from services.preprocessing_service import PreprocessingService
+from services.ocr_pipeline_service import OcrPipelineService
 
 
 logger = logging.getLogger(__name__)
@@ -40,7 +42,8 @@ class MainWindow(QMainWindow):
         detectionService: DetectionService,
         imageSaverService: ImageSaverService,
         preprocessingService: PreprocessingService,
-        config: dict
+        ocrPipelineService: Optional[OcrPipelineService] = None,
+        config: dict = None
     ):
         """
         Initialize MainWindow.
@@ -50,6 +53,7 @@ class MainWindow(QMainWindow):
             detectionService: Detection service instance.
             imageSaverService: Image saver service instance.
             preprocessingService: Preprocessing service instance.
+            ocrPipelineService: OCR pipeline service instance (optional).
             config: Application configuration dictionary.
         """
         super().__init__()
@@ -58,7 +62,8 @@ class MainWindow(QMainWindow):
         self._detectionService = detectionService
         self._imageSaverService = imageSaverService
         self._preprocessingService = preprocessingService
-        self._config = config
+        self._ocrPipelineService = ocrPipelineService
+        self._config = config or {}
         
         # Frame update timer
         self._frameTimer = QTimer(self)
@@ -112,6 +117,13 @@ class MainWindow(QMainWindow):
         self._configPanel = ConfigPanel()
         self._configPanel.setFixedWidth(250)
         mainLayout.addWidget(self._configPanel, stretch=0)
+        
+        # OCR Result widget (right side of config panel)
+        self._ocrResultWidget = OcrResultWidget()
+        self._ocrResultWidget.setFixedWidth(220)
+        if self._ocrPipelineService is None:
+            self._ocrResultWidget.hide()
+        mainLayout.addWidget(self._ocrResultWidget, stretch=0)
         
         # Status bar
         self._statusBar = QStatusBar()
@@ -297,11 +309,17 @@ class MainWindow(QMainWindow):
     def _onDebugToggled(self, enabled: bool):
         """
         Handle debug mode toggle.
+        Controls all debug output (image saver + OCR pipeline).
         
         Args:
             enabled: True if debug enabled.
         """
         self._cameraWidget.setDebugMode(enabled)
+        
+        # Also enable/disable OCR pipeline debug
+        if self._ocrPipelineService is not None:
+            self._ocrPipelineService.setDebugEnabled(enabled)
+        
         status = "Debug mode enabled" if enabled else "Debug mode disabled"
         self._statusBar.showMessage(status)
     
@@ -353,12 +371,18 @@ class MainWindow(QMainWindow):
                 # Display the final enhanced image in UI
                 if enhancedImage is not None:
                     self._configPanel.updatePreprocessedImage(enhancedImage)
+                    
+                    # Run OCR pipeline if available
+                    self._runOcrPipeline(enhancedImage)
                 else:
                     self._configPanel.clearPreprocessedImage()
+                    self._ocrResultWidget.clear()
             else:
                 self._configPanel.clearPreprocessedImage()
+                self._ocrResultWidget.clear()
         else:
             self._configPanel.clearPreprocessedImage()
+            self._ocrResultWidget.clear()
         
         # Auto-save in debug mode when detections found (with cooldown)
         if self._cameraWidget.isDebugMode() and detections:
@@ -394,6 +418,31 @@ class MainWindow(QMainWindow):
             self._fpsLabel.setText(f"FPS: {fps:.1f} | Total: {totalTime:.1f}ms")
         else:
             self._fpsLabel.setText("FPS: --")
+    
+    def _runOcrPipeline(self, image):
+        """
+        Run OCR pipeline on preprocessed image.
+        
+        Args:
+            image: Preprocessed label image.
+        """
+        if self._ocrPipelineService is None:
+            return
+        
+        try:
+            result = self._ocrPipelineService.process(image)
+            
+            if result is not None:
+                self._ocrResultWidget.updateResult(
+                    result.labelData, 
+                    result.processingTimeMs
+                )
+            else:
+                self._ocrResultWidget.showError("No QR detected")
+                
+        except Exception as e:
+            logger.error(f"OCR pipeline error: {e}")
+            self._ocrResultWidget.showError("OCR Error")
     
     def closeEvent(self, event):
         """Handle window close event."""

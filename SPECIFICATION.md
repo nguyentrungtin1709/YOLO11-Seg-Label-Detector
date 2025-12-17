@@ -145,13 +145,26 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | F22 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask, ảnh cropped, ảnh enhanced, và tọa độ contour |
 | F23 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
 
-### 3.5 Điều khiển ứng dụng
+### 3.5 OCR Pipeline (Đọc nội dung nhãn)
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F24 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
-| F25 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
-| F26 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F24 | QR Code Detection | Phát hiện và giải mã QR code trên nhãn sử dụng pyzbar |
+| F25 | QR Data Parsing | Parse dữ liệu QR theo format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION` |
+| F26 | Component Extraction | Cắt vùng trên/dưới QR code để trích xuất thông tin text |
+| F27 | OCR Text Extraction | Sử dụng PaddleOCR để đọc text từ vùng đã cắt |
+| F28 | Fuzzy Matching | So khớp text với database sử dụng Levenshtein + Jaro-Winkler |
+| F29 | Data Validation | Xác thực dữ liệu đã trích xuất (QR + OCR) |
+| F30 | Result Display | Hiển thị kết quả OCR trong widget chuyên dụng |
+| F31 | OCR Debug Output | Lưu debug cho từng bước: QR detect, components, raw text, final result |
+
+### 3.6 Điều khiển ứng dụng
+
+| ID | Tính năng | Mô tả |
+|----|-----------|-------|
+| F32 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
+| F33 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F34 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
 
 ## 4. Định dạng lưu trữ
 
@@ -174,8 +187,16 @@ output/
     │   └── cropped_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
     ├── preprocessing/     # Ảnh sau enhancement (kết quả cuối cùng)
     │   └── preprocessed_YYYYMMDD_HHMMSS_mmm.jpg
-    └── txt/               # Tọa độ contour của mask
-        └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
+    ├── txt/               # Tọa độ contour của mask
+    │   └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
+    ├── qr-code/           # QR code detection debug
+    │   └── qr_YYYYMMDD_HHMMSS_mmm.jpg
+    ├── components/        # Above/Below QR regions
+    │   └── component_YYYYMMDD_HHMMSS_mmm_{type}.jpg
+    ├── ocr-raw-text/      # Raw OCR text output
+    │   └── ocr_YYYYMMDD_HHMMSS_mmm.txt
+    └── result/            # Final OCR pipeline result
+        └── result_YYYYMMDD_HHMMSS_mmm.json
 ```
 
 ### 4.2 Quy tắc đặt tên file
@@ -273,25 +294,93 @@ output/
 | `preprocessing.enhancement.sharpnessSigma` | float | 1.0 | Gaussian blur sigma |
 | `preprocessing.enhancement.sharpnessAmount` | float | 1.5 | Sharpen amount (1.0 - 3.0) |
 
-## 9. Yêu cầu phi chức năng
+## 9. Cấu hình OCR Pipeline
 
-### 9.1 Hiệu năng
+### 9.1 Cấu hình chung
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.enabled` | bool | true | Bật/tắt OCR pipeline |
+| `ocrPipeline.debugEnabled` | bool | true | Lưu debug output cho OCR |
+
+### 9.2 QR Detector
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.qrDetector.symbolTypes` | array | ["QRCODE"] | Loại mã cần detect |
+
+**QR Data Format:** `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+- `MMDDYY`: Ngày (ví dụ: 110125 = 11/01/2025)
+- `FACILITY`: Mã cơ sở (ví dụ: VA)
+- `TYPE`: Loại đơn hàng (M = Made-to-Order, S = Stock)
+- `ORDER`: Số đơn hàng (6 chữ số)
+- `POSITION`: Vị trí (1-n)
+
+### 9.3 Component Extractor
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.componentExtractor.aboveQrRatio` | float | 0.25 | Tỷ lệ vùng trên QR (% chiều cao ảnh) |
+| `ocrPipeline.componentExtractor.belowQrRatio` | float | 0.35 | Tỷ lệ vùng dưới QR (% chiều cao ảnh) |
+| `ocrPipeline.componentExtractor.paddingRatio` | float | 0.02 | Padding cho merged image |
+
+**Label Structure:**
+```
+┌─────────────────────────────────┐
+│  Position/Quantity (above QR)   │  ← Extracted with aboveQrRatio
+├─────────────────────────────────┤
+│                                 │
+│         [QR CODE]               │
+│                                 │
+├─────────────────────────────────┤
+│  Product/Size/Color (below QR)  │  ← Extracted with belowQrRatio
+└─────────────────────────────────┘
+```
+
+### 9.4 OCR Extractor (PaddleOCR)
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.ocr.language` | string | "en" | Ngôn ngữ OCR |
+| `ocrPipeline.ocr.useGpu` | bool | false | Sử dụng GPU (CPU-only khi false) |
+| `ocrPipeline.ocr.showLog` | bool | false | Hiển thị log PaddleOCR |
+| `ocrPipeline.ocr.dropScore` | float | 0.5 | Ngưỡng lọc kết quả OCR |
+
+### 9.5 Text Processor (Fuzzy Matching)
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.textProcessor.colorsPath` | string | data/colors.json | Database màu sắc |
+| `ocrPipeline.textProcessor.productsPath` | string | data/products.json | Database sản phẩm |
+| `ocrPipeline.textProcessor.sizesPath` | string | data/sizes.json | Database kích thước |
+| `ocrPipeline.textProcessor.matchThreshold` | float | 0.7 | Ngưỡng similarity tối thiểu |
+| `ocrPipeline.textProcessor.levenshteinWeight` | float | 0.4 | Trọng số Levenshtein |
+| `ocrPipeline.textProcessor.jaroWinklerWeight` | float | 0.6 | Trọng số Jaro-Winkler |
+
+**Fuzzy Matching Algorithm:**
+```
+combinedSimilarity = (levenshteinWeight × levenshteinScore) + (jaroWinklerWeight × jaroWinklerScore)
+```
+
+## 10. Yêu cầu phi chức năng
+
+### 10.1 Hiệu năng
 - Xử lý real-time với FPS >= 15 trên CPU
 - Độ trễ phát hiện < 100ms
 - Target FPS có thể cấu hình (mặc định: 60 FPS)
 - Performance logging tùy chọn với FPS display trên status bar
 
-### 9.2 Giao diện
+### 10.2 Giao diện
 - Giao diện tối (dark theme)
 - Responsive khi resize cửa sổ
 - Kích thước cửa sổ tối thiểu: 900 x 700 pixels (cấu hình được)
 
-### 9.3 Tương thích
+### 10.3 Tương thích
 - Hệ điều hành: Windows, Linux, macOS
 - Python 3.12+
 - Hỗ trợ nhiều loại camera (USB, built-in)
 
-## 10. Xử lý các trường hợp đặc biệt
+## 11. Xử lý các trường hợp đặc biệt
 
 | Tình huống | Xử lý |
 |------------|-------|
@@ -299,6 +388,9 @@ output/
 | Camera không mở được | Hiển thị thông báo lỗi, tắt toggle Camera Power |
 | Không load được YOLO model | Hiển thị cảnh báo khi khởi động |
 | Không load được PaddleOCR model | Vô hiệu hóa AI orientation fix, sử dụng các bước khác |
+| Không tìm thấy QR code | Bỏ qua OCR pipeline, hiển thị thông báo |
+| OCR không đọc được text | Trả về kết quả với các trường trống |
+| Fuzzy matching không khớp | Giữ giá trị OCR gốc, đánh dấu không hợp lệ |
 | Thư mục output không tồn tại | Tự động tạo thư mục khi lưu ảnh |
 | Nút Capture khi camera tắt | Nút bị vô hiệu hóa (disabled) |
 
