@@ -7,6 +7,28 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.1.0] - 2025-12-17
+
+### Tổng quan
+Phiên bản bổ sung tính năng **Image Preprocessing** - xử lý ảnh nhãn sau khi phát hiện bao gồm crop, rotate, và sửa hướng ảnh bằng AI.
+
+### Added
+- **Preprocessing Pipeline**: Crop và xoay ảnh dựa trên segmentation mask
+- **Force Landscape**: Tự động xoay ảnh về hướng ngang (width >= height)
+- **AI Orientation Fix**: Sử dụng PaddleOCR (PP-LCNet_x1_0_doc_ori) để phát hiện và sửa ảnh bị ngược 180°
+- **Preprocessed Image Widget**: Hiển thị ảnh đã xử lý trong UI bên dưới Detection config panel
+- **Debug Save**: Tự động lưu ảnh đã xử lý vào `output/debug/preprocessing/` khi bật Debug Mode
+- **Local Model Storage**: Model PP-LCNet được lưu trong `models/paddle/` để portable
+
+### Technical
+- Thêm Core layer: `IImagePreprocessor` interface, `GeometricTransformer`, `OrientationCorrector`, `DocumentPreprocessor`
+- Thêm Service layer: `PreprocessingService`
+- Thêm UI layer: `PreprocessedImageWidget`
+- Dependencies mới: `paddleocr>=2.7.0`, `paddlepaddle>=2.5.0`
+- Config mới: `preprocessing.enabled`, `forceLandscape`, `aiOrientationFix`, `paddleModelPath`
+
+---
+
 ## [1.0.0] - 2025-12-13
 
 ### Tổng quan

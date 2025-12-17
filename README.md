@@ -9,11 +9,15 @@
 - **Camera Management**: Tự động phát hiện và chọn camera, bật/tắt camera
 - **Instance Segmentation**: Phát hiện và phân đoạn nhãn với YOLO11n-seg (ONNX)
 - **Mask Visualization**: Hiển thị segmentation mask với màu sắc và opacity tùy chỉnh
+- **Image Preprocessing**: Crop, rotate và sửa hướng ảnh nhãn tự động
+  - Crop theo minimum area rectangle từ segmentation mask
+  - Force landscape orientation (width >= height)
+  - AI 180° fix sử dụng PaddleOCR (PP-LCNet)
 - **Adjustable Threshold**: Điều chỉnh ngưỡng confidence (0.0 - 1.0)
 - **Size Filtering**: Lọc bỏ đối tượng quá lớn theo tỷ lệ diện tích
 - **Top N Selection**: Chỉ hiển thị N đối tượng có confidence cao nhất
 - **Image Capture**: Chụp và lưu ảnh gốc
-- **Debug Mode**: Tự động lưu ảnh có annotation khi phát hiện đối tượng
+- **Debug Mode**: Tự động lưu ảnh có annotation và ảnh đã xử lý khi phát hiện đối tượng
 - **Dark Theme**: Giao diện tối, thân thiện với mắt
 - **Configurable**: Tất cả màu sắc và tham số có thể cấu hình từ file JSON
 
@@ -88,23 +92,28 @@ label-detector/
 ├── config/
 │   └── app_config.json       # Cấu hình ứng dụng
 ├── core/                     # Core layer (interfaces & implementations)
-│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter)
+│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor)
 │   ├── camera/               # Camera implementation (OpenCVCamera)
 │   ├── detector/             # YOLO detector implementation (YOLODetector)
+│   ├── preprocessor/         # Preprocessing (GeometricTransformer, OrientationCorrector, DocumentPreprocessor)
 │   └── writer/               # File writer implementation (LocalImageWriter)
 ├── services/                 # Service layer (business logic)
 │   ├── camera_service.py     # Camera orchestration
 │   ├── detection_service.py  # Detection + filtering logic
 │   ├── image_saver_service.py # Image saving with annotations
+│   ├── preprocessing_service.py # Image preprocessing orchestration
 │   └── performance_logger.py # FPS and timing metrics
 ├── ui/                       # UI layer (PySide6 widgets)
 │   ├── main_window.py
 │   └── widgets/
 │       ├── camera_widget.py  # Video display with overlays
 │       ├── config_panel.py   # Control panel
+│       ├── preprocessed_image_widget.py  # Preprocessed image display
 │       └── toggle_switch.py  # Custom toggle widget
 ├── models/
-│   └── yolo11n-seg-version-1.0.1.onnx  # YOLO11n-seg model
+│   ├── yolo11n-seg-version-x-x-x.onnx  # YOLO11n-seg model
+│   └── paddle/
+│       └── PP-LCNet_x1_0_doc_ori/      # PaddleOCR orientation model
 ├── output/
 │   ├── captures/             # Ảnh chụp thủ công (raw)
 │   └── debug/                # Ảnh debug tự động
@@ -112,6 +121,7 @@ label-detector/
 │       ├── original/         # Ảnh gốc (PNG)
 │       ├── bbox/             # Crop theo bounding box
 │       ├── mask/             # Crop theo mask (PNG với alpha)
+│       ├── preprocessing/    # Ảnh đã xử lý (crop, rotate, orientation fix)
 │       └── txt/              # Tọa độ contour của mask
 ├── main.py                   # Entry point với Dependency Injection
 ├── requirements.txt          # Dependencies
@@ -139,6 +149,16 @@ File cấu hình: `config/app_config.json`
 | `filterSettings.maxAreaRatio` | Lọc đối tượng > X% diện tích ảnh | `0.15` |
 | `filterSettings.topNDetections` | Số đối tượng tối đa hiển thị | `3` |
 
+### Preprocessing Settings (Tiền xử lý ảnh)
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `preprocessing.enabled` | Bật/tắt preprocessing | `true` |
+| `preprocessing.forceLandscape` | Xoay ảnh về hướng ngang | `true` |
+| `preprocessing.aiOrientationFix` | Sửa ảnh ngược 180° bằng AI | `true` |
+| `preprocessing.aiConfidenceThreshold` | Ngưỡng confidence cho AI fix | `0.6` |
+| `preprocessing.paddleModelPath` | Đường dẫn model PaddleOCR | `models/paddle/PP-LCNet_x1_0_doc_ori` |
+
 ### Visualization (Hiển thị)
 
 | Tham số | Mô tả | Mặc định |
@@ -158,6 +178,7 @@ Khi bật Debug Mode và phát hiện đối tượng, ứng dụng tự động
 | `debug/original/` | Ảnh gốc không annotation | PNG |
 | `debug/bbox/` | Crop theo bounding box | JPEG |
 | `debug/mask/` | Crop theo mask với nền trong suốt | PNG (BGRA) |
+| `debug/preprocessing/` | Ảnh đã xử lý (crop, rotate, orientation fix) | JPEG |
 | `debug/txt/` | Tọa độ contour của mask | TXT |
 
 ## Performance Logging
