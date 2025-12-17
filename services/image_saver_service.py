@@ -65,6 +65,7 @@ class ImageSaverService:
         self._bboxCropDirectory = os.path.join(debugDirectory, "bbox")
         self._maskCropDirectory = os.path.join(debugDirectory, "mask")
         self._txtDirectory = os.path.join(debugDirectory, "txt")
+        self._croppedDirectory = os.path.join(debugDirectory, "cropped")
         self._preprocessingDirectory = os.path.join(debugDirectory, "preprocessing")
         self._boxColor = boxColor
         self._textColor = textColor
@@ -119,11 +120,11 @@ class ImageSaverService:
         detectionIndex: int = 0
     ) -> Optional[str]:
         """
-        Save a preprocessed (cropped, rotated, orientation-fixed) image.
-        Used in debug mode to save the result of preprocessing pipeline.
+        Save a final enhanced image (after brightness + sharpness enhancement).
+        Used in debug mode to save the final result of preprocessing + enhancement pipeline.
         
         Args:
-            image: Preprocessed image to save (BGR format).
+            image: Enhanced image to save (BGR format).
             detectionIndex: Index of the detection (for filename).
             
         Returns:
@@ -145,6 +146,38 @@ class ImageSaverService:
             logger.error(f"Failed to save preprocessed image: {filepath}")
             return None
     
+    def saveCroppedImage(
+        self,
+        image: np.ndarray,
+        detectionIndex: int = 0
+    ) -> Optional[str]:
+        """
+        Save a cropped image (after crop, rotate, orientation fix but before enhancement).
+        Used in debug mode to save the result of DocumentPreprocessor.
+        
+        Args:
+            image: Cropped image to save (BGR format).
+            detectionIndex: Index of the detection (for filename).
+            
+        Returns:
+            Saved file path, or None if failed.
+        """
+        if image is None:
+            return None
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+        filename = f"cropped_{timestamp}_{detectionIndex}.jpg"
+        filepath = os.path.join(self._croppedDirectory, filename)
+        
+        success = self._imageWriter.save(image.copy(), filepath)
+        
+        if success:
+            logger.debug(f"Cropped image saved: {filepath}")
+            return filepath
+        else:
+            logger.error(f"Failed to save cropped image: {filepath}")
+            return None
+
     def saveDebugFrame(
         self,
         frame: np.ndarray,
