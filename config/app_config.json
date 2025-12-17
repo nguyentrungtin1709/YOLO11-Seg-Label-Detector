@@ -36,6 +36,15 @@
         "logInterval": 1,
         "showInStatusBar": true
     },
+    "preprocessing": {
+        "enabled": true,
+        "forceLandscape": true,
+        "aiOrientationFix": true,
+        "aiConfidenceThreshold": 0.6,
+        "paddleModelPath": "models/paddle/PP-LCNet_x1_0_doc_ori",
+        "displayWidth": 230,
+        "displayHeight": 100
+    },
     "maxCameraSearch": 2,
     "windowMinWidth": 1000,
     "windowMinHeight": 700

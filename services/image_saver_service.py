@@ -65,6 +65,7 @@ class ImageSaverService:
         self._bboxCropDirectory = os.path.join(debugDirectory, "bbox")
         self._maskCropDirectory = os.path.join(debugDirectory, "mask")
         self._txtDirectory = os.path.join(debugDirectory, "txt")
+        self._preprocessingDirectory = os.path.join(debugDirectory, "preprocessing")
         self._boxColor = boxColor
         self._textColor = textColor
         self._lineThickness = lineThickness
@@ -110,6 +111,38 @@ class ImageSaverService:
             return filepath
         else:
             logger.error(f"Failed to save raw capture: {filepath}")
+            return None
+    
+    def savePreprocessedImage(
+        self,
+        image: np.ndarray,
+        detectionIndex: int = 0
+    ) -> Optional[str]:
+        """
+        Save a preprocessed (cropped, rotated, orientation-fixed) image.
+        Used in debug mode to save the result of preprocessing pipeline.
+        
+        Args:
+            image: Preprocessed image to save (BGR format).
+            detectionIndex: Index of the detection (for filename).
+            
+        Returns:
+            Saved file path, or None if failed.
+        """
+        if image is None:
+            return None
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+        filename = f"preprocessed_{timestamp}_{detectionIndex}.jpg"
+        filepath = os.path.join(self._preprocessingDirectory, filename)
+        
+        success = self._imageWriter.save(image.copy(), filepath)
+        
+        if success:
+            logger.debug(f"Preprocessed image saved: {filepath}")
+            return filepath
+        else:
+            logger.error(f"Failed to save preprocessed image: {filepath}")
             return None
     
     def saveDebugFrame(

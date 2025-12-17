@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 )
 
 from ui.widgets.toggle_switch import ToggleSwitch
+from ui.widgets.preprocessed_image_widget import PreprocessedImageWidget
 from core.interfaces.camera_interface import CameraInfo
 
 
@@ -100,6 +101,10 @@ class ConfigPanel(QWidget):
         detectionLayout.addLayout(confidenceRow)
         
         layout.addWidget(detectionGroup)
+        
+        # Preprocessed Image Widget
+        self._preprocessedImageWidget = PreprocessedImageWidget()
+        layout.addWidget(self._preprocessedImageWidget)
         
         # Capture Button
         self._captureButton = QPushButton("📷 Capture Image")
@@ -222,3 +227,19 @@ class ConfigPanel(QWidget):
     def isCameraEnabled(self) -> bool:
         """Get camera toggle state."""
         return self._cameraToggle.isChecked()
+    
+    def updatePreprocessedImage(self, image) -> None:
+        """
+        Update the preprocessed image display.
+        
+        Args:
+            image: Preprocessed image (BGR format), or None to clear.
+        """
+        if image is not None:
+            self._preprocessedImageWidget.updateImage(image)
+        else:
+            self._preprocessedImageWidget.clear()
+    
+    def clearPreprocessedImage(self) -> None:
+        """Clear the preprocessed image display."""
+        self._preprocessedImageWidget.clear()
