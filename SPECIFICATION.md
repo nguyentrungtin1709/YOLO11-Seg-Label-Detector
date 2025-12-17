@@ -8,6 +8,7 @@
 
 - **Instance Segmentation**: Phân đoạn pixel-level cho từng đối tượng
 - **Image Preprocessing**: Crop, rotate và sửa hướng ảnh nhãn tự động bằng AI
+- **Image Enhancement**: Tăng cường độ sáng (CLAHE) và độ sắc nét (Unsharp Mask)
 - **Lọc theo kích thước**: Chỉ hiển thị các đối tượng có diện tích nhỏ hơn ngưỡng
 - **Top N Detection**: Chỉ hiển thị N đối tượng có confidence cao nhất
 - **Màu sắc tùy chỉnh**: Màu mask và bounding box có thể cấu hình từ file config
@@ -132,23 +133,25 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | F15 | Rotate | Xoay ảnh để nhãn nằm thẳng |
 | F16 | Force Landscape | Tự động xoay ảnh về hướng ngang (width >= height) |
 | F17 | AI Orientation Fix | Sử dụng PaddleOCR (PP-LCNet) để phát hiện và sửa ảnh bị ngược 180° |
-| F18 | Hiển thị kết quả | Hiển thị ảnh đã xử lý trong widget bên dưới Detection config |
+| F18 | Brightness Enhancement | Tăng cường độ sáng ảnh tối bằng CLAHE (tùy chọn) |
+| F19 | Sharpness Enhancement | Làm sắc nét ảnh mờ bằng Unsharp Mask (tùy chọn) |
+| F20 | Hiển thị kết quả | Hiển thị ảnh đã xử lý trong widget bên dưới Detection config |
 
 ### 3.4 Chụp và lưu ảnh
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F19 | Chụp ảnh thủ công | Lưu frame hiện tại dưới dạng ảnh gốc (không có bounding box và mask) khi nhấn nút Capture |
-| F20 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask, ảnh đã xử lý, và tọa độ contour |
-| F21 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
+| F21 | Chụp ảnh thủ công | Lưu frame hiện tại dưới dạng ảnh gốc (không có bounding box và mask) khi nhấn nút Capture |
+| F22 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask, ảnh cropped, ảnh enhanced, và tọa độ contour |
+| F23 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
 
 ### 3.5 Điều khiển ứng dụng
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F22 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
-| F23 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
-| F24 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F24 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
+| F25 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F26 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
 
 ## 4. Định dạng lưu trữ
 
@@ -167,7 +170,9 @@ output/
     │   └── bbox_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
     ├── mask/              # Crop theo mask với alpha channel
     │   └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.png
-    ├── preprocessing/     # Ảnh đã xử lý (crop, rotate, orientation fix)
+    ├── cropped/           # Ảnh sau crop, rotate, orientation fix
+    │   └── cropped_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
+    ├── preprocessing/     # Ảnh sau enhancement (kết quả cuối cùng)
     │   └── preprocessed_YYYYMMDD_HHMMSS_mmm.jpg
     └── txt/               # Tọa độ contour của mask
         └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
@@ -182,7 +187,8 @@ output/
 | Original | `debug/original/` | `frame_{timestamp}.png` | Ảnh gốc tại thời điểm phát hiện |
 | BBox Crop | `debug/bbox/` | `bbox_{timestamp}_{idx}.jpg` | Crop ảnh theo bounding box |
 | Mask Crop | `debug/mask/` | `mask_{timestamp}_{idx}.png` | Crop ảnh theo mask với nền trong suốt (BGRA) |
-| Preprocessed | `debug/preprocessing/` | `preprocessed_{timestamp}.jpg` | Ảnh đã xử lý (crop, rotate, orientation fix) |
+| Cropped | `debug/cropped/` | `cropped_{timestamp}_{idx}.jpg` | Ảnh sau crop, rotate, orientation fix |
+| Preprocessed | `debug/preprocessing/` | `preprocessed_{timestamp}.jpg` | Ảnh sau enhancement (kết quả cuối cùng) |
 | Contour | `debug/txt/` | `mask_{timestamp}_{idx}.txt` | Tọa độ x,y của contour mask |
 
 *Timestamp format: YYYYMMDD_HHMMSS_mmm (năm-tháng-ngày_giờ-phút-giây_miligiây)*
@@ -255,6 +261,17 @@ output/
 | `preprocessing.paddleModelPath` | string | models/paddle/PP-LCNet_x1_0_doc_ori | Đường dẫn model PaddleOCR |
 | `preprocessing.displayWidth` | int | 230 | Chiều rộng widget hiển thị |
 | `preprocessing.displayHeight` | int | 100 | Chiều cao widget hiển thị |
+
+## 8.1 Cấu hình Enhancement
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `preprocessing.enhancement.brightnessEnabled` | bool | true | Bật tăng cường độ sáng (CLAHE) |
+| `preprocessing.enhancement.brightnessClipLimit` | float | 2.5 | CLAHE clip limit (1.0 - 5.0) |
+| `preprocessing.enhancement.brightnessTileSize` | int | 8 | CLAHE tile grid size |
+| `preprocessing.enhancement.sharpnessEnabled` | bool | true | Bật làm sắc nét (Unsharp Mask) |
+| `preprocessing.enhancement.sharpnessSigma` | float | 1.0 | Gaussian blur sigma |
+| `preprocessing.enhancement.sharpnessAmount` | float | 1.5 | Sharpen amount (1.0 - 3.0) |
 
 ## 9. Yêu cầu phi chức năng
 
