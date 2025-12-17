@@ -343,12 +343,18 @@ class MainWindow(QMainWindow):
         self._cameraWidget.updateFrame(frame, detections)
         
         # Run preprocessing on first detection and update UI
-        preprocessedImage = None
+        croppedImage = None
+        enhancedImage = None
         if detections and self._preprocessingService.isEnabled:
-            result = self._preprocessingService.processFirstDetection(frame, detections)
-            if result and result.success and result.image is not None:
-                preprocessedImage = result.image
-                self._configPanel.updatePreprocessedImage(preprocessedImage)
+            result = self._preprocessingService.processFirstDetectionFull(frame, detections)
+            if result and result.success:
+                croppedImage = result.croppedImage
+                enhancedImage = result.enhancedImage
+                # Display the final enhanced image in UI
+                if enhancedImage is not None:
+                    self._configPanel.updatePreprocessedImage(enhancedImage)
+                else:
+                    self._configPanel.clearPreprocessedImage()
             else:
                 self._configPanel.clearPreprocessedImage()
         else:
@@ -360,9 +366,13 @@ class MainWindow(QMainWindow):
             if currentTime - self._lastDebugSave >= self._debugSaveCooldown:
                 self._imageSaverService.saveDebugFrame(frame, detections)
                 
-                # Also save preprocessed image if available
-                if preprocessedImage is not None:
-                    self._imageSaverService.savePreprocessedImage(preprocessedImage, 0)
+                # Save cropped image (after document preprocessing)
+                if croppedImage is not None:
+                    self._imageSaverService.saveCroppedImage(croppedImage, 0)
+                
+                # Save enhanced image (final result after enhancement)
+                if enhancedImage is not None:
+                    self._imageSaverService.savePreprocessedImage(enhancedImage, 0)
                 
                 self._lastDebugSave = currentTime
                 self._statusBar.showMessage(f"Debug: saved frame with {len(detections)} detection(s)")

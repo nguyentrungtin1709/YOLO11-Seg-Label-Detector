@@ -22,6 +22,9 @@ from core.writer.local_writer import LocalImageWriter
 from core.preprocessor.geometric_transformer import GeometricTransformer
 from core.preprocessor.orientation_corrector import OrientationCorrector
 from core.preprocessor.document_preprocessor import DocumentPreprocessor
+from core.enhancer.brightness_enhancer import BrightnessEnhancer
+from core.enhancer.sharpness_enhancer import SharpnessEnhancer
+from core.enhancer.image_enhancer import ImageEnhancer
 from services.camera_service import CameraService
 from services.detection_service import DetectionService
 from services.image_saver_service import ImageSaverService
@@ -156,11 +159,33 @@ def createApplication(config: dict) -> tuple:
         geometricTransformer=geometricTransformer,
         orientationCorrector=orientationCorrector
     )
+    
+    # Create Image Enhancer
+    enhancementConfig = preprocessingConfig.get("enhancement", {})
+    brightnessEnhancer = BrightnessEnhancer(
+        clipLimit=enhancementConfig.get("brightnessClipLimit", 2.5),
+        tileGridSize=(
+            enhancementConfig.get("brightnessTileSize", 8),
+            enhancementConfig.get("brightnessTileSize", 8)
+        )
+    )
+    sharpnessEnhancer = SharpnessEnhancer(
+        sigma=enhancementConfig.get("sharpnessSigma", 1.0),
+        amount=enhancementConfig.get("sharpnessAmount", 1.5)
+    )
+    imageEnhancer = ImageEnhancer(
+        brightnessEnhancer=brightnessEnhancer,
+        sharpnessEnhancer=sharpnessEnhancer
+    )
+    
     preprocessingService = PreprocessingService(
         preprocessor=documentPreprocessor,
+        enhancer=imageEnhancer,
         enabled=preprocessingConfig.get("enabled", True),
         forceLandscape=preprocessingConfig.get("forceLandscape", True),
-        aiOrientationFix=preprocessingConfig.get("aiOrientationFix", True)
+        aiOrientationFix=preprocessingConfig.get("aiOrientationFix", True),
+        brightnessEnabled=enhancementConfig.get("brightnessEnabled", True),
+        sharpnessEnabled=enhancementConfig.get("sharpnessEnabled", True)
     )
     
     # Create Main Window (UI Layer)

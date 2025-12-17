@@ -13,6 +13,9 @@
   - Crop theo minimum area rectangle từ segmentation mask
   - Force landscape orientation (width >= height)
   - AI 180° fix sử dụng PaddleOCR (PP-LCNet)
+- **Image Enhancement**: Cải thiện chất lượng ảnh nhãn
+  - Brightness Enhancement (CLAHE) - tăng cường độ sáng ảnh tối
+  - Sharpness Enhancement (Unsharp Mask) - làm sắc nét ảnh mờ
 - **Adjustable Threshold**: Điều chỉnh ngưỡng confidence (0.0 - 1.0)
 - **Size Filtering**: Lọc bỏ đối tượng quá lớn theo tỷ lệ diện tích
 - **Top N Selection**: Chỉ hiển thị N đối tượng có confidence cao nhất
@@ -92,10 +95,11 @@ label-detector/
 ├── config/
 │   └── app_config.json       # Cấu hình ứng dụng
 ├── core/                     # Core layer (interfaces & implementations)
-│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor)
+│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor, IImageEnhancer)
 │   ├── camera/               # Camera implementation (OpenCVCamera)
 │   ├── detector/             # YOLO detector implementation (YOLODetector)
 │   ├── preprocessor/         # Preprocessing (GeometricTransformer, OrientationCorrector, DocumentPreprocessor)
+│   ├── enhancer/             # Enhancement (BrightnessEnhancer, SharpnessEnhancer, ImageEnhancer)
 │   └── writer/               # File writer implementation (LocalImageWriter)
 ├── services/                 # Service layer (business logic)
 │   ├── camera_service.py     # Camera orchestration
@@ -121,7 +125,8 @@ label-detector/
 │       ├── original/         # Ảnh gốc (PNG)
 │       ├── bbox/             # Crop theo bounding box
 │       ├── mask/             # Crop theo mask (PNG với alpha)
-│       ├── preprocessing/    # Ảnh đã xử lý (crop, rotate, orientation fix)
+│       ├── cropped/          # Ảnh sau crop, rotate, orientation fix
+│       ├── preprocessing/    # Ảnh sau enhancement (kết quả cuối cùng)
 │       └── txt/              # Tọa độ contour của mask
 ├── main.py                   # Entry point với Dependency Injection
 ├── requirements.txt          # Dependencies
@@ -159,6 +164,17 @@ File cấu hình: `config/app_config.json`
 | `preprocessing.aiConfidenceThreshold` | Ngưỡng confidence cho AI fix | `0.6` |
 | `preprocessing.paddleModelPath` | Đường dẫn model PaddleOCR | `models/paddle/PP-LCNet_x1_0_doc_ori` |
 
+### Enhancement Settings (Cải thiện chất lượng ảnh)
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `preprocessing.enhancement.brightnessEnabled` | Bật tăng cường độ sáng | `true` |
+| `preprocessing.enhancement.brightnessClipLimit` | CLAHE clip limit (1.0-5.0) | `2.5` |
+| `preprocessing.enhancement.brightnessTileSize` | CLAHE tile grid size | `8` |
+| `preprocessing.enhancement.sharpnessEnabled` | Bật làm sắc nét | `true` |
+| `preprocessing.enhancement.sharpnessSigma` | Gaussian blur sigma | `1.0` |
+| `preprocessing.enhancement.sharpnessAmount` | Sharpen amount (1.0-3.0) | `1.5` |
+
 ### Visualization (Hiển thị)
 
 | Tham số | Mô tả | Mặc định |
@@ -178,7 +194,8 @@ Khi bật Debug Mode và phát hiện đối tượng, ứng dụng tự động
 | `debug/original/` | Ảnh gốc không annotation | PNG |
 | `debug/bbox/` | Crop theo bounding box | JPEG |
 | `debug/mask/` | Crop theo mask với nền trong suốt | PNG (BGRA) |
-| `debug/preprocessing/` | Ảnh đã xử lý (crop, rotate, orientation fix) | JPEG |
+| `debug/cropped/` | Ảnh sau crop, rotate, orientation fix | JPEG |
+| `debug/preprocessing/` | Ảnh sau enhancement (kết quả cuối cùng) | JPEG |
 | `debug/txt/` | Tọa độ contour của mask | TXT |
 
 ## Performance Logging

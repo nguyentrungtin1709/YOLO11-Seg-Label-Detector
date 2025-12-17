@@ -43,7 +43,15 @@
         "aiConfidenceThreshold": 0.6,
         "paddleModelPath": "models/paddle/PP-LCNet_x1_0_doc_ori",
         "displayWidth": 230,
-        "displayHeight": 100
+        "displayHeight": 100,
+        "enhancement": {
+            "brightnessEnabled": true,
+            "brightnessClipLimit": 2.5,
+            "brightnessTileSize": 8,
+            "sharpnessEnabled": true,
+            "sharpnessSigma": 1.0,
+            "sharpnessAmount": 1.5
+        }
     },
     "maxCameraSearch": 2,
     "windowMinWidth": 1000,
