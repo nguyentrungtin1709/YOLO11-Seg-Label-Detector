@@ -35,6 +35,10 @@ class LabelTextProcessor(ITextProcessor):
     # Pattern for position/quantity: "1/1", "2/10", etc.
     POSITION_QUANTITY_PATTERN = re.compile(r'^(\d+)\s*/\s*(\d+)$')
     
+    # Pattern for recovery: "/" misread as "1", "|", "l", "I", "!", "t", "i", "j"
+    # Examples: "313" -> "3/3", "21|5" -> "2/5"
+    POSITION_RECOVERY_SEPARATORS = ['1', '|', 'l', 'I', '!', 't', 'i', 'j']
+    
     def __init__(
         self,
         validProducts: Optional[List[str]] = None,
@@ -171,7 +175,7 @@ class LabelTextProcessor(ITextProcessor):
             
             # Try to identify field type and extract value
             if not result.positionQuantity:
-                if self._tryParsePositionQuantity(result, text, confidence):
+                if self._tryParsePositionQuantity(result, text, confidence, qrResult):
                     continue
             
             if not result.productCode:
@@ -203,21 +207,94 @@ class LabelTextProcessor(ITextProcessor):
         self, 
         result: LabelData, 
         text: str, 
-        confidence: float
+        confidence: float,
+        qrResult: QrDetectionResult
     ) -> bool:
         """
         Try to parse position/quantity from text.
         
-        Returns True if successfully parsed.
+        Handles cases where "/" is misread as "1", "|", "l", etc.
+        Uses QR position to validate and recover the correct format.
+        
+        Validation rules:
+        - quantity must be >= position (e.g., "3/5" is valid, "5/3" is not)
+        - position should match QR position if available
+        
+        Args:
+            result: LabelData to update
+            text: OCR text to parse
+            confidence: OCR confidence score
+            qrResult: QR detection result for validation
+            
+        Returns:
+            True if successfully parsed.
         """
+        # Pattern 1: Standard format with "/" (e.g., "3/3", "1/5")
         match = self.POSITION_QUANTITY_PATTERN.match(text)
         if match:
+            position = int(match.group(1))
+            quantity = int(match.group(2))
+            
+            # Validate: quantity must be >= position
+            if quantity < position:
+                self._logger.debug(
+                    f"Invalid position/quantity: {text} (quantity {quantity} < position {position})"
+                )
+                return False
+            
+            # Validate against QR position if available
+            if qrResult.position > 0 and position != qrResult.position:
+                self._logger.warning(
+                    f"Position mismatch: OCR={position}, QR={qrResult.position}"
+                )
+                # Still accept but mark as potentially invalid
+            
             result.positionQuantity = text
-            result.ocrPosition = int(match.group(1))
-            result.quantity = int(match.group(2))
+            result.ocrPosition = position
+            result.quantity = quantity
             result.fieldConfidences['positionQuantity'] = confidence
             self._logger.debug(f"Matched position/quantity: {text}")
             return True
+        
+        # Pattern 2: Recovery - "/" misread as separator character
+        # Use QR position to help identify and recover
+        if qrResult.position > 0:
+            qrPosStr = str(qrResult.position)
+            
+            # Check if text starts with QR position followed by a separator
+            for sep in self.POSITION_RECOVERY_SEPARATORS:
+                # Pattern: {qrPosition}{separator}{quantity}
+                # Example: QR position = 3, text = "313" → "3" + "1" + "3"
+                if text.startswith(qrPosStr) and len(text) > len(qrPosStr):
+                    afterPos = text[len(qrPosStr):]
+                    
+                    # Check if first char after position is a separator
+                    if afterPos and afterPos[0] == sep:
+                        quantityStr = afterPos[1:]
+                        if quantityStr.isdigit():
+                            position = qrResult.position
+                            quantity = int(quantityStr)
+                            
+                            # Validate: quantity must be >= position
+                            if quantity < position:
+                                self._logger.debug(
+                                    f"Invalid recovered position/quantity: {text} "
+                                    f"(quantity {quantity} < position {position})"
+                                )
+                                continue  # Try next separator
+                            
+                            recoveredText = f"{position}/{quantity}"
+                            
+                            result.positionQuantity = recoveredText
+                            result.ocrPosition = position
+                            result.quantity = quantity
+                            result.fieldConfidences['positionQuantity'] = confidence * 0.9
+                            self._logger.info(
+                                f"Recovered position/quantity: '{text}' -> '{recoveredText}' "
+                                f"(separator '{sep}' detected)"
+                            )
+                            return True
+        
         return False
     
     def _tryMatchProduct(
