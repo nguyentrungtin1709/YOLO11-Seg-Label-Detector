@@ -2,27 +2,25 @@
 Main Window
 
 Main application window containing all UI components.
-Orchestrates the interaction between widgets and services.
+Orchestrates the interaction between widgets and services via PipelineOrchestrator.
 """
 
 import logging
 import time
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
-    QStatusBar, QMessageBox
+    QStatusBar, QMessageBox, QLabel
 )
 
 from ui.widgets.camera_widget import CameraWidget
 from ui.widgets.config_panel import ConfigPanel
 from ui.widgets.ocr_result_widget import OcrResultWidget
-from services.camera_service import CameraService
-from services.detection_service import DetectionService
-from services.image_saver_service import ImageSaverService
-from services.preprocessing_service import PreprocessingService
-from services.ocr_pipeline_service import OcrPipelineService
+
+if TYPE_CHECKING:
+    from ui.pipeline_orchestrator import PipelineOrchestrator
 
 
 logger = logging.getLogger(__name__)
@@ -34,36 +32,31 @@ class MainWindow(QMainWindow):
     
     Contains camera view and configuration panel.
     Manages the main application loop and service interactions.
+    Receives PipelineOrchestrator to access all services.
     """
     
-    def __init__(
-        self,
-        cameraService: CameraService,
-        detectionService: DetectionService,
-        imageSaverService: ImageSaverService,
-        preprocessingService: PreprocessingService,
-        ocrPipelineService: Optional[OcrPipelineService] = None,
-        config: dict = None
-    ):
+    def __init__(self, orchestrator: "PipelineOrchestrator"):
         """
         Initialize MainWindow.
         
         Args:
-            cameraService: Camera service instance.
-            detectionService: Detection service instance.
-            imageSaverService: Image saver service instance.
-            preprocessingService: Preprocessing service instance.
-            ocrPipelineService: OCR pipeline service instance (optional).
-            config: Application configuration dictionary.
+            orchestrator: Pipeline orchestrator containing all services.
         """
         super().__init__()
         
-        self._cameraService = cameraService
-        self._detectionService = detectionService
-        self._imageSaverService = imageSaverService
-        self._preprocessingService = preprocessingService
-        self._ocrPipelineService = ocrPipelineService
-        self._config = config or {}
+        # Store orchestrator and extract services
+        self._orchestrator = orchestrator
+        self._configService = orchestrator.configService
+        
+        # Get services from orchestrator
+        self._cameraService = orchestrator.cameraService
+        self._detectionService = orchestrator.detectionService
+        self._preprocessingService = orchestrator.preprocessingService
+        self._enhancementService = orchestrator.enhancementService
+        self._qrDetectionService = orchestrator.qrDetectionService
+        self._componentExtractionService = orchestrator.componentExtractionService
+        self._ocrService = orchestrator.ocrService
+        self._postprocessingService = orchestrator.postprocessingService
         
         # Frame update timer
         self._frameTimer = QTimer(self)
@@ -74,12 +67,14 @@ class MainWindow(QMainWindow):
         self._fpsTimer.timeout.connect(self._updateFpsDisplay)
         
         # Performance logging settings
-        perfConfig = config.get("performanceLogging", {})
-        self._showFpsInStatusBar = perfConfig.get("showInStatusBar", False)
+        self._showFpsInStatusBar = self._configService.isShowFpsInStatusBar()
         
-        # Debug save cooldown (1 second)
+        # Debug save cooldown
         self._lastDebugSave = 0.0
-        self._debugSaveCooldown = 2.0  # seconds
+        self._debugSaveCooldown = self._configService.getDebugSaveCooldown()
+        
+        # Frame counter for unique IDs
+        self._frameCounter = 0
         
         self._setupUI()
         self._setupConnections()
@@ -88,7 +83,10 @@ class MainWindow(QMainWindow):
     def _setupUI(self):
         """Setup the main window UI."""
         self.setWindowTitle("Label Detector")
-        self.setMinimumSize(900, 600)
+        self.setMinimumSize(
+            self._configService.getWindowMinWidth(),
+            self._configService.getWindowMinHeight()
+        )
         
         # Central widget
         centralWidget = QWidget()
@@ -99,17 +97,18 @@ class MainWindow(QMainWindow):
         mainLayout.setContentsMargins(10, 10, 10, 10)
         mainLayout.setSpacing(10)
         
-        # Camera widget (left side, stretches)
-        boxColor = tuple(self._config.get("boxColor", [0, 255, 0]))
-        textColor = tuple(self._config.get("textColor", [255, 255, 255]))
+        # Get visualization config
+        vizConfig = self._configService.getVisualizationConfig()
+        boxColor = tuple(vizConfig.get("boxColor", [0, 255, 0]))
+        textColor = tuple(vizConfig.get("textColor", [0, 0, 0]))
         
         self._cameraWidget = CameraWidget(
             boxColor=boxColor,
             textColor=textColor,
-            lineThickness=self._config.get("lineThickness", 2),
-            fontSize=self._config.get("fontSize", 0.6),
-            maskOpacity=self._config.get("maskOpacity", 0.4),
-            maskColors=self._config.get("maskColors", None)
+            lineThickness=vizConfig.get("lineThickness", 2),
+            fontSize=vizConfig.get("fontSize", 0.8),
+            maskOpacity=vizConfig.get("maskOpacity", 0.4),
+            maskColors=vizConfig.get("maskColors", None)
         )
         mainLayout.addWidget(self._cameraWidget, stretch=3)
         
@@ -121,8 +120,6 @@ class MainWindow(QMainWindow):
         # OCR Result widget (right side of config panel)
         self._ocrResultWidget = OcrResultWidget()
         self._ocrResultWidget.setFixedWidth(220)
-        if self._ocrPipelineService is None:
-            self._ocrResultWidget.hide()
         mainLayout.addWidget(self._ocrResultWidget, stretch=0)
         
         # Status bar
@@ -131,7 +128,6 @@ class MainWindow(QMainWindow):
         self._statusBar.showMessage("Ready")
         
         # FPS label for status bar (persistent)
-        from PySide6.QtWidgets import QLabel
         self._fpsLabel = QLabel("")
         self._fpsLabel.setStyleSheet("color: #888888; padding-right: 10px;")
         self._statusBar.addPermanentWidget(self._fpsLabel)
@@ -202,8 +198,8 @@ class MainWindow(QMainWindow):
     
     def _loadInitialState(self):
         """Load initial application state."""
-        # Load model
-        modelPath = self._config.get("modelPath", "models/yolo11n_best.onnx")
+        # Load model via detection service
+        modelPath = self._configService.getModelPath()
         if not self._detectionService.loadModel(modelPath):
             QMessageBox.warning(
                 self,
@@ -212,7 +208,7 @@ class MainWindow(QMainWindow):
             )
         
         # Set initial confidence
-        confidence = self._config.get("confidenceThreshold", 0.5)
+        confidence = self._configService.getConfidenceThreshold()
         self._configPanel.setConfidenceThreshold(confidence)
         self._detectionService.setConfidenceThreshold(confidence)
         
@@ -250,15 +246,15 @@ class MainWindow(QMainWindow):
     
     def _startCamera(self, index: int):
         """Start camera capture."""
-        frameWidth = self._config.get("frameWidth", 640)
-        frameHeight = self._config.get("frameHeight", 640)
+        frameWidth = self._configService.getFrameWidth()
+        frameHeight = self._configService.getFrameHeight()
         
         if self._cameraService.openCamera(index, frameWidth, frameHeight):
             self._statusBar.showMessage(f"Camera {index} connected")
             self._configPanel.setCaptureEnabled(True)
             
             # Start frame capture timer
-            fps = self._config.get("fps", 30)
+            fps = self._configService.getFps()
             self._frameTimer.start(int(1000 / fps))
             
             # Start FPS display timer if enabled
@@ -309,16 +305,22 @@ class MainWindow(QMainWindow):
     def _onDebugToggled(self, enabled: bool):
         """
         Handle debug mode toggle.
-        Controls all debug output (image saver + OCR pipeline).
+        Controls debug output with cooldown mechanism.
+        
+        Debug is controlled per-frame based on cooldown in _updateFrame.
+        This just sets the overall debug mode flag.
         
         Args:
             enabled: True if debug enabled.
         """
         self._cameraWidget.setDebugMode(enabled)
         
-        # Also enable/disable OCR pipeline debug
-        if self._ocrPipelineService is not None:
-            self._ocrPipelineService.setDebugEnabled(enabled)
+        # Reset cooldown timer when debug is toggled on
+        if enabled:
+            self._lastDebugSave = 0.0  # Force immediate save on next frame
+        else:
+            # Disable debug for all services immediately
+            self._orchestrator.setDebugEnabled(False)
         
         status = "Debug mode enabled" if enabled else "Debug mode disabled"
         self._statusBar.showMessage(status)
@@ -340,109 +342,207 @@ class MainWindow(QMainWindow):
             self._statusBar.showMessage("No frame to capture")
             return
         
-        # Save raw frame without any detection annotations
-        filepath = self._imageSaverService.saveRawCapture(frame)
-        
-        if filepath:
-            self._statusBar.showMessage(f"Raw image saved: {filepath}")
-        else:
-            self._statusBar.showMessage("Failed to save image")
+        # TODO: Implement capture saving via new service
+        # For now, just show a message
+        self._statusBar.showMessage("Capture requested - feature coming soon")
     
     def _updateFrame(self):
-        """Update frame from camera and run detection."""
-        frame = self._cameraService.readFrame()
-        if frame is None:
+        """
+        Update frame from camera and run the full 8-step pipeline.
+        
+        Pipeline Steps:
+        S1: Camera capture (frame already captured)
+        S2: Detection
+        S3: Preprocessing (crop, rotate, orientation)
+        S4: Enhancement (brightness, sharpness)
+        S5: QR Detection
+        S6: Component Extraction
+        S7: OCR
+        S8: Postprocessing
+        """
+        import time
+        pipelineStartTime = time.time()
+        pipelineTiming = {}
+        
+        # Check debug cooldown - only save debug if cooldown elapsed
+        currentTime = time.time()
+        shouldSaveDebug = (
+            self._cameraWidget.isDebugMode() and 
+            (currentTime - self._lastDebugSave) >= self._debugSaveCooldown
+        )
+        
+        # Temporarily enable/disable debug for all services based on cooldown
+        if self._cameraWidget.isDebugMode():
+            self._orchestrator.setDebugEnabled(shouldSaveDebug)
+        
+        # S1: Get frame from camera service
+        frameResult = self._cameraService.captureFrame()
+        pipelineTiming["s1_camera"] = frameResult.processingTimeMs
+        
+        if not frameResult.success or frameResult.image is None:
             return
         
-        # Run detection
-        detections = self._detectionService.detect(frame)
+        frame = frameResult.image
+        frameId = frameResult.frameId
         
-        # Update camera widget
+        # S2: Run detection
+        detectionResult = self._detectionService.detect(frame, frameId)
+        pipelineTiming["s2_detection"] = detectionResult.processingTimeMs
+        
+        # Update camera widget with frame and detections
+        detections = detectionResult.detections if detectionResult.success else []
         self._cameraWidget.updateFrame(frame, detections)
         
-        # Run preprocessing on first detection and update UI
-        croppedImage = None
-        enhancedImage = None
-        if detections and self._preprocessingService.isEnabled:
-            result = self._preprocessingService.processFirstDetectionFull(frame, detections)
-            if result and result.success:
-                croppedImage = result.croppedImage
-                enhancedImage = result.enhancedImage
-                # Display the final enhanced image in UI
-                if enhancedImage is not None:
-                    self._configPanel.updatePreprocessedImage(enhancedImage)
-                    
-                    # Run OCR pipeline if available
-                    self._runOcrPipeline(enhancedImage)
-                else:
-                    self._configPanel.clearPreprocessedImage()
-                    self._ocrResultWidget.clear()
-            else:
-                self._configPanel.clearPreprocessedImage()
-                self._ocrResultWidget.clear()
-        else:
+        # If no detections, clear OCR results and return
+        if not detections:
             self._configPanel.clearPreprocessedImage()
             self._ocrResultWidget.clear()
+            return
         
-        # Auto-save in debug mode when detections found (with cooldown)
-        if self._cameraWidget.isDebugMode() and detections:
-            currentTime = time.time()
-            if currentTime - self._lastDebugSave >= self._debugSaveCooldown:
-                self._imageSaverService.saveDebugFrame(frame, detections)
-                
-                # Save cropped image (after document preprocessing)
-                if croppedImage is not None:
-                    self._imageSaverService.saveCroppedImage(croppedImage, 0)
-                
-                # Save enhanced image (final result after enhancement)
-                if enhancedImage is not None:
-                    self._imageSaverService.savePreprocessedImage(enhancedImage, 0)
-                
-                self._lastDebugSave = currentTime
-                self._statusBar.showMessage(f"Debug: saved frame with {len(detections)} detection(s)")
+        # Get first detection for processing
+        firstDetection = detections[0]
+        
+        # S3: Preprocessing (crop, rotate, fix orientation)
+        if self._preprocessingService.isEnabled():
+            preprocessResult = self._preprocessingService.preprocess(
+                frame, firstDetection, frameId
+            )
+            pipelineTiming["s3_preprocessing"] = preprocessResult.processingTimeMs
+            
+            if not preprocessResult.success or preprocessResult.croppedImage is None:
+                self._configPanel.clearPreprocessedImage()
+                self._ocrResultWidget.clear()
+                return
+            processedImage = preprocessResult.croppedImage
+        else:
+            # Without preprocessing, skip further processing
+            self._configPanel.clearPreprocessedImage()
+            self._ocrResultWidget.clear()
+            return
+        
+        # S4: Enhancement (brightness, sharpness)
+        if self._enhancementService.isEnabled():
+            enhanceResult = self._enhancementService.enhance(processedImage, frameId)
+            pipelineTiming["s4_enhancement"] = enhanceResult.processingTimeMs
+            
+            if enhanceResult.success and enhanceResult.enhancedImage is not None:
+                processedImage = enhanceResult.enhancedImage
+        
+        # Update preprocessed image display
+        self._configPanel.updatePreprocessedImage(processedImage)
+        
+        # S5: QR Detection
+        qrResult = self._qrDetectionService.detectQr(processedImage, frameId)
+        pipelineTiming["s5_qr_detection"] = qrResult.processingTimeMs
+        
+        if not qrResult.success or qrResult.qrData is None:
+            self._ocrResultWidget.showError("No QR detected")
+            self._logPipelineTiming(frameId, pipelineTiming, pipelineStartTime, shouldSaveDebug)
+            return
+        
+        # S6: Component Extraction
+        componentResult = self._componentExtractionService.extractComponents(
+            processedImage, 
+            qrResult.qrData.polygon,
+            frameId
+        )
+        pipelineTiming["s6_component_extraction"] = componentResult.processingTimeMs
+        
+        if not componentResult.success or componentResult.mergedImage is None:
+            self._ocrResultWidget.showError("Component extraction failed")
+            self._logPipelineTiming(frameId, pipelineTiming, pipelineStartTime, shouldSaveDebug)
+            return
+        
+        # S7: OCR
+        ocrResult = self._ocrService.extractText(componentResult.mergedImage, frameId)
+        pipelineTiming["s7_ocr"] = ocrResult.processingTimeMs
+        
+        textBlocks = ocrResult.ocrData.textBlocks if ocrResult.success and ocrResult.ocrData else []
+        
+        # S8: Postprocessing
+        postResult = self._postprocessingService.process(
+            textBlocks,
+            qrResult.qrData,
+            frameId
+        )
+        pipelineTiming["s8_postprocessing"] = postResult.processingTimeMs
+        
+        if postResult.success and postResult.labelData:
+            self._ocrResultWidget.updateResult(
+                postResult.labelData,
+                postResult.processingTimeMs
+            )
+        else:
+            self._ocrResultWidget.showError("Processing failed")
+        
+        # Log pipeline timing and update debug save time
+        self._logPipelineTiming(frameId, pipelineTiming, pipelineStartTime, shouldSaveDebug)
+        
+        if shouldSaveDebug:
+            self._lastDebugSave = currentTime
+        
+        # Update status
+        self._statusBar.showMessage(f"Detected: {len(detections)} label(s)")
+    
+    def _logPipelineTiming(
+        self, 
+        frameId: str, 
+        timing: dict, 
+        startTime: float,
+        saveToFile: bool = False
+    ) -> None:
+        """
+        Log and optionally save pipeline timing information.
+        
+        When debug mode is enabled, displays detailed timing for each step.
+        Otherwise, only shows FPS and total time.
+        
+        Args:
+            frameId: Frame identifier.
+            timing: Dictionary of service timings.
+            startTime: Pipeline start time.
+            saveToFile: Whether to save timing to debug file.
+        """
+        import time
+        
+        totalTime = (time.time() - startTime) * 1000
+        timing["total_pipeline"] = round(totalTime, 2)
+        
+        # Round all timing values for cleaner output
+        for key in timing:
+            if isinstance(timing[key], float):
+                timing[key] = round(timing[key], 2)
+        
+        # Log to console
+        timingStr = " | ".join([f"{k}: {v:.1f}ms" for k, v in timing.items()])
+        logger.info(f"[{frameId}] Pipeline timing: {timingStr}")
+        
+        # Update FPS label - show detailed timing when debug mode is enabled
+        if self._showFpsInStatusBar and totalTime > 0:
+            fps = 1000 / totalTime
+            
+            if self._cameraWidget.isDebugMode():
+                # Detailed timing display when debug is on
+                detailParts = [f"FPS: {fps:.1f}"]
+                for key, value in timing.items():
+                    if key != "total_pipeline":
+                        # Shorten key name: s1_camera -> S1
+                        shortKey = key.split("_")[0].upper()
+                        detailParts.append(f"{shortKey}: {value:.0f}")
+                detailParts.append(f"Total: {totalTime:.0f}ms")
+                self._fpsLabel.setText(" | ".join(detailParts))
             else:
-                self._statusBar.showMessage(f"Detected: {len(detections)} label(s)")
-        elif self._detectionService.isEnabled() and detections:
-            self._statusBar.showMessage(f"Detected: {len(detections)} label(s)")
+                # Simple display when debug is off
+                self._fpsLabel.setText(f"FPS: {fps:.1f} | Total: {totalTime:.1f}ms")
+        
+        # Save to file if debug mode and cooldown elapsed
+        if saveToFile:
+            self._orchestrator.savePipelineTiming(frameId, timing)
     
     def _updateFpsDisplay(self):
         """Update FPS display in status bar."""
-        performanceLogger = self._detectionService.performanceLogger
-        if performanceLogger is None:
-            return
-        
-        fps = performanceLogger.getAverageFPS()
-        totalTime = performanceLogger.getTotalTime()
-        
-        if fps > 0:
-            self._fpsLabel.setText(f"FPS: {fps:.1f} | Total: {totalTime:.1f}ms")
-        else:
-            self._fpsLabel.setText("FPS: --")
-    
-    def _runOcrPipeline(self, image):
-        """
-        Run OCR pipeline on preprocessed image.
-        
-        Args:
-            image: Preprocessed label image.
-        """
-        if self._ocrPipelineService is None:
-            return
-        
-        try:
-            result = self._ocrPipelineService.process(image)
-            
-            if result is not None:
-                self._ocrResultWidget.updateResult(
-                    result.labelData, 
-                    result.processingTimeMs
-                )
-            else:
-                self._ocrResultWidget.showError("No QR detected")
-                
-        except Exception as e:
-            logger.error(f"OCR pipeline error: {e}")
-            self._ocrResultWidget.showError("OCR Error")
+        # FPS is now updated in _logPipelineTiming
+        pass
     
     def closeEvent(self, event):
         """Handle window close event."""
@@ -450,7 +550,7 @@ class MainWindow(QMainWindow):
         self._frameTimer.stop()
         self._fpsTimer.stop()
         
-        # Release camera
+        # Release camera via service
         self._cameraService.closeCamera()
         
         logger.info("Application closed")
