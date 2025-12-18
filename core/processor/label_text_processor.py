@@ -43,7 +43,7 @@ class LabelTextProcessor(ITextProcessor):
         productsJsonPath: Optional[str] = None,
         sizesJsonPath: Optional[str] = None,
         colorsJsonPath: Optional[str] = None,
-        minFuzzyScore: float = 0.75,
+        minFuzzyScore: float = 0.80,
         logger: Optional[logging.Logger] = None
     ):
         """
@@ -56,7 +56,7 @@ class LabelTextProcessor(ITextProcessor):
             productsJsonPath: Path to products JSON file
             sizesJsonPath: Path to sizes JSON file
             colorsJsonPath: Path to colors JSON file
-            minFuzzyScore: Minimum fuzzy match score (default: 0.75)
+            minFuzzyScore: Minimum fuzzy match score (default: 0.80)
             logger: Logger instance for debug output
         """
         self._logger = logger or logging.getLogger(__name__)
@@ -248,13 +248,6 @@ class LabelTextProcessor(ITextProcessor):
             result.productCode = matched
             result.fieldConfidences['productCode'] = confidence * score
             self._logger.debug(f"Fuzzy product match: {text} -> {matched} (score: {score:.3f})")
-            return True
-        
-        # Accept short alphanumeric codes that look like product codes
-        if len(text) <= 8 and (text.isdigit() or text.isalnum()):
-            result.productCode = text
-            result.fieldConfidences['productCode'] = confidence * 0.7  # Lower confidence
-            self._logger.debug(f"Accepted product code: {text}")
             return True
         
         return False

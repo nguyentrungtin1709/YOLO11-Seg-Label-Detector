@@ -76,7 +76,7 @@
             "device": "cpu"
         },
         "textProcessor": {
-            "minFuzzyScore": 0.75,
+            "minFuzzyScore": 0.80,
             "productsJsonPath": "data/products.json",
             "sizesJsonPath": "data/sizes.json",
             "colorsJsonPath": "data/colors.json"
