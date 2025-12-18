@@ -165,7 +165,7 @@ class S2DetectionService(IDetectionService, BaseService):
             processingTimeMs = self._measureTime(startTime)
             
             # Save debug output
-            self._saveDebugOutput(frameId, topDetections, annotatedFrame)
+            self._saveDebugOutput(frameId, topDetections, annotatedFrame, frame)
             
             # Log timing
             self._logTiming(frameId, processingTimeMs)
@@ -301,7 +301,8 @@ class S2DetectionService(IDetectionService, BaseService):
         self, 
         frameId: str, 
         detections: List[Detection],
-        annotatedFrame: np.ndarray
+        annotatedFrame: np.ndarray,
+        originalFrame: np.ndarray
     ) -> None:
         """Save debug output for detection step."""
         if not self._debugEnabled:
@@ -326,8 +327,18 @@ class S2DetectionService(IDetectionService, BaseService):
         }
         self._saveDebugJson(frameId, detectionData, "detection")
         
-        # Save individual masks
+        # Save individual cropped images by mask
         for i, det in enumerate(detections):
             if det.mask is not None:
-                maskImage = (det.mask * 255).astype(np.uint8)
+                # Mask is already uint8 with values 0 or 255 from yolo_detector
+                maskImage = det.mask.astype(np.uint8)
                 self._saveDebugImage(f"{frameId}_{i}", maskImage, "mask")
+                
+                # Crop original image using mask (keep only masked region)
+                mask3ch = cv2.cvtColor(maskImage, cv2.COLOR_GRAY2BGR)
+                croppedByMask = cv2.bitwise_and(originalFrame, mask3ch)
+                
+                # Crop to bounding box for compact output
+                x1, y1, x2, y2 = det.bbox
+                croppedBbox = croppedByMask[y1:y2, x1:x2]
+                self._saveDebugImage(f"{frameId}_{i}", croppedBbox, "cropped")

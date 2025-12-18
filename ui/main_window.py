@@ -342,9 +342,25 @@ class MainWindow(QMainWindow):
             self._statusBar.showMessage("No frame to capture")
             return
         
-        # TODO: Implement capture saving via new service
-        # For now, just show a message
-        self._statusBar.showMessage("Capture requested - feature coming soon")
+        # Save raw frame to captures folder
+        import os
+        from datetime import datetime
+        
+        capturesDir = "output/captures"
+        os.makedirs(capturesDir, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = f"capture_{timestamp}.png"
+        filepath = os.path.join(capturesDir, filename)
+        
+        try:
+            import cv2
+            cv2.imwrite(filepath, frame)
+            self._statusBar.showMessage(f"Captured: {filename}")
+            logger.info(f"Frame captured: {filepath}")
+        except Exception as e:
+            self._statusBar.showMessage(f"Capture failed: {str(e)}")
+            logger.error(f"Failed to capture frame: {e}")
     
     def _updateFrame(self):
         """
