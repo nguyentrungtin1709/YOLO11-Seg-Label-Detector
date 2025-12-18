@@ -154,17 +154,19 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | F26 | Component Extraction | Cắt vùng trên/dưới QR code để trích xuất thông tin text |
 | F27 | OCR Text Extraction | Sử dụng PaddleOCR để đọc text từ vùng đã cắt |
 | F28 | Fuzzy Matching | So khớp text với database sử dụng Levenshtein + Jaro-Winkler |
-| F29 | Data Validation | Xác thực dữ liệu đã trích xuất (QR + OCR) |
-| F30 | Result Display | Hiển thị kết quả OCR trong widget chuyên dụng |
-| F31 | OCR Debug Output | Lưu debug cho từng bước: QR detect, components, raw text, final result |
+| F29 | Position/Quantity Recovery | Phục hồi format `X/Y` khi "/" bị OCR đọc sai thành "1", "|", "l", etc. |
+| F30 | Data Validation | Xác thực: quantity >= position, OCR position == QR position |
+| F31 | Result Display | Hiển thị kết quả OCR trong widget chuyên dụng |
+| F32 | OCR Debug Output | Lưu debug cho từng bước: QR detect, components, raw text, final result |
 
 ### 3.6 Điều khiển ứng dụng
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F32 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
-| F33 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
-| F34 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F33 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
+| F34 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F35 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F36 | Debug Cooldown | Giới hạn tần suất lưu debug (2 giây) để tránh quá tải I/O |
 
 ## 4. Định dạng lưu trữ
 
@@ -195,8 +197,10 @@ output/
     │   └── component_YYYYMMDD_HHMMSS_mmm_{type}.jpg
     ├── ocr-raw-text/      # Raw OCR text output
     │   └── ocr_YYYYMMDD_HHMMSS_mmm.txt
-    └── result/            # Final OCR pipeline result
-        └── result_YYYYMMDD_HHMMSS_mmm.json
+    ├── result/            # Final OCR pipeline result
+    │   └── result_YYYYMMDD_HHMMSS_mmm.json
+    └── timing/            # Pipeline timing information
+        └── timing_YYYYMMDD_HHMMSS_mmm.json
 ```
 
 ### 4.2 Quy tắc đặt tên file
@@ -362,25 +366,89 @@ output/
 combinedSimilarity = (levenshteinWeight × levenshteinScore) + (jaroWinklerWeight × jaroWinklerScore)
 ```
 
-## 10. Yêu cầu phi chức năng
+### 9.6 Position/Quantity Recovery
 
-### 10.1 Hiệu năng
+Khi OCR đọc sai ký tự "/" trong format `position/quantity` (ví dụ: "3/3" → "313"), hệ thống sử dụng QR position để phục hồi:
+
+**Recovery Separators:** `1`, `|`, `l`, `I`, `!`, `t`, `i`, `j`
+
+**Recovery Logic:**
+1. **Pattern 1 (Standard):** Nếu text match format `X/Y`:
+   - Validate: `quantity >= position`
+   - Validate: `position == qrPosition` (nếu có)
+
+2. **Pattern 2 (Recovery):** Nếu có QR position:
+   - Tìm separator sau QR position trong text
+   - Extract quantity từ phần còn lại
+   - Validate: `quantity >= position`
+   - Ví dụ: QR position = 3, text = "313" → "3" + "1" + "3" → "3/3"
+
+## 10. Kiến trúc hệ thống
+
+### 10.1 Pipeline Architecture (v2.0)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    PipelineOrchestrator                         │
+│              (Đọc config, tạo & điều phối services)             │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+    ┌───────┬───────┬───────┬───┼───┬───────┬───────┬───────┐
+    ▼       ▼       ▼       ▼   ▼   ▼       ▼       ▼       ▼
+┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐
+│  S1   ││  S2   ││  S3   ││  S4   ││  S5   ││  S6   ││  S7   ││  S8   │
+│Camera ││Detect ││Preproc││Enhance││  QR   ││Extract││  OCR  ││ Post  │
+└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘
+    │       │       │       │   │   │       │       │       │
+    ▼       ▼       ▼       ▼   ▼   ▼       ▼       ▼       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      Core Layer (Implementations)               │
+│  OpenCVCamera, YOLODetector, DocumentPreprocessor, ImageEnhancer│
+│  ZxingQrDetector, LabelComponentExtractor, PaddleOcrExtractor,  │
+│  LabelTextProcessor                                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 10.2 DIP Pattern
+
+Mỗi service tuân theo Dependency Inversion Principle:
+- Service nhận config parameters qua constructor
+- Service tự khởi tạo core component
+- Service có thể bật/tắt debug độc lập
+- Tất cả services được quản lý bởi `PipelineOrchestrator`
+
+### 10.3 Services Structure
+
+| Service | Mô tả | Core Component |
+|---------|-------|----------------|
+| S1 Camera | Capture frame từ camera | OpenCVCamera |
+| S2 Detection | Phát hiện nhãn với YOLO | YOLODetector |
+| S3 Preprocessing | Crop, rotate, orientation fix | DocumentPreprocessor |
+| S4 Enhancement | Brightness, sharpness | ImageEnhancer |
+| S5 QR Detection | Detect & decode QR code | ZxingQrDetector |
+| S6 Component Extraction | Extract text regions | LabelComponentExtractor |
+| S7 OCR | Extract text from image | PaddleOcrExtractor |
+| S8 Postprocessing | Fuzzy matching, validation | LabelTextProcessor |
+
+## 11. Yêu cầu phi chức năng
+
+### 11.1 Hiệu năng
 - Xử lý real-time với FPS >= 15 trên CPU
 - Độ trễ phát hiện < 100ms
 - Target FPS có thể cấu hình (mặc định: 60 FPS)
 - Performance logging tùy chọn với FPS display trên status bar
 
-### 10.2 Giao diện
+### 11.2 Giao diện
 - Giao diện tối (dark theme)
 - Responsive khi resize cửa sổ
 - Kích thước cửa sổ tối thiểu: 900 x 700 pixels (cấu hình được)
 
-### 10.3 Tương thích
+### 11.3 Tương thích
 - Hệ điều hành: Windows, Linux, macOS
 - Python 3.12+
 - Hỗ trợ nhiều loại camera (USB, built-in)
 
-## 11. Xử lý các trường hợp đặc biệt
+## 12. Xử lý các trường hợp đặc biệt
 
 | Tình huống | Xử lý |
 |------------|-------|

@@ -116,14 +116,27 @@ label-detector/
 │   ├── products.json         # Valid product codes database (2172 entries)
 │   └── sizes.json            # Valid sizes database (138 entries)
 ├── services/                 # Service layer (business logic)
-│   ├── camera_service.py     # Camera orchestration
-│   ├── detection_service.py  # Detection + filtering logic
-│   ├── image_saver_service.py # Image saving with annotations
-│   ├── preprocessing_service.py # Image preprocessing orchestration
-│   ├── ocr_pipeline_service.py # OCR pipeline orchestration
-│   └── performance_logger.py # FPS and timing metrics
+│   ├── interfaces/           # Service interfaces (DIP)
+│   │   ├── camera_service_interface.py
+│   │   ├── detection_service_interface.py
+│   │   ├── preprocessing_service_interface.py
+│   │   ├── enhancement_service_interface.py
+│   │   ├── qr_detection_service_interface.py
+│   │   ├── component_extraction_service_interface.py
+│   │   ├── ocr_service_interface.py
+│   │   └── postprocessing_service_interface.py
+│   └── impl/                 # Service implementations
+│       ├── s1_camera_service.py
+│       ├── s2_detection_service.py
+│       ├── s3_preprocessing_service.py
+│       ├── s4_enhancement_service.py
+│       ├── s5_qr_detection_service.py
+│       ├── s6_component_extraction_service.py
+│       ├── s7_ocr_service.py
+│       └── s8_postprocessing_service.py
 ├── ui/                       # UI layer (PySide6 widgets)
 │   ├── main_window.py
+│   ├── pipeline_orchestrator.py  # Pipeline coordination
 │   └── widgets/
 │       ├── camera_widget.py  # Video display with overlays
 │       ├── config_panel.py   # Control panel
@@ -265,6 +278,7 @@ Khi bật Debug Mode và phát hiện đối tượng, ứng dụng tự động
 | `debug/components/` | Vùng above/below QR đã cắt | JPEG |
 | `debug/ocr-raw-text/` | Raw text từ PaddleOCR | TXT |
 | `debug/result/` | Kết quả OCR pipeline cuối cùng | JSON |
+| `debug/timing/` | Thời gian xử lý pipeline | JSON |
 
 ## Performance Logging
 

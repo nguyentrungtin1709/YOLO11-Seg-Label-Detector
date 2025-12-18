@@ -7,6 +7,45 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.3.0] - 2025-12-19
+
+### Tổng quan
+Phiên bản tái cấu trúc **Services Layer** theo pattern DIP (Dependency Inversion Principle) và cải thiện **OCR Position/Quantity Recovery** với QR validation.
+
+### Added
+- **Pipeline Orchestrator**: Lớp điều phối trung tâm quản lý 8 services trong pipeline
+- **Debug Cooldown**: Cơ chế giới hạn tần suất lưu debug (2 giây) để tránh quá tải
+- **Pipeline Timing**: Lưu thời gian xử lý của từng service vào `output/debug/timing/`
+- **Position/Quantity Recovery**: Phục hồi format `X/Y` khi OCR đọc sai "/" thành "1", "|", "l", "I", "!", "t", "i", "j"
+  - Pattern 1: Format chuẩn với validation `quantity >= position`
+  - Pattern 2: Recovery sử dụng QR position + separator detection
+
+### Changed
+- **Services Architecture**: Tái cấu trúc theo DIP pattern
+  - Mỗi service tự khởi tạo core component thay vì nhận từ bên ngoài
+  - Services nhận config parameters qua constructor
+  - `PipelineOrchestrator` đọc config và tạo tất cả services
+- **LabelTextProcessor**: Cập nhật `_tryParsePositionQuantity()` với qrResult parameter
+  - Thêm validation: `quantity >= position` (e.g., "3/5" valid, "5/3" invalid)
+  - Thêm validation: OCR position phải khớp QR position
+
+### Removed
+- **Old Service Files**: Xóa các file service cũ không còn sử dụng
+  - `services/camera_service.py` → replaced by `services/impl/s1_camera_service.py`
+  - `services/detection_service.py` → replaced by `services/impl/s2_detection_service.py`
+  - `services/image_saver_service.py` → integrated into pipeline services
+  - `services/ocr_pipeline_service.py` → replaced by S5-S8 services
+  - `services/performance_logger.py` → replaced by PipelineOrchestrator timing
+  - `services/preprocessing_service.py` → replaced by S3/S4 services
+- **Unsafe OCR Pattern**: Loại bỏ Pattern 3 (fallback không có QR validation)
+
+### Technical
+- Cập nhật `services/__init__.py` để reference services mới trong `services/impl/`
+- Thêm `POSITION_RECOVERY_SEPARATORS` trong `LabelTextProcessor`
+- Cập nhật `PLAN.md` với kiến trúc v2.0 và service interfaces
+
+---
+
 ## [1.2.0] - 2025-12-18
 
 ### Tổng quan
