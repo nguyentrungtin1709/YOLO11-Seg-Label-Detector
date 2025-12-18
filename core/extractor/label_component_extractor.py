@@ -27,13 +27,14 @@ class LabelComponentExtractor(IComponentExtractor):
     
     Based on actual label structure:
     ┌─────────────────────────────────────────────────────────────────┐
-    │  VA-S-002410-1                              11/19              │
-    │  PTFY-API                           ┌───┐   1/1                │ ← ABOVE QR
-    │                                     │QR │                      │
-    │                                     └───┘                      │
-    │  340                                                           │ ← BELOW QR
-    │  3T                                                            │ ← BELOW QR
-    │  MIDNIGHT                                                      │ ← BELOW QR
+    │  VA-S-002410-1                              11/19               │
+    │  PTFY-API                                    1/1                │ ← ABOVE QR
+    │                                            ┌───┐                │
+    │                                            │QR │                │
+    │                                            └───┘                │
+    │  340                                                            │ ← BELOW QR
+    │  3T                                                             │ ← BELOW QR
+    │  MIDNIGHT                                                       │ ← BELOW QR
     └─────────────────────────────────────────────────────────────────┘
     """
     
