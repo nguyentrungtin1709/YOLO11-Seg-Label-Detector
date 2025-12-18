@@ -145,13 +145,28 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | F22 | Chế độ Debug | Khi bật, tự động lưu đầy đủ: ảnh annotated, ảnh gốc, crop bbox, crop mask, ảnh cropped, ảnh enhanced, và tọa độ contour |
 | F23 | Giới hạn tần suất lưu | Trong chế độ Debug, chỉ lưu tối đa 1 lần mỗi 2 giây để tránh quá tải |
 
-### 3.5 Điều khiển ứng dụng
+### 3.5 OCR Pipeline (Đọc nội dung nhãn)
 
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
-| F24 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
-| F25 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
-| F26 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F24 | QR Code Detection | Phát hiện và giải mã QR code trên nhãn sử dụng pyzbar |
+| F25 | QR Data Parsing | Parse dữ liệu QR theo format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION` |
+| F26 | Component Extraction | Cắt vùng trên/dưới QR code để trích xuất thông tin text |
+| F27 | OCR Text Extraction | Sử dụng PaddleOCR để đọc text từ vùng đã cắt |
+| F28 | Fuzzy Matching | So khớp text với database sử dụng Levenshtein + Jaro-Winkler |
+| F29 | Position/Quantity Recovery | Phục hồi format `X/Y` khi "/" bị OCR đọc sai thành "1", "|", "l", etc. |
+| F30 | Data Validation | Xác thực: quantity >= position, OCR position == QR position |
+| F31 | Result Display | Hiển thị kết quả OCR trong widget chuyên dụng |
+| F32 | OCR Debug Output | Lưu debug cho từng bước: QR detect, components, raw text, final result |
+
+### 3.6 Điều khiển ứng dụng
+
+| ID | Tính năng | Mô tả |
+|----|-----------|-------|
+| F33 | Đóng ứng dụng | Đóng ứng dụng an toàn, giải phóng camera và tài nguyên |
+| F34 | Hiển thị trạng thái | Thông báo các sự kiện quan trọng qua status bar (kết nối camera, phát hiện đối tượng, lưu ảnh, ...) |
+| F35 | Performance Logging | Hiển thị FPS và thời gian xử lý (preprocess, inference, postprocess) trên status bar khi được bật |
+| F36 | Debug Cooldown | Giới hạn tần suất lưu debug (2 giây) để tránh quá tải I/O |
 
 ## 4. Định dạng lưu trữ
 
@@ -174,8 +189,18 @@ output/
     │   └── cropped_YYYYMMDD_HHMMSS_mmm_{idx}.jpg
     ├── preprocessing/     # Ảnh sau enhancement (kết quả cuối cùng)
     │   └── preprocessed_YYYYMMDD_HHMMSS_mmm.jpg
-    └── txt/               # Tọa độ contour của mask
-        └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
+    ├── txt/               # Tọa độ contour của mask
+    │   └── mask_YYYYMMDD_HHMMSS_mmm_{idx}.txt
+    ├── qr-code/           # QR code detection debug
+    │   └── qr_YYYYMMDD_HHMMSS_mmm.jpg
+    ├── components/        # Above/Below QR regions
+    │   └── component_YYYYMMDD_HHMMSS_mmm_{type}.jpg
+    ├── ocr-raw-text/      # Raw OCR text output
+    │   └── ocr_YYYYMMDD_HHMMSS_mmm.txt
+    ├── result/            # Final OCR pipeline result
+    │   └── result_YYYYMMDD_HHMMSS_mmm.json
+    └── timing/            # Pipeline timing information
+        └── timing_YYYYMMDD_HHMMSS_mmm.json
 ```
 
 ### 4.2 Quy tắc đặt tên file
@@ -273,25 +298,157 @@ output/
 | `preprocessing.enhancement.sharpnessSigma` | float | 1.0 | Gaussian blur sigma |
 | `preprocessing.enhancement.sharpnessAmount` | float | 1.5 | Sharpen amount (1.0 - 3.0) |
 
-## 9. Yêu cầu phi chức năng
+## 9. Cấu hình OCR Pipeline
 
-### 9.1 Hiệu năng
+### 9.1 Cấu hình chung
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.enabled` | bool | true | Bật/tắt OCR pipeline |
+| `ocrPipeline.debugEnabled` | bool | true | Lưu debug output cho OCR |
+
+### 9.2 QR Detector
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.qrDetector.symbolTypes` | array | ["QRCODE"] | Loại mã cần detect |
+
+**QR Data Format:** `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+- `MMDDYY`: Ngày (ví dụ: 110125 = 11/01/2025)
+- `FACILITY`: Mã cơ sở (ví dụ: VA)
+- `TYPE`: Loại đơn hàng (M = Made-to-Order, S = Stock)
+- `ORDER`: Số đơn hàng (6 chữ số)
+- `POSITION`: Vị trí (1-n)
+
+### 9.3 Component Extractor
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.componentExtractor.aboveQrRatio` | float | 0.25 | Tỷ lệ vùng trên QR (% chiều cao ảnh) |
+| `ocrPipeline.componentExtractor.belowQrRatio` | float | 0.35 | Tỷ lệ vùng dưới QR (% chiều cao ảnh) |
+| `ocrPipeline.componentExtractor.paddingRatio` | float | 0.02 | Padding cho merged image |
+
+**Label Structure:**
+```
+┌─────────────────────────────────┐
+│  Position/Quantity (above QR)   │  ← Extracted with aboveQrRatio
+├─────────────────────────────────┤
+│                                 │
+│         [QR CODE]               │
+│                                 │
+├─────────────────────────────────┤
+│  Product/Size/Color (below QR)  │  ← Extracted with belowQrRatio
+└─────────────────────────────────┘
+```
+
+### 9.4 OCR Extractor (PaddleOCR)
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.ocr.language` | string | "en" | Ngôn ngữ OCR |
+| `ocrPipeline.ocr.useGpu` | bool | false | Sử dụng GPU (CPU-only khi false) |
+| `ocrPipeline.ocr.showLog` | bool | false | Hiển thị log PaddleOCR |
+| `ocrPipeline.ocr.dropScore` | float | 0.5 | Ngưỡng lọc kết quả OCR |
+
+### 9.5 Text Processor (Fuzzy Matching)
+
+| Tham số | Kiểu | Mặc định | Mô tả |
+|---------|------|----------|-------|
+| `ocrPipeline.textProcessor.colorsPath` | string | data/colors.json | Database màu sắc |
+| `ocrPipeline.textProcessor.productsPath` | string | data/products.json | Database sản phẩm |
+| `ocrPipeline.textProcessor.sizesPath` | string | data/sizes.json | Database kích thước |
+| `ocrPipeline.textProcessor.matchThreshold` | float | 0.7 | Ngưỡng similarity tối thiểu |
+| `ocrPipeline.textProcessor.levenshteinWeight` | float | 0.4 | Trọng số Levenshtein |
+| `ocrPipeline.textProcessor.jaroWinklerWeight` | float | 0.6 | Trọng số Jaro-Winkler |
+
+**Fuzzy Matching Algorithm:**
+```
+combinedSimilarity = (levenshteinWeight × levenshteinScore) + (jaroWinklerWeight × jaroWinklerScore)
+```
+
+### 9.6 Position/Quantity Recovery
+
+Khi OCR đọc sai ký tự "/" trong format `position/quantity` (ví dụ: "3/3" → "313"), hệ thống sử dụng QR position để phục hồi:
+
+**Recovery Separators:** `1`, `|`, `l`, `I`, `!`, `t`, `i`, `j`
+
+**Recovery Logic:**
+1. **Pattern 1 (Standard):** Nếu text match format `X/Y`:
+   - Validate: `quantity >= position`
+   - Validate: `position == qrPosition` (nếu có)
+
+2. **Pattern 2 (Recovery):** Nếu có QR position:
+   - Tìm separator sau QR position trong text
+   - Extract quantity từ phần còn lại
+   - Validate: `quantity >= position`
+   - Ví dụ: QR position = 3, text = "313" → "3" + "1" + "3" → "3/3"
+
+## 10. Kiến trúc hệ thống
+
+### 10.1 Pipeline Architecture (v2.0)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    PipelineOrchestrator                         │
+│              (Đọc config, tạo & điều phối services)             │
+└─────────────────────────────────────────────────────────────────┘
+                                │
+    ┌───────┬───────┬───────┬───┼───┬───────┬───────┬───────┐
+    ▼       ▼       ▼       ▼   ▼   ▼       ▼       ▼       ▼
+┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐
+│  S1   ││  S2   ││  S3   ││  S4   ││  S5   ││  S6   ││  S7   ││  S8   │
+│Camera ││Detect ││Preproc││Enhance││  QR   ││Extract││  OCR  ││ Post  │
+└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘
+    │       │       │       │   │   │       │       │       │
+    ▼       ▼       ▼       ▼   ▼   ▼       ▼       ▼       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      Core Layer (Implementations)               │
+│  OpenCVCamera, YOLODetector, DocumentPreprocessor, ImageEnhancer│
+│  ZxingQrDetector, LabelComponentExtractor, PaddleOcrExtractor,  │
+│  LabelTextProcessor                                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 10.2 DIP Pattern
+
+Mỗi service tuân theo Dependency Inversion Principle:
+- Service nhận config parameters qua constructor
+- Service tự khởi tạo core component
+- Service có thể bật/tắt debug độc lập
+- Tất cả services được quản lý bởi `PipelineOrchestrator`
+
+### 10.3 Services Structure
+
+| Service | Mô tả | Core Component |
+|---------|-------|----------------|
+| S1 Camera | Capture frame từ camera | OpenCVCamera |
+| S2 Detection | Phát hiện nhãn với YOLO | YOLODetector |
+| S3 Preprocessing | Crop, rotate, orientation fix | DocumentPreprocessor |
+| S4 Enhancement | Brightness, sharpness | ImageEnhancer |
+| S5 QR Detection | Detect & decode QR code | ZxingQrDetector |
+| S6 Component Extraction | Extract text regions | LabelComponentExtractor |
+| S7 OCR | Extract text from image | PaddleOcrExtractor |
+| S8 Postprocessing | Fuzzy matching, validation | LabelTextProcessor |
+
+## 11. Yêu cầu phi chức năng
+
+### 11.1 Hiệu năng
 - Xử lý real-time với FPS >= 15 trên CPU
 - Độ trễ phát hiện < 100ms
 - Target FPS có thể cấu hình (mặc định: 60 FPS)
 - Performance logging tùy chọn với FPS display trên status bar
 
-### 9.2 Giao diện
+### 11.2 Giao diện
 - Giao diện tối (dark theme)
 - Responsive khi resize cửa sổ
 - Kích thước cửa sổ tối thiểu: 900 x 700 pixels (cấu hình được)
 
-### 9.3 Tương thích
+### 11.3 Tương thích
 - Hệ điều hành: Windows, Linux, macOS
 - Python 3.12+
 - Hỗ trợ nhiều loại camera (USB, built-in)
 
-## 10. Xử lý các trường hợp đặc biệt
+## 12. Xử lý các trường hợp đặc biệt
 
 | Tình huống | Xử lý |
 |------------|-------|
@@ -299,6 +456,9 @@ output/
 | Camera không mở được | Hiển thị thông báo lỗi, tắt toggle Camera Power |
 | Không load được YOLO model | Hiển thị cảnh báo khi khởi động |
 | Không load được PaddleOCR model | Vô hiệu hóa AI orientation fix, sử dụng các bước khác |
+| Không tìm thấy QR code | Bỏ qua OCR pipeline, hiển thị thông báo |
+| OCR không đọc được text | Trả về kết quả với các trường trống |
+| Fuzzy matching không khớp | Giữ giá trị OCR gốc, đánh dấu không hợp lệ |
 | Thư mục output không tồn tại | Tự động tạo thư mục khi lưu ảnh |
 | Nút Capture khi camera tắt | Nút bị vô hiệu hóa (disabled) |
 

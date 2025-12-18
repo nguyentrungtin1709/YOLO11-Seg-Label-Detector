@@ -1,12 +1,10 @@
 # Services module for Label Detector
 # Contains business logic services
 
-from services.camera_service import CameraService
-from services.detection_service import DetectionService
-from services.image_saver_service import ImageSaverService
+# New pipeline services are in services/impl/
+# Import them directly from there:
+# from services.impl.s1_camera_service import S1CameraService
+# from services.impl.s2_detection_service import S2DetectionService
+# etc.
 
-__all__ = [
-    "CameraService",
-    "DetectionService",
-    "ImageSaverService",
-]
+__all__ = []

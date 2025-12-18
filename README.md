@@ -16,6 +16,12 @@
 - **Image Enhancement**: Cải thiện chất lượng ảnh nhãn
   - Brightness Enhancement (CLAHE) - tăng cường độ sáng ảnh tối
   - Sharpness Enhancement (Unsharp Mask) - làm sắc nét ảnh mờ
+- **OCR Pipeline**: Trích xuất thông tin từ nhãn sản phẩm
+  - QR Code Detection (pyzbar) - phát hiện và parse QR code
+  - Component Extraction - cắt vùng text dựa trên vị trí QR
+  - Text Extraction (PaddleOCR) - trích xuất text từ vùng đã cắt
+  - Fuzzy Matching - so khớp với database products/sizes/colors
+  - Validation - kiểm tra position từ QR khớp với OCR
 - **Adjustable Threshold**: Điều chỉnh ngưỡng confidence (0.0 - 1.0)
 - **Size Filtering**: Lọc bỏ đối tượng quá lớn theo tỷ lệ diện tích
 - **Top N Selection**: Chỉ hiển thị N đối tượng có confidence cao nhất
@@ -95,24 +101,47 @@ label-detector/
 ├── config/
 │   └── app_config.json       # Cấu hình ứng dụng
 ├── core/                     # Core layer (interfaces & implementations)
-│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor, IImageEnhancer)
+│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor, IImageEnhancer, IQrDetector, IComponentExtractor, IOcrExtractor, ITextProcessor)
 │   ├── camera/               # Camera implementation (OpenCVCamera)
 │   ├── detector/             # YOLO detector implementation (YOLODetector)
 │   ├── preprocessor/         # Preprocessing (GeometricTransformer, OrientationCorrector, DocumentPreprocessor)
 │   ├── enhancer/             # Enhancement (BrightnessEnhancer, SharpnessEnhancer, ImageEnhancer)
+│   ├── qr/                   # QR detection (PyzbarQrDetector)
+│   ├── extractor/            # Component extraction (LabelComponentExtractor)
+│   ├── ocr/                  # OCR extraction (PaddleOcrExtractor)
+│   ├── processor/            # Text processing (FuzzyMatcher, LabelTextProcessor)
 │   └── writer/               # File writer implementation (LocalImageWriter)
+├── data/                     # Reference data for fuzzy matching
+│   ├── colors.json           # Valid colors database (4904 entries)
+│   ├── products.json         # Valid product codes database (2172 entries)
+│   └── sizes.json            # Valid sizes database (138 entries)
 ├── services/                 # Service layer (business logic)
-│   ├── camera_service.py     # Camera orchestration
-│   ├── detection_service.py  # Detection + filtering logic
-│   ├── image_saver_service.py # Image saving with annotations
-│   ├── preprocessing_service.py # Image preprocessing orchestration
-│   └── performance_logger.py # FPS and timing metrics
+│   ├── interfaces/           # Service interfaces (DIP)
+│   │   ├── camera_service_interface.py
+│   │   ├── detection_service_interface.py
+│   │   ├── preprocessing_service_interface.py
+│   │   ├── enhancement_service_interface.py
+│   │   ├── qr_detection_service_interface.py
+│   │   ├── component_extraction_service_interface.py
+│   │   ├── ocr_service_interface.py
+│   │   └── postprocessing_service_interface.py
+│   └── impl/                 # Service implementations
+│       ├── s1_camera_service.py
+│       ├── s2_detection_service.py
+│       ├── s3_preprocessing_service.py
+│       ├── s4_enhancement_service.py
+│       ├── s5_qr_detection_service.py
+│       ├── s6_component_extraction_service.py
+│       ├── s7_ocr_service.py
+│       └── s8_postprocessing_service.py
 ├── ui/                       # UI layer (PySide6 widgets)
 │   ├── main_window.py
+│   ├── pipeline_orchestrator.py  # Pipeline coordination
 │   └── widgets/
 │       ├── camera_widget.py  # Video display with overlays
 │       ├── config_panel.py   # Control panel
 │       ├── preprocessed_image_widget.py  # Preprocessed image display
+│       ├── ocr_result_widget.py  # OCR results display
 │       └── toggle_switch.py  # Custom toggle widget
 ├── models/
 │   ├── yolo11n-seg-version-x-x-x.onnx  # YOLO11n-seg model
@@ -175,6 +204,47 @@ File cấu hình: `config/app_config.json`
 | `preprocessing.enhancement.sharpnessSigma` | Gaussian blur sigma | `1.0` |
 | `preprocessing.enhancement.sharpnessAmount` | Sharpen amount (1.0-3.0) | `1.5` |
 
+### OCR Pipeline Settings (Đọc nội dung nhãn)
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `ocrPipeline.enabled` | Bật/tắt OCR pipeline | `true` |
+| `ocrPipeline.debugEnabled` | Lưu debug output cho OCR | `true` |
+
+#### QR Detector
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `ocrPipeline.qrDetector.symbolTypes` | Loại mã cần detect | `["QRCODE"]` |
+
+#### Component Extractor
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `ocrPipeline.componentExtractor.aboveQrRatio` | Tỷ lệ vùng phía trên QR (% chiều cao ảnh) | `0.25` |
+| `ocrPipeline.componentExtractor.belowQrRatio` | Tỷ lệ vùng phía dưới QR (% chiều cao ảnh) | `0.35` |
+| `ocrPipeline.componentExtractor.paddingRatio` | Padding cho merged image | `0.02` |
+
+#### OCR Extractor
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `ocrPipeline.ocr.language` | Ngôn ngữ OCR | `"en"` |
+| `ocrPipeline.ocr.useGpu` | Sử dụng GPU (tắt để chạy CPU) | `false` |
+| `ocrPipeline.ocr.showLog` | Hiển thị log PaddleOCR | `false` |
+| `ocrPipeline.ocr.dropScore` | Ngưỡng lọc kết quả OCR | `0.5` |
+
+#### Text Processor (Fuzzy Matching)
+
+| Tham số | Mô tả | Mặc định |
+|---------|-------|----------|
+| `ocrPipeline.textProcessor.colorsPath` | Đường dẫn database màu sắc | `"data/colors.json"` |
+| `ocrPipeline.textProcessor.productsPath` | Đường dẫn database sản phẩm | `"data/products.json"` |
+| `ocrPipeline.textProcessor.sizesPath` | Đường dẫn database kích thước | `"data/sizes.json"` |
+| `ocrPipeline.textProcessor.matchThreshold` | Ngưỡng similarity tối thiểu (0.0-1.0) | `0.7` |
+| `ocrPipeline.textProcessor.levenshteinWeight` | Trọng số Levenshtein (0.0-1.0) | `0.4` |
+| `ocrPipeline.textProcessor.jaroWinklerWeight` | Trọng số Jaro-Winkler (0.0-1.0) | `0.6` |
+
 ### Visualization (Hiển thị)
 
 | Tham số | Mô tả | Mặc định |
@@ -188,6 +258,8 @@ File cấu hình: `config/app_config.json`
 
 Khi bật Debug Mode và phát hiện đối tượng, ứng dụng tự động lưu (với cooldown 2 giây):
 
+### Detection Debug
+
 | Thư mục | Nội dung | Định dạng |
 |---------|----------|----------|
 | `debug/display/` | Ảnh có annotation (mask + bbox + label) | JPEG |
@@ -197,6 +269,16 @@ Khi bật Debug Mode và phát hiện đối tượng, ứng dụng tự động
 | `debug/cropped/` | Ảnh sau crop, rotate, orientation fix | JPEG |
 | `debug/preprocessing/` | Ảnh sau enhancement (kết quả cuối cùng) | JPEG |
 | `debug/txt/` | Tọa độ contour của mask | TXT |
+
+### OCR Pipeline Debug
+
+| Thư mục | Nội dung | Định dạng |
+|---------|----------|----------|
+| `debug/qr-code/` | Ảnh QR code đã detect với bbox | JPEG |
+| `debug/components/` | Vùng above/below QR đã cắt | JPEG |
+| `debug/ocr-raw-text/` | Raw text từ PaddleOCR | TXT |
+| `debug/result/` | Kết quả OCR pipeline cuối cùng | JSON |
+| `debug/timing/` | Thời gian xử lý pipeline | JSON |
 
 ## Performance Logging
 

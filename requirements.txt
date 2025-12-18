@@ -34,13 +34,22 @@ numpy>=1.24.0
 Pillow>=10.0.0
 
 # ========== Document Preprocessing ==========
-# PaddleOCR: Document orientation classification
+# PaddleOCR: Document orientation classification + OCR text extraction
 # - Sử dụng cho việc phát hiện và sửa hướng tài liệu (0°, 90°, 180°, 270°)
+# - OCR cho trích xuất text từ nhãn
 paddleocr>=2.7.0
 
 # PaddlePaddle: Deep learning framework for PaddleOCR
 # - Backend cho PaddleOCR
+# - CPU-only mode (không sử dụng GPU)
 paddlepaddle>=2.5.0
+
+# ========== QR Code Detection ==========
+# zxing-cpp: High-performance barcode/QR code detection
+# - C++ implementation with Python bindings (pybind11)
+# - Supports QR, DataMatrix, Aztec, PDF417, etc.
+# - No external dependencies required
+zxing-cpp>=2.2.0
 
 # ========== Optional: GPU Support ==========
 # Nếu cần GPU acceleration, uncomment dòng dưới và comment onnxruntime ở trên
