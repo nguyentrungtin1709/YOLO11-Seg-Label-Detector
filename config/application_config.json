@@ -37,7 +37,7 @@
         "inputSize": 640,
         "confidenceThreshold": 0.5,
         "maxAreaRatio": 0.40,
-        "topNDetections": 1,
+        "topNDetections": 2,
         "visualization": {
             "boxColor": [0, 255, 0],
             "textColor": [0, 0, 0],
@@ -90,9 +90,9 @@
     "s6_component_extraction": {
         "_description": "Step 6: Extract label components relative to QR position",
         "aboveQrWidthRatio": 0.35,
-        "aboveQrHeightRatio": 0.20,
+        "aboveQrHeightRatio": 0.12,
         "belowQrWidthRatio": 0.65,
-        "belowQrHeightRatio": 0.45,
+        "belowQrHeightRatio": 0.65,
         "padding": 5
     },
     
