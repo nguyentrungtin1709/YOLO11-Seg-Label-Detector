@@ -90,9 +90,9 @@
     "s6_component_extraction": {
         "_description": "Step 6: Extract label components relative to QR position",
         "aboveQrWidthRatio": 0.35,
-        "aboveQrHeightRatio": 0.12,
+        "aboveQrHeightRatio": 0.14,
         "belowQrWidthRatio": 0.65,
-        "belowQrHeightRatio": 0.65,
+        "belowQrHeightRatio": 0.60,
         "padding": 5
     },
     
