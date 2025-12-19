@@ -102,8 +102,8 @@
         "lang": "en",
         "useTextlineOrientation": false,
         "textDetThresh": 0.3,
-        "textDetBoxThresh": 0.5,
-        "textRecScoreThresh": 0.5,
+        "textDetBoxThresh": 0.3,
+        "textRecScoreThresh": 0.3,
         "device": "cpu"
     },
     
