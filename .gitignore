@@ -112,8 +112,28 @@ $RECYCLE.BIN/
 
 # ========== Project Specific ==========
 # Output directories (generated at runtime)
-output/
+output/*
 logs/
+
+# Exception: Allow specific debug images for ML-PIPELINES-MIN.md documentation
+!output/debug/
+output/debug/*
+!output/debug/s2_detection/
+output/debug/s2_detection/*
+!output/debug/s2_detection/detection_frame_20251219_111858_200.png
+!output/debug/s2_detection/cropped_frame_20251219_111858_200_0.png
+!output/debug/s2_detection/mask_frame_20251219_111858_200_0.png
+!output/debug/s3_preprocessing/
+output/debug/s3_preprocessing/*
+!output/debug/s3_preprocessing/preprocessing_frame_20251219_111858_200.png
+!output/debug/s4_enhancement/
+output/debug/s4_enhancement/*
+!output/debug/s4_enhancement/enhancement_frame_20251219_111858_200.png
+!output/debug/s6_component_extraction/
+output/debug/s6_component_extraction/*
+!output/debug/s6_component_extraction/above_qr_frame_20251219_111858_200.png
+!output/debug/s6_component_extraction/below_qr_frame_20251219_111858_200.png
+!output/debug/s6_component_extraction/components_frame_20251219_111858_200.png
 
 # Data directory (external dataset - not part of this repo)
 # data/
