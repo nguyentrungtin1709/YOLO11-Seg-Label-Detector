@@ -37,6 +37,15 @@ class PaddleOcrExtractor(IOcrExtractor):
         textDetThresh: float = 0.3,
         textDetBoxThresh: float = 0.5,
         textRecScoreThresh: float = 0.5,
+        textDetUnclipRatio: float = 1.5,
+        textDetLimitType: str = 'min',
+        textDetLimitSideLen: int = 736,
+        textDetectionModelName: Optional[str] = None,
+        textRecognitionModelName: Optional[str] = None,
+        precision: str = 'fp32',
+        enableMkldnn: bool = True,
+        mkldnnCacheCapacity: int = 10,
+        cpuThreads: int = 8,
         device: str = 'cpu',
         logger: Optional[logging.Logger] = None
     ):
@@ -49,6 +58,15 @@ class PaddleOcrExtractor(IOcrExtractor):
             textDetThresh: Text detection threshold
             textDetBoxThresh: Text detection box threshold
             textRecScoreThresh: Text recognition score threshold
+            textDetUnclipRatio: Text box unclip ratio for expansion
+            textDetLimitType: Image resize limit type ('min' or 'max')
+            textDetLimitSideLen: Side length limit for image resize
+            textDetectionModelName: Detection model name (e.g., PP-OCRv5_server_det)
+            textRecognitionModelName: Recognition model name (e.g., PP-OCRv5_server_rec)
+            precision: Inference precision ('fp32' or 'fp16')
+            enableMkldnn: Enable MKL-DNN acceleration
+            mkldnnCacheCapacity: MKL-DNN cache capacity
+            cpuThreads: Number of CPU threads
             device: Device for inference ('cpu' or 'gpu')
             logger: Logger instance for debug output
         """
@@ -65,11 +83,26 @@ class PaddleOcrExtractor(IOcrExtractor):
             'text_det_thresh': textDetThresh,
             'text_det_box_thresh': textDetBoxThresh,
             'text_rec_score_thresh': textRecScoreThresh,
+            'text_det_unclip_ratio': textDetUnclipRatio,
+            'text_det_limit_type': textDetLimitType,
+            'text_det_limit_side_len': textDetLimitSideLen,
+            'precision': precision,
+            'enable_mkldnn': enableMkldnn,
+            'mkldnn_cache_capacity': mkldnnCacheCapacity,
+            'cpu_threads': cpuThreads,
             'device': device
         }
         
+        # Add optional parameters if provided
+        if textDetectionModelName:
+            self._config['text_detection_model_name'] = textDetectionModelName
+        if textRecognitionModelName:
+            self._config['text_recognition_model_name'] = textRecognitionModelName
+        
         self._logger.info(
-            f"PaddleOcrExtractor initialized with lang={lang}, device={device}"
+            f"PaddleOcrExtractor initialized with lang={lang}, device={device}, "
+            f"limit_type={textDetLimitType}, limit_side_len={textDetLimitSideLen}, "
+            f"models=({textDetectionModelName}, {textRecognitionModelName})"
         )
     
     def _ensureOcrEngine(self) -> None:

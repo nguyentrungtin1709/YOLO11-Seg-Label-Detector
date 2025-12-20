@@ -101,8 +101,21 @@
         "enabled": true,
         "lang": "en",
         "useTextlineOrientation": false,
-        "textDetThresh": 0.3,
-        "textDetBoxThresh": 0.3,
+        
+        "textDetectionModelName": "PP-OCRv5_mobile_det",
+        "textRecognitionModelName": "PP-OCRv5_mobile_rec",
+        
+        "precision": "fp32",
+        "enableMkldnn": true,
+        "mkldnnCacheCapacity": 10,
+        "cpuThreads": 4,
+        
+        "textDetLimitType": "max",
+        "textDetLimitSideLen": 960,
+        "textDetThresh": 0.05,
+        "textDetBoxThresh": 0.05,
+        "textDetUnclipRatio": 2.0,
+        
         "textRecScoreThresh": 0.3,
         "device": "cpu"
     },

@@ -396,6 +396,42 @@ class ConfigService(IConfigService):
         """Get OCR device (cpu/gpu)."""
         return self.get("s7_ocr.device", "cpu")
     
+    def getTextDetectionModelName(self) -> Optional[str]:
+        """Get text detection model name."""
+        return self.get("s7_ocr.textDetectionModelName")
+    
+    def getTextRecognitionModelName(self) -> Optional[str]:
+        """Get text recognition model name."""
+        return self.get("s7_ocr.textRecognitionModelName")
+    
+    def getOcrPrecision(self) -> str:
+        """Get OCR inference precision."""
+        return self.get("s7_ocr.precision", "fp32")
+    
+    def isOcrEnableMkldnn(self) -> bool:
+        """Check if MKL-DNN is enabled for OCR."""
+        return self.get("s7_ocr.enableMkldnn", True)
+    
+    def getOcrMkldnnCacheCapacity(self) -> int:
+        """Get MKL-DNN cache capacity."""
+        return self.get("s7_ocr.mkldnnCacheCapacity", 10)
+    
+    def getOcrCpuThreads(self) -> int:
+        """Get number of CPU threads for OCR."""
+        return self.get("s7_ocr.cpuThreads", 8)
+    
+    def getTextDetLimitType(self) -> str:
+        """Get text detection limit type."""
+        return self.get("s7_ocr.textDetLimitType", "min")
+    
+    def getTextDetLimitSideLen(self) -> int:
+        """Get text detection limit side length."""
+        return self.get("s7_ocr.textDetLimitSideLen", 736)
+    
+    def getTextDetUnclipRatio(self) -> float:
+        """Get text detection unclip ratio."""
+        return self.get("s7_ocr.textDetUnclipRatio", 1.5)
+    
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S8 Postprocessing Settings
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
