@@ -112,8 +112,8 @@
         
         "textDetLimitType": "max",
         "textDetLimitSideLen": 960,
-        "textDetThresh": 0.05,
-        "textDetBoxThresh": 0.05,
+        "textDetThresh": 0.15,
+        "textDetBoxThresh": 0.15,
         "textDetUnclipRatio": 2.0,
         
         "textRecScoreThresh": 0.3,
