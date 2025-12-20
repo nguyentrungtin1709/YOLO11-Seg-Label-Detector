@@ -34,6 +34,8 @@ import os
 import argparse
 import logging
 import time
+import json
+from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -228,6 +230,13 @@ def processImage(orchestrator: PipelineOrchestrator, image, frameId: str) -> dic
     # Calculate total time
     result["timing"]["total"] = (time.time() - startTime) * 1000
     
+    # Add total_pipeline key for PipelineOrchestrator compatibility
+    result["timing"]["total_pipeline"] = result["timing"]["total"]
+    
+    # Save timing to file (reuse orchestrator method)
+    if orchestrator.isDebugEnabled():
+        orchestrator.savePipelineTiming(frameId, result["timing"])
+    
     return result
 
 
@@ -319,8 +328,105 @@ def processAll(
     
     if orchestrator.isDebugEnabled():
         logger.info(f"Debug output:  {orchestrator.getDebugBasePath()}")
+        
+        # Save batch timing summary
+        saveBatchSummary(orchestrator, results, batchTotalTime, inputDir)
     
     return results
+
+
+def saveBatchSummary(
+    orchestrator: PipelineOrchestrator,
+    results: List[dict],
+    batchTotalTime: float,
+    inputDir: str
+) -> Optional[str]:
+    """
+    Save batch processing summary with timing statistics.
+    
+    Args:
+        orchestrator: Pipeline orchestrator (for debug settings).
+        results: List of result dictionaries from processImage().
+        batchTotalTime: Total batch processing time in milliseconds.
+        inputDir: Input directory name (for identification).
+        
+    Returns:
+        Path to saved summary file, or None if debug disabled.
+    """
+    if not orchestrator.isDebugEnabled():
+        return None
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Create timing directory
+        timingPath = Path(orchestrator.getDebugBasePath()) / "timing"
+        timingPath.mkdir(parents=True, exist_ok=True)
+        
+        # Collect timing statistics
+        successResults = [r for r in results if r.get("success", False)]
+        totalCount = len(results)
+        successCount = len(successResults)
+        
+        # Calculate timing stats
+        allTimings = [r["timing"] for r in results if "timing" in r]
+        
+        avgTotal = sum(t.get("total", 0) for t in allTimings) / len(allTimings) if allTimings else 0
+        minTotal = min((t.get("total", 0) for t in allTimings), default=0)
+        maxTotal = max((t.get("total", 0) for t in allTimings), default=0)
+        
+        # Per-step averages
+        stepKeys = ["s2_detection", "s3_preprocessing", "s4_enhancement", 
+                    "s5_qr_detection", "s6_component_extraction", 
+                    "s7_ocr", "s8_postprocessing"]
+        
+        avgSteps = {}
+        for key in stepKeys:
+            values = [t.get(key, 0) for t in allTimings if key in t]
+            avgSteps[key] = sum(values) / len(values) if values else 0
+        
+        # Build summary data
+        summaryData = {
+            "batch_info": {
+                "input_directory": inputDir,
+                "timestamp": datetime.now().isoformat(),
+                "total_images": totalCount,
+                "successful": successCount,
+                "failed": totalCount - successCount,
+                "success_rate": round(successCount / totalCount * 100, 2) if totalCount > 0 else 0
+            },
+            "timing_summary": {
+                "batch_total_ms": round(batchTotalTime, 2),
+                "avg_per_image_ms": round(avgTotal, 2),
+                "min_image_ms": round(minTotal, 2),
+                "max_image_ms": round(maxTotal, 2),
+                "avg_fps": round(1000 / avgTotal, 2) if avgTotal > 0 else 0
+            },
+            "step_averages_ms": {k: round(v, 2) for k, v in avgSteps.items()},
+            "individual_results": [
+                {
+                    "frameId": r.get("frameId"),
+                    "success": r.get("success", False),
+                    "total_ms": r.get("timing", {}).get("total", 0),
+                    "error": r.get("error")
+                }
+                for r in results
+            ]
+        }
+        
+        # Save to file
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filepath = timingPath / f"batch_summary_{timestamp}.json"
+        
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(summaryData, f, indent=2, ensure_ascii=False)
+        
+        logger.info(f"Batch summary saved: {filepath}")
+        return str(filepath)
+        
+    except Exception as e:
+        logger.error(f"Failed to save batch summary: {e}")
+        return None
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
