@@ -110,6 +110,15 @@ class PaddleOcrExtractor(IOcrExtractor):
         if self._ocrEngine is None:
             try:
                 from paddleocr import PaddleOCR
+                
+                # Log full configuration before initialization
+                self._logger.info("=" * 60)
+                self._logger.info("PaddleOCR Initialization Configuration:")
+                self._logger.info("=" * 60)
+                for key, value in self._config.items():
+                    self._logger.info(f"  {key:35s} = {value}")
+                self._logger.info("=" * 60)
+                
                 self._ocrEngine = PaddleOCR(**self._config)
                 self._logger.info("PaddleOCR engine initialized successfully")
             except ImportError as e:
