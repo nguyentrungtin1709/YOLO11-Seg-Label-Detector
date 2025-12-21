@@ -23,7 +23,17 @@ opencv-python-headless>=4.8.0
 # ONNX Runtime: High-performance inference engine
 # - Hỗ trợ CPU/GPU acceleration
 # - Nhẹ hơn PyTorch/TensorFlow
+# - Cross-platform compatible
 onnxruntime>=1.16.0
+
+# OpenVINO Runtime: Intel-optimized inference engine (OPTIONAL)
+# - Tối ưu cho CPU/GPU/VPU Intel
+# - Hỗ trợ INT8 quantization cho tốc độ cao (2-4x nhanh hơn ONNX FP32)
+# - Chỉ cần thiết nếu muốn sử dụng backend="openvino" trong config
+# - Cài đặt: pip install openvino>=2024.0.0
+# - Lưu ý: OpenVINO chỉ tối ưu trên Intel hardware, không cần thiết cho AMD/ARM
+# Uncomment dòng dưới để cài đặt OpenVINO:
+openvino>=2024.0.0
 
 # ========== Numeric Computing ==========
 # NumPy: Array processing

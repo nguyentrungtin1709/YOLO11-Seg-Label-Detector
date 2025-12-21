@@ -32,7 +32,11 @@
     
     "s2_detection": {
         "_description": "Step 2: YOLO detection settings",
-        "modelPath": "models/yolo11n-seg-version-1-0-0.onnx",
+        "backend": "openvino",
+        "_comment_backend": "Backend for inference: 'onnx' (ONNX Runtime, cross-platform) or 'openvino' (OpenVINO Runtime, Intel-optimized). Default: 'onnx'",
+        "modelPath": "models/yolo11n-seg-version-1-0-0_int8_openvino_model/yolo11n-seg-version-1-0-0.xml",
+        "_comment_modelPath_onnx": "For ONNX backend, use: models/yolo11n-seg-version-1-0-0.onnx",
+        "_comment_modelPath_openvino": "For OpenVINO backend, use: models/yolo11n-seg-version-1-0-0_int8_openvino_model/yolo11n-seg-version-1-0-0.xml",
         "isSegmentation": true,
         "inputSize": 640,
         "confidenceThreshold": 0.5,

@@ -99,6 +99,7 @@ class PipelineOrchestrator:
         # S2 Detection Service
         # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         self._s2DetectionService = S2DetectionService(
+            backend=self._configService.getDetectionBackend(),
             modelPath=self._configService.getModelPath(),
             inputSize=self._configService.getInputSize(),
             isSegmentation=self._configService.isSegmentation(),

@@ -18,7 +18,7 @@ import cv2
 import numpy as np
 
 from core.interfaces.detector_interface import IDetector, Detection
-from core.detector.yolo_detector import YOLODetector
+from core.detector import createDetector
 from services.interfaces.detection_service_interface import (
     IDetectionService,
     DetectionServiceResult
@@ -40,7 +40,8 @@ class S2DetectionService(IDetectionService, BaseService):
     
     def __init__(
         self,
-        modelPath: str,
+        backend: str = "onnx",
+        modelPath: str = "",
         inputSize: int = 640,
         isSegmentation: bool = True,
         classNames: Optional[List[str]] = None,
@@ -60,7 +61,8 @@ class S2DetectionService(IDetectionService, BaseService):
         Initialize S2DetectionService.
         
         Args:
-            modelPath: Path to YOLO ONNX model file.
+            backend: Backend for inference ("onnx" or "openvino").
+            modelPath: Path to model file (.onnx for ONNX, .xml for OpenVINO).
             inputSize: Model input size (default: 640).
             isSegmentation: Whether model is segmentation type.
             classNames: List of class names.
@@ -83,8 +85,10 @@ class S2DetectionService(IDetectionService, BaseService):
             debugEnabled=debugEnabled
         )
         
-        # Create core detector implementation
-        self._detector: IDetector = YOLODetector(
+        # Create core detector implementation using factory
+        self._detector: IDetector = createDetector(
+            backend=backend,
+            modelPath=modelPath,
             inputSize=inputSize,
             classNames=classNames or ["label"],
             isSegmentation=isSegmentation
@@ -109,13 +113,11 @@ class S2DetectionService(IDetectionService, BaseService):
             (0, 255, 255), (128, 255, 0), (255, 128, 0), (0, 255, 0)
         ]
         
-        # Load model during initialization
-        if modelPath:
-            self.loadModel(modelPath)
+        # Model already loaded by factory if modelPath provided
         
         self._logger.info(
             f"S2DetectionService initialized "
-            f"(inputSize={inputSize}, isSegmentation={isSegmentation})"
+            f"(backend={backend}, inputSize={inputSize}, isSegmentation={isSegmentation})"
         )
     
     def detect(

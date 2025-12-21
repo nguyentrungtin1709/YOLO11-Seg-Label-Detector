@@ -7,6 +7,82 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.4.0] - 2025-12-21
+
+### Tổng quan
+Phiên bản thêm hỗ trợ **OpenVINO Runtime** backend cho YOLO detector theo nguyên tắc OCP (Open/Closed Principle). Hệ thống giờ có thể chọn giữa ONNX Runtime (cross-platform) và OpenVINO Runtime (Intel-optimized) thông qua config.
+
+### Added
+- **OpenVINO Backend Support**: Hỗ trợ OpenVINO Runtime cho inference tốc độ cao trên Intel hardware
+  - `core/detector/openvino_detector.py`: Implementation IDetector sử dụng OpenVINO Runtime
+  - `core/detector/detector_factory.py`: Factory pattern để tạo detector dựa trên backend
+  - INT8 quantization support (2-4x nhanh hơn ONNX FP32 trên Intel CPU)
+- **Backend Selection**: Chọn backend qua config `s2_detection.backend` ("onnx" hoặc "openvino")
+- **Factory Pattern**: Encapsulation việc tạo detector, dễ mở rộng cho backends mới
+- **Documentation**: 
+  - `config/YOLOv11-DOCS.md`: Hướng dẫn cấu hình backend ONNX/OpenVINO
+  - `ARCHITECTURE.md`: Mô tả kiến trúc hệ thống hiện tại
+  - `PLAN.md`: Kế hoạch triển khai với architecture diagrams
+- **Test Suite**: `scripts/test_openvino.py` để verify implementation
+
+### Changed
+- **DetectorFactory**: S2DetectionService giờ sử dụng `createDetector()` thay vì hard-code `YOLODetector`
+- **ConfigService**: Thêm method `getDetectionBackend()` để đọc backend từ config
+- **PipelineOrchestrator**: Truyền backend parameter vào S2DetectionService
+- **application_config.json**: Thêm field `backend` với default "onnx" (backward compatible)
+- **requirements.txt**: Thêm OpenVINO Runtime như optional dependency với hướng dẫn
+
+### Technical Details
+- **OCP Compliance**: Mở rộng (thêm OpenVINO) mà không sửa code hiện tại
+- **DIP Compliance**: Services phụ thuộc `IDetector` interface, không phụ thuộc concrete class
+- **Backward Compatible**: Default backend = "onnx", không breaking changes
+- **Model Format**: 
+  - ONNX backend: `.onnx` file (FP32, ~6.5MB)
+  - OpenVINO backend: `.xml` + `.bin` files (INT8, ~1.6MB)
+- **Performance Benchmark** (7 samples, Intel CPU):
+  - OpenVINO: 116.05ms avg detection (1.69 FPS)
+  - ONNX: 188.96ms avg detection (1.57 FPS)
+  - Improvement: 38.6% faster với OpenVINO
+
+### Files Modified
+- `core/detector/__init__.py`: Export factory functions
+- `services/impl/config_service.py`: +1 method `getDetectionBackend()`
+- `services/impl/s2_detection_service.py`: +1 parameter `backend`, sử dụng factory
+- `ui/pipeline_orchestrator.py`: Truyền backend từ config
+- `config/application_config.json`: +5 dòng (backend field + comments)
+- `requirements.txt`: +8 dòng (OpenVINO documentation)
+
+### Files Created
+- `core/detector/openvino_detector.py` (~450 dòng)
+- `core/detector/detector_factory.py` (~250 dòng)
+- `config/YOLOv11-DOCS.md` (~200 dòng)
+- `ARCHITECTURE.md` (~300 dòng)
+- `scripts/test_openvino.py` (~350 dòng)
+- `PLAN.md` (~700 dòng)
+
+### Files Removed
+- `docs/OPENVINO_GUIDE.md`: Replaced by `config/YOLOv11-DOCS.md`
+
+### Testing
+- All 6 tests passed trong test suite
+- Factory pattern works correctly
+- Backend availability detection
+- ONNX detector creation
+- OpenVINO detector creation (nếu installed)
+- Error handling cho invalid backend
+- Model loading và inference verification
+- Tensor naming bug fix (support models without named tensors)
+
+### Migration Guide
+Xem `config/YOLOv11-DOCS.md` để biết hướng dẫn chi tiết về:
+- Cấu hình backend trong application_config.json
+- So sánh ONNX vs OpenVINO
+- Cài đặt OpenVINO Runtime
+- Performance comparison
+- Troubleshooting
+
+---
+
 ## [1.3.0] - 2025-12-19
 
 ### Tổng quan

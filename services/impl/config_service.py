@@ -196,6 +196,16 @@ class ConfigService(IConfigService):
         """Get model file path."""
         return self.get("s2_detection.modelPath")
     
+    def getDetectionBackend(self) -> str:
+        """
+        Get detection backend (onnx or openvino).
+        
+        Returns:
+            str: Backend name ("onnx" or "openvino"), default "onnx".
+        """
+        backend = self.get("s2_detection.backend", "onnx")
+        return backend.lower()
+    
     def isSegmentation(self) -> bool:
         """Check if model is segmentation type."""
         return self.get("s2_detection.isSegmentation", True)
