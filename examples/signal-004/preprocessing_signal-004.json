@@ -1,0 +1,11 @@
+{
+  "frameId": "signal-004",
+  "rotationAngle": 0.0,
+  "orientationFixed": false,
+  "imageShape": [
+    408,
+    709,
+    3
+  ],
+  "contourPointsCount": 200
+}

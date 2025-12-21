@@ -45,6 +45,15 @@ class S7OcrService(IOcrService, BaseService):
         textDetThresh: float = 0.3,
         textDetBoxThresh: float = 0.5,
         textRecScoreThresh: float = 0.5,
+        textDetUnclipRatio: float = 1.5,
+        textDetLimitType: str = "min",
+        textDetLimitSideLen: int = 736,
+        textDetectionModelName: Optional[str] = None,
+        textRecognitionModelName: Optional[str] = None,
+        precision: str = "fp32",
+        enableMkldnn: bool = True,
+        mkldnnCacheCapacity: int = 10,
+        cpuThreads: int = 8,
         device: str = "cpu",
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
@@ -59,6 +68,15 @@ class S7OcrService(IOcrService, BaseService):
             textDetThresh: Text detection threshold.
             textDetBoxThresh: Text detection box threshold.
             textRecScoreThresh: Text recognition score threshold.
+            textDetUnclipRatio: Text box unclip ratio for expansion.
+            textDetLimitType: Image resize limit type ('min' or 'max').
+            textDetLimitSideLen: Side length limit for image resize.
+            textDetectionModelName: Detection model name (e.g., PP-OCRv5_server_det).
+            textRecognitionModelName: Recognition model name (e.g., PP-OCRv5_server_rec).
+            precision: Inference precision ('fp32' or 'fp16').
+            enableMkldnn: Enable MKL-DNN acceleration.
+            mkldnnCacheCapacity: MKL-DNN cache capacity.
+            cpuThreads: Number of CPU threads.
             device: Device for inference ('cpu' or 'gpu').
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
@@ -77,6 +95,15 @@ class S7OcrService(IOcrService, BaseService):
             textDetThresh=textDetThresh,
             textDetBoxThresh=textDetBoxThresh,
             textRecScoreThresh=textRecScoreThresh,
+            textDetUnclipRatio=textDetUnclipRatio,
+            textDetLimitType=textDetLimitType,
+            textDetLimitSideLen=textDetLimitSideLen,
+            textDetectionModelName=textDetectionModelName,
+            textRecognitionModelName=textRecognitionModelName,
+            precision=precision,
+            enableMkldnn=enableMkldnn,
+            mkldnnCacheCapacity=mkldnnCacheCapacity,
+            cpuThreads=cpuThreads,
             device=device
         )
         
@@ -84,7 +111,8 @@ class S7OcrService(IOcrService, BaseService):
         
         self._logger.info(
             f"S7OcrService initialized "
-            f"(lang={lang}, device={device})"
+            f"(lang={lang}, device={device}, limit_type={textDetLimitType}, "
+            f"limit_side_len={textDetLimitSideLen})"
         )
     
     def extractText(

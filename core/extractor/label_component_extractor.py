@@ -98,8 +98,10 @@ class LabelComponentExtractor(IComponentExtractor):
             # Extract region above QR (position/quantity: "1/1")
             aboveQrRoi = self._extractAboveQr(image, qrTop, qrRight, w, h)
             
-            # Extract region below QR (product, size, color)
-            belowQrRoi = self._extractBelowQr(image, qrBottom, w, h)
+            # Extract region left of QR (product, size, color)
+            # This region starts from middle of QR height and extends down
+            qrLeft = min(p[0] for p in qrPolygon)
+            belowQrRoi = self._extractBelowQr(image, qrTop, qrBottom, qrLeft, w, h)
             
             # Merge two regions into one image (above on top, below at bottom)
             mergedImage = self._mergeComponents(aboveQrRoi, belowQrRoi)
@@ -167,31 +169,54 @@ class LabelComponentExtractor(IComponentExtractor):
     def _extractBelowQr(
         self, 
         image: np.ndarray, 
-        qrBottom: int, 
+        qrTop: int,
+        qrBottom: int,
+        qrLeft: int,
         imgWidth: int, 
         imgHeight: int
     ) -> np.ndarray:
         """
-        Extract region below QR code.
+        Extract region to the LEFT of QR code, starting from middle of QR.
         
         This region contains product code, size, and color.
-        """
-        roiHeight = int(imgHeight * self._belowQrHeightRatio)
-        roiWidth = int(imgWidth * self._belowQrWidthRatio)
+        The region starts from approximately 40% of QR height (middle area)
+        and extends down below QR.
         
-        # Region below QR, from left side
-        y1 = qrBottom + self._padding
-        y2 = min(imgHeight, qrBottom + roiHeight)
+        Layout:
+        ┌─────────────────────────────────────────┐
+        │                              ┌───┐      │
+        │  5000      ←─ starts here    │QR │      │
+        │  M                           │   │      │
+        │  FOREST GREEN                └───┘      │
+        └─────────────────────────────────────────┘
+        """
+        qrHeight = qrBottom - qrTop
+        
+        # Start from 40% of QR height (middle area where product info begins)
+        startYOffset = int(qrHeight * 0.4)
+        
+        # Region height: from middle of QR down to bottom of image
+        roiHeight = int(imgHeight * self._belowQrHeightRatio)
+        
+        # Y coordinates: start from middle of QR, extend down
+        y1 = qrTop + startYOffset
+        y2 = min(imgHeight, y1 + roiHeight)
+        
+        # X coordinates: from left edge to left of QR (with some padding)
         x1 = 0
-        x2 = roiWidth
+        x2 = max(1, qrLeft - self._padding)
         
         # Ensure valid region
         if y1 >= y2 or x1 >= x2:
             self._logger.warning("Invalid below-QR region, using fallback")
-            y1 = min(imgHeight - 1, qrBottom + 5)
+            y1 = qrTop
             y2 = imgHeight
             x1 = 0
-            x2 = imgWidth // 2
+            x2 = max(1, qrLeft)
+        
+        self._logger.debug(
+            f"Below QR region: y1={y1}, y2={y2}, x1={x1}, x2={x2}"
+        )
         
         roi = image[y1:y2, x1:x2]
         

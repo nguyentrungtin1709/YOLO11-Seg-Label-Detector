@@ -1,0 +1,25 @@
+{
+  "frameId": "signal-004",
+  "labelData": {
+    "fullOrderCode": "110825-VA-M-000547-2",
+    "dateCode": "110825",
+    "facility": "VA",
+    "orderType": "M",
+    "orderNumber": "000547",
+    "qrPosition": 2,
+    "positionQuantity": "2/2",
+    "ocrPosition": 2,
+    "quantity": 2,
+    "productCode": "5000",
+    "size": "M",
+    "color": "DARK HEATHER",
+    "isValid": true,
+    "fieldConfidences": {
+      "positionQuantity": 0.9166163802146912,
+      "productCode": 0.9996630549430847,
+      "size": 0.9998621940612793,
+      "color": 0.9954383969306946
+    }
+  },
+  "processingTimeMs": 0.04363059997558594
+}

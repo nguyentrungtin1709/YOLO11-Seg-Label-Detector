@@ -32,12 +32,16 @@
     
     "s2_detection": {
         "_description": "Step 2: YOLO detection settings",
-        "modelPath": "models/yolo11n-seg-version-1-0-0.onnx",
+        "backend": "openvino",
+        "_comment_backend": "Backend for inference: 'onnx' (ONNX Runtime, cross-platform) or 'openvino' (OpenVINO Runtime, Intel-optimized). Default: 'onnx'",
+        "modelPath": "models/yolo11n-seg-version-1-0-0_int8_openvino_model/yolo11n-seg-version-1-0-0.xml",
+        "_comment_modelPath_onnx": "For ONNX backend, use: models/yolo11n-seg-version-1-0-0.onnx",
+        "_comment_modelPath_openvino": "For OpenVINO backend, use: models/yolo11n-seg-version-1-0-0_int8_openvino_model/yolo11n-seg-version-1-0-0.xml",
         "isSegmentation": true,
         "inputSize": 640,
         "confidenceThreshold": 0.5,
         "maxAreaRatio": 0.40,
-        "topNDetections": 1,
+        "topNDetections": 2,
         "visualization": {
             "boxColor": [0, 255, 0],
             "textColor": [0, 0, 0],
@@ -90,9 +94,9 @@
     "s6_component_extraction": {
         "_description": "Step 6: Extract label components relative to QR position",
         "aboveQrWidthRatio": 0.35,
-        "aboveQrHeightRatio": 0.20,
+        "aboveQrHeightRatio": 0.13,
         "belowQrWidthRatio": 0.65,
-        "belowQrHeightRatio": 0.45,
+        "belowQrHeightRatio": 0.55,
         "padding": 5
     },
     
@@ -101,8 +105,21 @@
         "enabled": true,
         "lang": "en",
         "useTextlineOrientation": false,
-        "textDetThresh": 0.3,
-        "textDetBoxThresh": 0.3,
+        
+        "textDetectionModelName": "PP-OCRv5_mobile_det",
+        "textRecognitionModelName": "PP-OCRv5_mobile_rec",
+        
+        "precision": "fp32",
+        "enableMkldnn": true,
+        "mkldnnCacheCapacity": 10,
+        "cpuThreads": 4,
+        
+        "textDetLimitType": "max",
+        "textDetLimitSideLen": 960,
+        "textDetThresh": 0.15,
+        "textDetBoxThresh": 0.15,
+        "textDetUnclipRatio": 2.0,
+        
         "textRecScoreThresh": 0.3,
         "device": "cpu"
     },

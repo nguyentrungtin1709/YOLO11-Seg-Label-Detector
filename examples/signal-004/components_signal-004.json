@@ -1,0 +1,18 @@
+{
+  "frameId": "signal-004",
+  "mergedImageShape": [
+    277,
+    505,
+    3
+  ],
+  "aboveQrRoiShape": [
+    53,
+    149,
+    3
+  ],
+  "belowQrRoiShape": [
+    221,
+    505,
+    3
+  ]
+}

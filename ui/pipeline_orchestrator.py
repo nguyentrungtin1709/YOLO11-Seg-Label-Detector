@@ -99,6 +99,7 @@ class PipelineOrchestrator:
         # S2 Detection Service
         # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         self._s2DetectionService = S2DetectionService(
+            backend=self._configService.getDetectionBackend(),
             modelPath=self._configService.getModelPath(),
             inputSize=self._configService.getInputSize(),
             isSegmentation=self._configService.isSegmentation(),
@@ -178,6 +179,15 @@ class PipelineOrchestrator:
             textDetThresh=self._configService.getTextDetThresh(),
             textDetBoxThresh=self._configService.getTextDetBoxThresh(),
             textRecScoreThresh=self._configService.getTextRecScoreThresh(),
+            textDetUnclipRatio=self._configService.getTextDetUnclipRatio(),
+            textDetLimitType=self._configService.getTextDetLimitType(),
+            textDetLimitSideLen=self._configService.getTextDetLimitSideLen(),
+            textDetectionModelName=self._configService.getTextDetectionModelName(),
+            textRecognitionModelName=self._configService.getTextRecognitionModelName(),
+            precision=self._configService.getOcrPrecision(),
+            enableMkldnn=self._configService.isOcrEnableMkldnn(),
+            mkldnnCacheCapacity=self._configService.getOcrMkldnnCacheCapacity(),
+            cpuThreads=self._configService.getOcrCpuThreads(),
             device=self._configService.getOcrDevice(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled

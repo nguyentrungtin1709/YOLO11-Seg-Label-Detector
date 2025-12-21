@@ -1,0 +1,17 @@
+{
+  "frameId": "signal-004",
+  "numDetections": 1,
+  "detections": [
+    {
+      "className": "label",
+      "confidence": 0.9516175985336304,
+      "bbox": [
+        299,
+        564,
+        1005,
+        981
+      ],
+      "hasMask": true
+    }
+  ]
+}

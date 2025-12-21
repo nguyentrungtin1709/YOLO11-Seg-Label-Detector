@@ -1,0 +1,36 @@
+{
+  "frameId": "signal-004",
+  "text": "110825-VA-M-000547-2",
+  "polygon": [
+    [
+      510,
+      117
+    ],
+    [
+      681,
+      120
+    ],
+    [
+      684,
+      294
+    ],
+    [
+      513,
+      291
+    ]
+  ],
+  "rect": [
+    510,
+    117,
+    174,
+    177
+  ],
+  "confidence": 1.0,
+  "parsed": {
+    "dateCode": "110825",
+    "facility": "VA",
+    "orderType": "M",
+    "orderNumber": "000547",
+    "position": 2
+  }
+}
