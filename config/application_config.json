@@ -97,7 +97,9 @@
         "aboveQrHeightRatio": 0.13,
         "belowQrWidthRatio": 0.65,
         "belowQrHeightRatio": 0.55,
-        "padding": 5
+        "padding": 5,
+        "grayscalePreprocessing": true,
+        "_comment_grayscale": "Convert merged components to grayscale before OCR. Output is still BGR format (3 channels) for compatibility."
     },
     
     "s7_ocr": {

@@ -48,6 +48,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
         belowQrWidthRatio: float = 0.65,
         belowQrHeightRatio: float = 0.45,
         padding: int = 5,
+        grayscalePreprocessing: bool = False,
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -61,6 +62,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             belowQrWidthRatio: Width ratio of below-QR region.
             belowQrHeightRatio: Height ratio of below-QR region.
             padding: Padding around extracted regions.
+            grayscalePreprocessing: Convert merged image to grayscale before OCR.
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -77,7 +79,8 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             aboveQrHeightRatio=aboveQrHeightRatio,
             belowQrWidthRatio=belowQrWidthRatio,
             belowQrHeightRatio=belowQrHeightRatio,
-            padding=padding
+            padding=padding,
+            grayscalePreprocessing=grayscalePreprocessing
         )
         
         self._enabled = enabled
@@ -85,7 +88,8 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
         self._logger.info(
             f"S6ComponentExtractionService initialized "
             f"(aboveQr={aboveQrWidthRatio}x{aboveQrHeightRatio}, "
-            f"belowQr={belowQrWidthRatio}x{belowQrHeightRatio})"
+            f"belowQr={belowQrWidthRatio}x{belowQrHeightRatio}, "
+            f"grayscale={grayscalePreprocessing})"
         )
     
     def extractComponents(
