@@ -61,6 +61,12 @@ paddlepaddle>=2.5.0
 # - No external dependencies required
 zxing-cpp>=2.2.0
 
+# ========== Data Visualization ==========
+# Matplotlib: Plotting library for charts and graphs
+# - Sử dụng cho việc tạo biểu đồ so sánh performance
+# - Xuất ra PNG, PDF, SVG, etc.
+matplotlib>=3.10.0
+
 # ========== Optional: GPU Support ==========
 # Nếu cần GPU acceleration, uncomment dòng dưới và comment onnxruntime ở trên
 # onnxruntime-gpu>=1.16.0

@@ -167,7 +167,7 @@ class S2DetectionService(IDetectionService, BaseService):
             processingTimeMs = self._measureTime(startTime)
             
             # Save debug output
-            self._saveDebugOutput(frameId, topDetections, annotatedFrame, frame)
+            self._saveDebugOutput(frameId, topDetections, annotatedFrame, frame, processingTimeMs)
             
             # Log timing
             self._logTiming(frameId, processingTimeMs)
@@ -304,7 +304,8 @@ class S2DetectionService(IDetectionService, BaseService):
         frameId: str, 
         detections: List[Detection],
         annotatedFrame: np.ndarray,
-        originalFrame: np.ndarray
+        originalFrame: np.ndarray,
+        processingTimeMs: float
     ) -> None:
         """Save debug output for detection step."""
         if not self._debugEnabled:
@@ -317,6 +318,7 @@ class S2DetectionService(IDetectionService, BaseService):
         detectionData = {
             "frameId": frameId,
             "numDetections": len(detections),
+            "processingTimeMs": processingTimeMs,
             "detections": [
                 {
                     "className": det.className,

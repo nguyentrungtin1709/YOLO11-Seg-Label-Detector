@@ -143,6 +143,7 @@ notebook/
 samples
 
 # Temporary files
+temp/
 *.tmp
 *.temp
 *.log
