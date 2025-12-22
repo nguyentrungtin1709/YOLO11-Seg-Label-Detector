@@ -19,12 +19,12 @@ logger = logging.getLogger(__name__)
 
 class PreprocessedImageWidget(QWidget):
     """
-    Widget for displaying preprocessed label images.
+    Widget for displaying OCR input image (merged components).
     
-    Shows the result of preprocessing pipeline:
-    - Cropped from original frame based on mask
-    - Rotated to upright position
-    - Orientation corrected (landscape, 180° fix)
+    Shows the result of component extraction (S6):
+    - Merged text components from the label
+    - This is the exact image that will be sent to OCR (S7)
+    - Includes preprocessing (S3) and enhancement (S4) if enabled
     
     Features:
     - Auto-scaling to fit widget while maintaining aspect ratio
@@ -61,7 +61,7 @@ class PreprocessedImageWidget(QWidget):
         layout.setSpacing(5)
         
         # Group box with title
-        groupBox = QGroupBox("Preprocessed Label")
+        groupBox = QGroupBox("OCR Input (Merged Components)")
         groupLayout = QVBoxLayout(groupBox)
         groupLayout.setContentsMargins(5, 10, 5, 5)
         
@@ -96,7 +96,7 @@ class PreprocessedImageWidget(QWidget):
         Update the displayed image.
         
         Args:
-            image: Preprocessed image (BGR format from OpenCV).
+            image: Merged component image for OCR (BGR format from OpenCV).
         """
         if image is None:
             self.clear()
