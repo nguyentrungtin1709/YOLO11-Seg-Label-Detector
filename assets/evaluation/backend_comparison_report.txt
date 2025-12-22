@@ -1,0 +1,34 @@
+================================================================================
+YOLO11 BACKEND PERFORMANCE COMPARISON REPORT
+================================================================================
+
+OPENVINO BACKEND
+--------------------------------------------------------------------------------
+  Total samples processed: 80
+  Average processing time: 118.63 ms
+  Median processing time:  112.24 ms
+  Min processing time:     52.87 ms
+  Max processing time:     192.31 ms
+  Standard deviation:      29.45 ms
+
+ONNX BACKEND
+--------------------------------------------------------------------------------
+  Total samples processed: 80
+  Average processing time: 247.07 ms
+  Median processing time:  254.15 ms
+  Min processing time:     107.44 ms
+  Max processing time:     371.69 ms
+  Standard deviation:      41.32 ms
+
+COMPARISON
+--------------------------------------------------------------------------------
+  Faster backend:          OpenVINO
+  Performance difference:  51.98% faster
+  Time difference:         128.44 ms
+
+PERFORMANCE METRICS
+--------------------------------------------------------------------------------
+  OpenVINO FPS (avg):      8.43 fps
+  ONNX FPS (avg):          4.05 fps
+
+================================================================================
