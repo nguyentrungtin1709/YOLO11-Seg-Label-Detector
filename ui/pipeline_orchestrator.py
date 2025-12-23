@@ -164,6 +164,7 @@ class PipelineOrchestrator:
             belowQrWidthRatio=self._configService.getBelowQrWidthRatio(),
             belowQrHeightRatio=self._configService.getBelowQrHeightRatio(),
             padding=self._configService.getComponentPadding(),
+            aboveQrScaleFactor=self._configService.getAboveQrScaleFactor(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )

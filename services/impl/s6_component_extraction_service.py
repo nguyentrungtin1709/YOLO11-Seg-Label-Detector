@@ -48,6 +48,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
         belowQrWidthRatio: float = 0.65,
         belowQrHeightRatio: float = 0.45,
         padding: int = 5,
+        aboveQrScaleFactor: float = 2.0,
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -61,6 +62,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             belowQrWidthRatio: Width ratio of below-QR region.
             belowQrHeightRatio: Height ratio of below-QR region.
             padding: Padding around extracted regions.
+            aboveQrScaleFactor: Scale factor for above-QR region (default: 2.0).
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -77,7 +79,8 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             aboveQrHeightRatio=aboveQrHeightRatio,
             belowQrWidthRatio=belowQrWidthRatio,
             belowQrHeightRatio=belowQrHeightRatio,
-            padding=padding
+            padding=padding,
+            aboveQrScaleFactor=aboveQrScaleFactor
         )
         
         self._enabled = enabled
@@ -86,6 +89,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             f"S6ComponentExtractionService initialized "
             f"(aboveQr={aboveQrWidthRatio}x{aboveQrHeightRatio}, "
             f"belowQr={belowQrWidthRatio}x{belowQrHeightRatio}, "
+            f"scale={aboveQrScaleFactor}x, "
             f"input=grayscale)"
         )
     

@@ -370,6 +370,18 @@ class ConfigService(IConfigService):
         """Get component extraction padding."""
         return self.get("s6_component_extraction.padding", 5)
     
+    def getAboveQrScaleFactor(self) -> float:
+        """
+        Get scale factor for above QR region.
+        
+        The above QR region will be scaled by this factor before merging.
+        This helps improve OCR accuracy for position/quantity text.
+        
+        Returns:
+            float: Scale factor (default: 2.0)
+        """
+        return self.get("s6_component_extraction.aboveQrScaleFactor", 2.0)
+    
     def isGrayscalePreprocessing(self) -> bool:
         """Check if grayscale preprocessing is enabled for component extraction."""
         return self.get("s6_component_extraction.grayscalePreprocessing", False)

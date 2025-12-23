@@ -97,7 +97,9 @@
         "aboveQrHeightRatio": 0.14,
         "belowQrWidthRatio": 0.65,
         "belowQrHeightRatio": 0.55,
-        "padding": 5
+        "padding": 5,
+        "aboveQrScaleFactor": 2.0,
+        "_comment_aboveQrScaleFactor": "Scale factor for above-QR region before merging (improves OCR accuracy for small text)"
     },
     
     "s7_ocr": {
