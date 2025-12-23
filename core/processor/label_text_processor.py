@@ -160,6 +160,7 @@ class LabelTextProcessor(ITextProcessor):
         result.orderType = qrResult.orderType
         result.orderNumber = qrResult.orderNumber
         result.qrPosition = qrResult.position
+        result.qrRevisionCount = qrResult.revisionCount
         
         # Sort text blocks by Y position (top to bottom)
         sortedBlocks = sorted(textBlocks, key=lambda b: b.bbox[0][1])

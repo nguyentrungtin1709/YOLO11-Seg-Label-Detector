@@ -16,10 +16,13 @@ import numpy as np
 from core.interfaces.qr_detector_interface import IQrDetector, QrDetectionResult
 
 
-# QR code format pattern: MMDDYY-FACILITY-TYPE-ORDER-POSITION
-# Example: 110125-VA-M-000002-2
+# QR code format pattern: MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
+# Examples: 
+#   110125-VA-M-000002-2      (no revision)
+#   110125-VA-M-000002-2/1    (revised once)
+#   110125-VA-M-000002-2/2    (revised twice)
 QR_PATTERN = re.compile(
-    r'^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)$'
+    r'^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$'
 )
 
 
@@ -28,7 +31,7 @@ class ZxingQrDetector(IQrDetector):
     QR code detector using zxing-cpp library.
     
     Detects QR codes in images and parses the content according to
-    the expected label format: MMDDYY-FACILITY-TYPE-ORDER-POSITION
+    the expected label format: MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
     """
     
     def __init__(
@@ -136,7 +139,8 @@ class ZxingQrDetector(IQrDetector):
                     facility=parsedData.get('facility', ''),
                     orderType=parsedData.get('orderType', ''),
                     orderNumber=parsedData.get('orderNumber', ''),
-                    position=parsedData.get('position', 0)
+                    position=parsedData.get('position', 0),
+                    revisionCount=parsedData.get('revisionCount', 0)
                 )
             
             self._logger.debug("No valid QR code in detected barcodes")
@@ -150,8 +154,10 @@ class ZxingQrDetector(IQrDetector):
         """
         Parse QR content according to expected format.
         
-        Format: MMDDYY-FACILITY-TYPE-ORDER-POSITION
-        Example: 110125-VA-M-000002-2
+        Format: MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
+        Examples: 
+            110125-VA-M-000002-2      (no revision)
+            110125-VA-M-000002-2/1    (revised once)
         
         Args:
             text: QR code text content
@@ -164,7 +170,8 @@ class ZxingQrDetector(IQrDetector):
             'facility': None,
             'orderType': None,
             'orderNumber': None,
-            'position': None
+            'position': None,
+            'revisionCount': 0
         }
         
         if not text:
@@ -177,13 +184,15 @@ class ZxingQrDetector(IQrDetector):
             result['orderType'] = match.group(3)      # M or S
             result['orderNumber'] = match.group(4)    # 000002
             result['position'] = int(match.group(5))  # 2
+            result['revisionCount'] = int(match.group(6)) if match.group(6) else 0  # 1, 2, ... or 0
             
+            revInfo = f", rev={result['revisionCount']}" if result['revisionCount'] > 0 else ""
             self._logger.debug(
                 f"QR parsed: date={result['dateCode']}, "
                 f"facility={result['facility']}, "
                 f"type={result['orderType']}, "
                 f"order={result['orderNumber']}, "
-                f"pos={result['position']}"
+                f"pos={result['position']}{revInfo}"
             )
         else:
             self._logger.warning(f"QR content does not match expected format: {text}")

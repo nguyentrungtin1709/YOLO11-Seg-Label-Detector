@@ -150,7 +150,7 @@ Panel cấu hình chứa các nhóm điều khiển sau:
 | ID | Tính năng | Mô tả |
 |----|-----------|-------|
 | F24 | QR Code Detection | Phát hiện và giải mã QR code trên nhãn sử dụng pyzbar |
-| F25 | QR Data Parsing | Parse dữ liệu QR theo format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION` |
+| F25 | QR Data Parsing | Parse dữ liệu QR theo format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]` |
 | F26 | Component Extraction | Cắt vùng trên/dưới QR code để trích xuất thông tin text |
 | F27 | OCR Text Extraction | Sử dụng PaddleOCR để đọc text từ vùng đã cắt |
 | F28 | Fuzzy Matching | So khớp text với database sử dụng Levenshtein + Jaro-Winkler |
@@ -241,13 +241,16 @@ output/
 | Thuộc tính | Giá trị |
 |------------|----------|
 | Kiến trúc | YOLO11n-seg (nano - Instance Segmentation) |
-| Định dạng | ONNX |
+| **Backend** | **ONNX Runtime hoặc OpenVINO Runtime** |
 | Kích thước input | 640 x 640 pixels |
 | Số class | 1 (label) |
-| File model | `models/yolo11n-seg-version-x-x-x.onnx` |
+| **ONNX Format** | **`models/yolo11n-seg-version-1-0-0.onnx` (FP32, ~5.8MB)** |
+| **OpenVINO Format** | **`models/yolo11n-seg-version-1-0-0_int8_openvino_model/*.xml` (INT8, ~1.6MB)** |
 | **Output 1** | **Bounding boxes + Mask coefficients: [1, 116, 8400]** |
 | **Output 2** | **Proto masks: [1, 32, 160, 160]** |
 | **Visualization** | **Colored masks với opacity cấu hình + Bounding boxes** |
+| **Backend Selection** | **Config: `s2_detection.backend` ("onnx" hoặc "openvino")** |
+| **Performance** | **OpenVINO: ~38% nhanh hơn ONNX trên Intel CPU** |
 
 ### 5.2 PaddleOCR Model (Orientation Classification)
 
@@ -313,20 +316,24 @@ output/
 |---------|------|----------|-------|
 | `ocrPipeline.qrDetector.symbolTypes` | array | ["QRCODE"] | Loại mã cần detect |
 
-**QR Data Format:** `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+**QR Data Format:** `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
 - `MMDDYY`: Ngày (ví dụ: 110125 = 11/01/2025)
 - `FACILITY`: Mã cơ sở (ví dụ: VA)
 - `TYPE`: Loại đơn hàng (M = Made-to-Order, S = Stock)
 - `ORDER`: Số đơn hàng (6 chữ số)
 - `POSITION`: Vị trí (1-n)
+- `REVISION` (optional): Số lần sửa chữa (1, 2, ...). Nếu không có nghĩa là chưa sửa lần nào
 
 ### 9.3 Component Extractor
 
 | Tham số | Kiểu | Mặc định | Mô tả |
 |---------|------|----------|-------|
-| `ocrPipeline.componentExtractor.aboveQrRatio` | float | 0.25 | Tỷ lệ vùng trên QR (% chiều cao ảnh) |
-| `ocrPipeline.componentExtractor.belowQrRatio` | float | 0.35 | Tỷ lệ vùng dưới QR (% chiều cao ảnh) |
-| `ocrPipeline.componentExtractor.paddingRatio` | float | 0.02 | Padding cho merged image |
+| `s6_component_extraction.aboveQrWidthRatio` | float | 0.35 | Tỷ lệ chiều rộng vùng trên QR (% chiều rộng ảnh) |
+| `s6_component_extraction.aboveQrHeightRatio` | float | 0.18 | Tỷ lệ chiều cao vùng trên QR (% chiều cao ảnh) |
+| `s6_component_extraction.belowQrWidthRatio` | float | 0.65 | Tỷ lệ chiều rộng vùng dưới QR (% chiều rộng ảnh) |
+| `s6_component_extraction.belowQrHeightRatio` | float | 0.55 | Tỷ lệ chiều cao vùng dưới QR (% chiều cao ảnh) |
+| `s6_component_extraction.padding` | int | 5 | Padding xung quanh vùng extracted (pixels) |
+| `s6_component_extraction.grayscalePreprocessing` | bool | true | Chuyển merged image sang grayscale trước OCR để tăng độ chính xác |
 
 **Label Structure:**
 ```

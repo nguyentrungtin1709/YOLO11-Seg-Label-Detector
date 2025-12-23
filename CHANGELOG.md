@@ -7,6 +7,37 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.5.0] - 2025-12-23
+
+### Tổng quan
+Phiên bản cập nhật QR code format để hỗ trợ **revision count** (số lần sửa chữa sản phẩm). Phần `/REVISION` là tùy chọn (optional), backward compatible với format cũ.
+
+### Changed
+- **QR Code Format**: Cập nhật hỗ trợ revision count (optional)
+  - Format cũ: `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+  - Format mới: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
+  - Ví dụ: 
+    - `110125-VA-M-000002-2` (chưa sửa lần nào)
+    - `110125-VA-M-000002-2/1` (đã sửa 1 lần)
+    - `110125-VA-M-000002-2/2` (đã sửa 2 lần)
+  - Phần `/REVISION` là optional, phần lớn sản phẩm vẫn là format cũ
+  - Backward compatible: Format cũ vẫn hoạt động bình thường
+- **QrDetectionResult**: Thêm field `revisionCount: int = 0`
+- **LabelData**: Thêm field `qrRevisionCount: int = 0`
+- **QR Detectors**: Cập nhật regex pattern và parsing logic
+  - `ZxingQrDetector`: Regex pattern `(?:/(\d+))?$` cho revision optional
+  - `PyzbarQrDetector`: Tương tự cập nhật
+- **Debug Output**: Tất cả debug JSON bây giờ include field `revisionCount`
+- **LabelTextProcessor**: Copy `revisionCount` từ QR result vào label data
+
+### Technical Details
+- Regex pattern mới: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$`
+- Group 6 (optional): Revision count
+- Nếu không có `/REVISION`, `revisionCount` = 0
+- Debug logs hiển thị revision count khi > 0
+
+---
+
 ## [1.4.0] - 2025-12-21
 
 ### Tổng quan

@@ -69,9 +69,15 @@ Phát hiện vùng chứa nhãn trong ảnh bằng mô hình YOLO11 Instance Seg
 ### Xử lý
 
 1. **Nạp mô hình YOLO**
-   - Sử dụng `YOLODetector` với ONNX Runtime để chạy inference.
+   - Hệ thống hỗ trợ 2 backend:
+     - **ONNX Runtime**: Cross-platform, sử dụng file `.onnx` (FP32, ~5.8MB)
+     - **OpenVINO Runtime**: Intel-optimized, sử dụng file `.xml` + `.bin` (INT8, ~1.6MB)
+   - Backend được chọn qua config: `s2_detection.backend` ("onnx" hoặc "openvino")
+   - Factory pattern tự động tạo detector phù hợp:
+     - `YOLODetector` cho ONNX Runtime
+     - `OpenVINODetector` cho OpenVINO Runtime
    - Cấu hình: `inputSize` (640), `isSegmentation` (True), `classNames` (["label"]).
-   - Nạp mô hình từ file `.onnx` khi khởi động service.
+   - Nạp mô hình từ file khi khởi động service.
 
 2. **Tiền xử lý ảnh (Preprocess)**
    - Resize ảnh về kích thước input của model (640x640).
@@ -284,15 +290,18 @@ Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàn
 
 4. **Giải mã và parse nội dung**
    - Lấy text từ `barcode.text`.
-   - Parse theo regex pattern: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)$`
-   - Format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
-   - Ví dụ: `110125-VA-M-000002-2`
+   - Parse theo regex pattern: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$`
+   - Format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
+   - Ví dụ: 
+     - `110125-VA-M-000002-2` (chưa sửa lần nào)
+     - `110125-VA-M-000002-2/1` (đã sửa 1 lần)
    - Trích xuất các trường:
      - `dateCode`: 6 ký tự đầu (MMDDYY) - Ngày tạo đơn
      - `facility`: 2 ký tự (VA, CA, ...) - Mã cơ sở
      - `orderType`: 1 ký tự (M: Multi, S: Single) - Loại đơn
      - `orderNumber`: Chuỗi số - Số đơn hàng
      - `position`: Số nguyên - Vị trí sản phẩm trong đơn
+     - `revisionCount`: Số nguyên - Số lần sửa chữa (0 nếu không có)
 
 ### Đầu ra
 
@@ -301,7 +310,7 @@ Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàn
   - `polygon`: 4 góc của mã QR [(x, y), ...]
   - `rect`: Bounding box (left, top, width, height)
   - `confidence`: Độ tin cậy (1.0 với zxing-cpp)
-  - `dateCode`, `facility`, `orderType`, `orderNumber`, `position`: Dữ liệu đã parse
+  - `dateCode`, `facility`, `orderType`, `orderNumber`, `position`, `revisionCount`: Dữ liệu đã parse
 
 ### Ví dụ Debug Output
 
@@ -380,6 +389,15 @@ Trích xuất các vùng chứa text dựa trên vị trí tương đối với 
    - Căn trái vùng Below QR theo targetWidth (pad trắng bên phải).
    - Thêm đường kẻ ngăn cách (separator) giữa 2 vùng.
    - Ghép theo chiều dọc: `np.vstack([aboveQr, separator, belowQr])`.
+
+5. **Grayscale Preprocessing (Tùy chọn)**
+   - Nếu `grayscalePreprocessing = true`:
+     - Chuyển merged image sang grayscale với `cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)`.
+     - Chuyển lại sang BGR format (3 channels) để tương thích với OCR: `cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)`.
+   - Grayscale giúp:
+     - Tăng tốc độ xử lý OCR (giảm noise từ màu sắc).
+     - Cải thiện độ chính xác nhận dạng text trên nền phức tạp.
+   - Output vẫn giữ format BGR 3 channels để tương thích với PaddleOCR.
 
 ### Đầu ra
 

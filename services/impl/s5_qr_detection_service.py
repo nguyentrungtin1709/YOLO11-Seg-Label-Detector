@@ -169,7 +169,8 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
                 "facility": qrResult.facility,
                 "orderType": qrResult.orderType,
                 "orderNumber": qrResult.orderNumber,
-                "position": qrResult.position
+                "position": qrResult.position,
+                "revisionCount": qrResult.revisionCount
             }
         }
         self._saveDebugJson(frameId, data, "qr")
