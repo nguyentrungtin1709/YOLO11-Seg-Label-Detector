@@ -408,15 +408,15 @@ class ConfigService(IConfigService):
     
     def getTextDetThresh(self) -> float:
         """Get text detection threshold."""
-        return self.get("s7_ocr.textDetThresh", 0.3)
+        return self.get("s7_ocr.textDetThresh", 0.15)
     
     def getTextDetBoxThresh(self) -> float:
         """Get text detection box threshold."""
-        return self.get("s7_ocr.textDetBoxThresh", 0.5)
+        return self.get("s7_ocr.textDetBoxThresh", 0.15)
     
     def getTextRecScoreThresh(self) -> float:
         """Get text recognition score threshold."""
-        return self.get("s7_ocr.textRecScoreThresh", 0.5)
+        return self.get("s7_ocr.textRecScoreThresh", 0.3)
     
     def getOcrDevice(self) -> str:
         """Get OCR device (cpu/gpu)."""
@@ -468,7 +468,7 @@ class ConfigService(IConfigService):
     
     def getMinFuzzyScore(self) -> float:
         """Get minimum fuzzy matching score."""
-        return self.get("s8_postprocessing.minFuzzyScore", 0.80)
+        return self.get("s8_postprocessing.minFuzzyScore", 0.90)
     
     def getProductsJsonPath(self) -> str:
         """Get products JSON file path."""

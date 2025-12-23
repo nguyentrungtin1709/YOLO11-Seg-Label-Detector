@@ -128,7 +128,7 @@
     
     "s8_postprocessing": {
         "_description": "Step 8: Text postprocessing - fuzzy matching and validation",
-        "minFuzzyScore": 0.80,
+        "minFuzzyScore": 0.90,
         "productsJsonPath": "data/products.json",
         "sizesJsonPath": "data/sizes.json",
         "colorsJsonPath": "data/colors.json"
