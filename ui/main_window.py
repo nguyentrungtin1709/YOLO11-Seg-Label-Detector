@@ -444,9 +444,6 @@ class MainWindow(QMainWindow):
             if enhanceResult.success and enhanceResult.enhancedImage is not None:
                 processedImage = enhanceResult.enhancedImage
         
-        # Update preprocessed image display
-        self._configPanel.updatePreprocessedImage(processedImage)
-        
         # S5: QR Detection
         qrResult = self._qrDetectionService.detectQr(processedImage, frameId)
         pipelineTiming["s5_qr_detection"] = qrResult.processingTimeMs
@@ -468,6 +465,9 @@ class MainWindow(QMainWindow):
             self._ocrResultWidget.showError("Component extraction failed")
             self._logPipelineTiming(frameId, pipelineTiming, pipelineStartTime, shouldSaveDebug)
             return
+        
+        # Update image display with merged components (will be used for OCR)
+        self._configPanel.updatePreprocessedImage(componentResult.mergedImage)
         
         # S7: OCR
         ocrResult = self._ocrService.extractText(componentResult.mergedImage, frameId)

@@ -370,6 +370,10 @@ class ConfigService(IConfigService):
         """Get component extraction padding."""
         return self.get("s6_component_extraction.padding", 5)
     
+    def isGrayscalePreprocessing(self) -> bool:
+        """Check if grayscale preprocessing is enabled for component extraction."""
+        return self.get("s6_component_extraction.grayscalePreprocessing", False)
+    
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S7 OCR Settings
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

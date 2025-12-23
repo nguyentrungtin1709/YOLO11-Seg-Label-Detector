@@ -45,6 +45,7 @@ class LabelComponentExtractor(IComponentExtractor):
         belowQrWidthRatio: float = 0.65,
         belowQrHeightRatio: float = 0.45,
         padding: int = 5,
+        grayscalePreprocessing: bool = False,
         logger: Optional[logging.Logger] = None
     ):
         """
@@ -56,6 +57,7 @@ class LabelComponentExtractor(IComponentExtractor):
             belowQrWidthRatio: Width of below-QR region as ratio of image width
             belowQrHeightRatio: Height of below-QR region as ratio of image height
             padding: Padding around extracted regions
+            grayscalePreprocessing: Convert merged image to grayscale before returning
             logger: Logger instance for debug output
         """
         self._aboveQrWidthRatio = aboveQrWidthRatio
@@ -63,6 +65,7 @@ class LabelComponentExtractor(IComponentExtractor):
         self._belowQrWidthRatio = belowQrWidthRatio
         self._belowQrHeightRatio = belowQrHeightRatio
         self._padding = padding
+        self._grayscalePreprocessing = grayscalePreprocessing
         self._logger = logger or logging.getLogger(__name__)
     
     def extractAndMerge(
@@ -275,5 +278,12 @@ class LabelComponentExtractor(IComponentExtractor):
         
         # Stack vertically
         merged = np.vstack([aboveQrRoi, separator, belowQrRoi])
+        
+        # Apply grayscale preprocessing if enabled
+        if self._grayscalePreprocessing:
+            # Convert to grayscale
+            merged_gray = cv2.cvtColor(merged, cv2.COLOR_BGR2GRAY)
+            # Convert back to BGR format (3 channels) for OCR compatibility
+            merged = cv2.cvtColor(merged_gray, cv2.COLOR_GRAY2BGR)
         
         return merged
