@@ -11,6 +11,7 @@ Follows DIP: Depends on injected enhancer components.
 import logging
 from typing import Optional
 import numpy as np
+import cv2
 
 from core.interfaces.enhancer_interface import IImageEnhancer, EnhancementResult
 from core.enhancer.brightness_enhancer import BrightnessEnhancer
@@ -25,11 +26,12 @@ class ImageEnhancer(IImageEnhancer):
     Orchestrates image enhancement pipeline.
     
     Combines BrightnessEnhancer and SharpnessEnhancer to provide
-    complete image quality enhancement.
+    complete image quality enhancement on grayscale images.
     
     Pipeline order (important):
-    1. Brightness enhancement FIRST - reveals hidden details
-    2. Sharpness enhancement SECOND - sharpens revealed details
+    1. Convert BGR to Grayscale FIRST
+    2. Brightness enhancement SECOND - reveals hidden details
+    3. Sharpness enhancement THIRD - sharpens revealed details
     
     Follows DIP: Receives enhancers via dependency injection.
     Follows SRP: Only orchestrates, doesn't implement enhancement logic.
@@ -69,11 +71,12 @@ class ImageEnhancer(IImageEnhancer):
         applySharpness: bool = True
     ) -> EnhancementResult:
         """
-        Enhance image quality through brightness and sharpness adjustments.
+        Enhance image quality through brightness and sharpness adjustments on grayscale.
         
         Pipeline:
-        1. If applyBrightness: Apply CLAHE brightness enhancement
-        2. If applySharpness: Apply Unsharp Mask sharpness enhancement
+        1. Convert BGR to Grayscale
+        2. If applyBrightness: Apply CLAHE brightness enhancement
+        3. If applySharpness: Apply Unsharp Mask sharpness enhancement
         
         Args:
             image: Input image (BGR format, numpy array).
@@ -82,7 +85,7 @@ class ImageEnhancer(IImageEnhancer):
             
         Returns:
             EnhancementResult containing:
-            - image: Enhanced image
+            - image: Enhanced grayscale image (H, W)
             - brightnessApplied: Whether brightness was applied
             - sharpnessApplied: Whether sharpness was applied
         """
@@ -94,24 +97,30 @@ class ImageEnhancer(IImageEnhancer):
                 sharpnessApplied=False
             )
         
-        result = image.copy()
+        # Convert BGR to Grayscale at the beginning
+        if len(image.shape) == 3 and image.shape[2] == 3:
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = image
+        
+        result = gray.copy()
         brightnessApplied = False
         sharpnessApplied = False
         
-        # Step 1: Brightness enhancement (CLAHE)
+        # Step 1: Brightness enhancement (CLAHE on grayscale)
         if applyBrightness:
             result = self._brightnessEnhancer.enhanceBrightness(result)
             brightnessApplied = True
             logger.debug("Brightness enhancement step completed")
         
-        # Step 2: Sharpness enhancement (Unsharp Mask)
+        # Step 2: Sharpness enhancement (Unsharp Mask on grayscale)
         if applySharpness:
             result = self._sharpnessEnhancer.enhanceSharpness(result)
             sharpnessApplied = True
             logger.debug("Sharpness enhancement step completed")
         
         if not applyBrightness and not applySharpness:
-            logger.debug("No enhancement applied, returning original image")
+            logger.debug("No enhancement applied, returning grayscale image")
         
         return EnhancementResult(
             image=result,

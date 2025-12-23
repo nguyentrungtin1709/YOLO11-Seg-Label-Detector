@@ -79,7 +79,7 @@
         "brightnessEnabled": true,
         "brightnessClipLimit": 2.5,
         "brightnessTileSize": 8,
-        "sharpnessEnabled": true,
+        "sharpnessEnabled": false,
         "sharpnessSigma": 1.0,
         "sharpnessAmount": 1.5
     },
@@ -94,12 +94,10 @@
     "s6_component_extraction": {
         "_description": "Step 6: Extract label components relative to QR position",
         "aboveQrWidthRatio": 0.35,
-        "aboveQrHeightRatio": 0.18,
+        "aboveQrHeightRatio": 0.14,
         "belowQrWidthRatio": 0.65,
         "belowQrHeightRatio": 0.55,
-        "padding": 5,
-        "grayscalePreprocessing": true,
-        "_comment_grayscale": "Convert merged components to grayscale before OCR. Output is still BGR format (3 channels) for compatibility."
+        "padding": 5
     },
     
     "s7_ocr": {

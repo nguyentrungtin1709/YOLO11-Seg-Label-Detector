@@ -23,12 +23,12 @@ class BrightnessEnhancer:
     CLAHE (Contrast Limited Adaptive Histogram Equalization):
     - Divides image into tiles and equalizes histogram for each tile separately
     - Uses clip limit to avoid noise amplification
-    - Processes only L channel in LAB color space to preserve colors
+    - Applied directly on grayscale images
     
     Advantages over direct brightness adjustment:
-    - Preserves colors (only processes lightness)
     - Adaptive: processes each region separately
     - Avoids over-exposure in already bright areas
+    - Efficient on single-channel grayscale images
     
     Follows SRP: Only responsible for brightness enhancement.
     """
@@ -70,16 +70,14 @@ class BrightnessEnhancer:
         Enhance image brightness using CLAHE.
         
         Process:
-        1. Convert BGR to LAB color space
-        2. Split into L (Lightness), A, B channels
-        3. Apply CLAHE only to L channel
-        4. Merge channels and convert back to BGR
+        1. Ensure input is 2D grayscale array
+        2. Apply CLAHE directly on grayscale image
         
         Args:
-            image: Input image (BGR format, numpy array).
+            image: Input grayscale image (H, W) or (H, W, 1).
             
         Returns:
-            Brightness-enhanced image (BGR format).
+            Brightness-enhanced grayscale image (H, W).
             Returns original image if processing fails.
         """
         if image is None or image.size == 0:
@@ -87,28 +85,23 @@ class BrightnessEnhancer:
             return image
         
         try:
-            # 1. Convert BGR to LAB color space
-            # LAB: L = Lightness, A = Green-Red, B = Blue-Yellow
-            lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+            # Ensure input is 2D array
+            if len(image.shape) == 3:
+                if image.shape[2] == 1:
+                    image = image[:, :, 0]
+                else:
+                    logger.warning("Expected grayscale image, got multi-channel image")
+                    return image
             
-            # 2. Split channels: L, A, B
-            lChannel, aChannel, bChannel = cv2.split(lab)
-            
-            # 3. Create CLAHE object and apply to L channel only
+            # Create CLAHE object and apply directly on grayscale
             clahe = cv2.createCLAHE(
                 clipLimit=self._clipLimit,
                 tileGridSize=self._tileGridSize
             )
-            lChannelEnhanced = clahe.apply(lChannel)
-            
-            # 4. Merge channels back
-            labEnhanced = cv2.merge([lChannelEnhanced, aChannel, bChannel])
-            
-            # 5. Convert back to BGR
-            result = cv2.cvtColor(labEnhanced, cv2.COLOR_LAB2BGR)
+            enhanced = clahe.apply(image)
             
             logger.debug("Brightness enhancement applied successfully")
-            return result
+            return enhanced
             
         except Exception as e:
             logger.error(f"Brightness enhancement failed: {e}")

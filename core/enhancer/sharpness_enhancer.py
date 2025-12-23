@@ -77,10 +77,10 @@ class SharpnessEnhancer:
             Sharpened = Original × (1 + amount) + Blurred × (-amount) + 0
         
         Args:
-            image: Input image (BGR format, numpy array).
+            image: Input grayscale image (H, W) or (H, W, 1).
             
         Returns:
-            Sharpness-enhanced image (BGR format).
+            Sharpness-enhanced grayscale image (H, W).
             Returns original image if processing fails.
         """
         if image is None or image.size == 0:
@@ -88,16 +88,22 @@ class SharpnessEnhancer:
             return image
         
         try:
-            # 1. Apply Gaussian blur
-            # ksize=(0,0) means kernel size is computed from sigma
+            # Ensure input is 2D array
+            if len(image.shape) == 3:
+                if image.shape[2] == 1:
+                    image = image[:, :, 0]
+                else:
+                    logger.warning("Expected grayscale image, got multi-channel image")
+                    return image
+            
+            # Apply Gaussian blur
             blurred = cv2.GaussianBlur(image, (0, 0), self._sigma)
             
-            # 2. Apply Unsharp Mask formula using addWeighted
-            # Sharpened = Original × (1 + amount) + Blurred × (-amount)
+            # Apply Unsharp Mask formula using addWeighted
             sharpened = cv2.addWeighted(
-                image, 1.0 + self._amount,   # src1 and alpha
-                blurred, -self._amount,       # src2 and beta
-                0                             # gamma
+                image, 1.0 + self._amount,
+                blurred, -self._amount,
+                0
             )
             
             logger.debug("Sharpness enhancement applied successfully")
