@@ -54,6 +54,7 @@ class S2DetectionService(IDetectionService, BaseService):
         fontSize: float = 0.8,
         maskOpacity: float = 0.4,
         maskColors: Optional[List[Tuple[int, int, int]]] = None,
+        openvinoConfig: Optional[dict] = None,
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -75,6 +76,7 @@ class S2DetectionService(IDetectionService, BaseService):
             fontSize: Font size for labels.
             maskOpacity: Opacity for segmentation masks.
             maskColors: List of colors for masks.
+            openvinoConfig: OpenVINO-specific performance configuration.
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -91,7 +93,8 @@ class S2DetectionService(IDetectionService, BaseService):
             modelPath=modelPath,
             inputSize=inputSize,
             classNames=classNames or ["label"],
-            isSegmentation=isSegmentation
+            isSegmentation=isSegmentation,
+            openvinoConfig=openvinoConfig
         )
         
         self._modelPath = modelPath

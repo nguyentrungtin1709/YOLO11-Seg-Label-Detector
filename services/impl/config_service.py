@@ -254,6 +254,22 @@ class ConfigService(IConfigService):
         """Get mask colors."""
         return self.get("s2_detection.visualization.maskColors", [])
     
+    def getOpenvinoConfig(self) -> Dict[str, Any]:
+        """
+        Get OpenVINO Runtime performance configuration.
+        
+        Returns:
+            Dict with keys: numThreads, numStreams, performanceHint,
+            enableHyperThreading, enableCpuPinning.
+        """
+        return self.get("s2_detection.openvino", {
+            "numThreads": 0,
+            "numStreams": 0,
+            "performanceHint": "LATENCY",
+            "enableHyperThreading": False,
+            "enableCpuPinning": True
+        })
+
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S3 Preprocessing Settings
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

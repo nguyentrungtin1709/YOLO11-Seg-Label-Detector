@@ -107,6 +107,7 @@ class PipelineOrchestrator:
             confidenceThreshold=self._configService.getConfidenceThreshold(),
             maxAreaRatio=self._configService.getMaxAreaRatio(),
             topNDetections=self._configService.getTopNDetections(),
+            openvinoConfig=self._configService.getOpenvinoConfig(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )

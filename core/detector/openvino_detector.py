@@ -17,11 +17,15 @@ import cv2
 
 try:
     from openvino.runtime import Core, Model, CompiledModel, InferRequest
+    import openvino.properties as props
+    import openvino.properties.hint as hints
 except ImportError:
     Core = None
     Model = None
     CompiledModel = None
     InferRequest = None
+    props = None
+    hints = None
 
 from core.interfaces.detector_interface import IDetector, Detection
 
@@ -46,7 +50,12 @@ class OpenVINODetector(IDetector):
         self, 
         inputSize: int = 640, 
         classNames: Optional[List[str]] = None,
-        isSegmentation: bool = False
+        isSegmentation: bool = False,
+        numThreads: int = 0,
+        numStreams: int = 0,
+        performanceHint: str = "LATENCY",
+        enableHyperThreading: bool = False,
+        enableCpuPinning: bool = True
     ):
         """
         Initialize OpenVINODetector.
@@ -55,6 +64,11 @@ class OpenVINODetector(IDetector):
             inputSize: Input image size for the model (default: 640).
             classNames: List of class names the model can detect.
             isSegmentation: If True, enable instance segmentation with mask output.
+            numThreads: Number of CPU threads for inference (0 = auto/all cores).
+            numStreams: Number of inference streams (0 = auto based on hint).
+            performanceHint: Performance mode - 'LATENCY' (default) or 'THROUGHPUT'.
+            enableHyperThreading: Enable hyper-threading (default: False for lower latency).
+            enableCpuPinning: Pin threads to CPU cores (default: True for better performance).
         """
         self._core: Optional[Core] = None
         self._model: Optional[Model] = None
@@ -73,6 +87,13 @@ class OpenVINODetector(IDetector):
         # Segmentation parameters
         self._numMaskCoeffs = 32  # YOLO11-seg uses 32 mask coefficients
         self._protoMaskSize = 160  # Proto mask resolution is 160x160
+        
+        # OpenVINO performance configuration
+        self._numThreads = numThreads
+        self._numStreams = numStreams
+        self._performanceHint = performanceHint.upper()
+        self._enableHyperThreading = enableHyperThreading
+        self._enableCpuPinning = enableCpuPinning
     
     def loadModel(self, modelPath: str) -> bool:
         """
@@ -102,7 +123,12 @@ class OpenVINODetector(IDetector):
             # CPU is most universal, GPU requires Intel GPU
             device = "CPU"
             logger.info(f"Compiling model for device: {device}")
-            self._compiledModel = self._core.compile_model(self._model, device)
+            
+            # Build configuration for OpenVINO performance optimization
+            config = self._buildCompileConfig()
+            logger.info(f"OpenVINO compile config: {config}")
+            
+            self._compiledModel = self._core.compile_model(self._model, device, config)
             
             # Create infer request for synchronous inference
             self._inferRequest = self._compiledModel.create_infer_request()
@@ -146,6 +172,53 @@ class OpenVINODetector(IDetector):
             logger.error(f"Failed to load OpenVINO model: {e}")
             self._compiledModel = None
             return False
+    
+    def _buildCompileConfig(self) -> Dict:
+        """
+        Build OpenVINO compile configuration for performance optimization.
+        
+        Applies performance hints and CPU-specific optimizations based on
+        instance configuration. Follows OpenVINO best practices:
+        - Use high-level hints (LATENCY/THROUGHPUT) for portability
+        - Limit threads to reduce system load
+        - Control hyper-threading and CPU pinning for latency-sensitive apps
+        
+        Returns:
+            Dict: Configuration dictionary for compile_model.
+        """
+        config = {}
+        
+        if props is None or hints is None:
+            logger.warning("OpenVINO properties module not available, using defaults")
+            return config
+        
+        # Set performance hint (LATENCY or THROUGHPUT)
+        if self._performanceHint == "THROUGHPUT":
+            config[hints.performance_mode] = hints.PerformanceMode.THROUGHPUT
+            logger.info("Performance hint: THROUGHPUT (optimized for parallel requests)")
+        else:
+            config[hints.performance_mode] = hints.PerformanceMode.LATENCY
+            logger.info("Performance hint: LATENCY (optimized for single request)")
+        
+        # Limit number of CPU threads (0 = use all available)
+        if self._numThreads > 0:
+            config[props.inference_num_threads] = self._numThreads
+            logger.info(f"CPU threads limited to: {self._numThreads}")
+        
+        # Limit number of inference streams (0 = auto based on hint)
+        if self._numStreams > 0:
+            config[props.num_streams] = self._numStreams
+            logger.info(f"Inference streams limited to: {self._numStreams}")
+        
+        # Control hyper-threading usage
+        config[hints.enable_hyper_threading] = self._enableHyperThreading
+        logger.info(f"Hyper-threading: {'enabled' if self._enableHyperThreading else 'disabled'}")
+        
+        # Control CPU pinning (helps with consistent latency)
+        config[hints.enable_cpu_pinning] = self._enableCpuPinning
+        logger.info(f"CPU pinning: {'enabled' if self._enableCpuPinning else 'disabled'}")
+        
+        return config
     
     def detect(self, image: np.ndarray, confidenceThreshold: float) -> List[Detection]:
         """

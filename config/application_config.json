@@ -42,6 +42,19 @@
         "confidenceThreshold": 0.5,
         "maxAreaRatio": 0.40,
         "topNDetections": 2,
+        "openvino": {
+            "_description": "OpenVINO Runtime performance optimization settings",
+            "numThreads": 4,
+            "_comment_numThreads": "Number of CPU threads for inference. 0 = use all available cores. Reduce to lower system load.",
+            "numStreams": 1,
+            "_comment_numStreams": "Number of parallel inference streams. 1 = single stream for low latency. 0 = auto.",
+            "performanceHint": "LATENCY",
+            "_comment_performanceHint": "Performance mode: 'LATENCY' (single request, low latency) or 'THROUGHPUT' (parallel requests, high throughput).",
+            "enableHyperThreading": false,
+            "_comment_enableHyperThreading": "Use hyper-threading logical cores. false = use physical cores only for lower latency.",
+            "enableCpuPinning": true,
+            "_comment_enableCpuPinning": "Pin threads to CPU cores for consistent performance. Disable if running multiple workloads."
+        },
         "visualization": {
             "boxColor": [0, 255, 0],
             "textColor": [0, 0, 0],

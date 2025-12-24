@@ -24,7 +24,8 @@ def createDetector(
     modelPath: str = "",
     inputSize: int = 640,
     classNames: Optional[List[str]] = None,
-    isSegmentation: bool = False
+    isSegmentation: bool = False,
+    openvinoConfig: Optional[dict] = None
 ) -> IDetector:
     """
     Factory function to create detector based on backend.
@@ -39,6 +40,12 @@ def createDetector(
         inputSize: Model input size (default: 640).
         classNames: List of class names the model can detect.
         isSegmentation: If True, enable instance segmentation with mask output.
+        openvinoConfig: OpenVINO-specific performance configuration dict with keys:
+            - numThreads: Number of CPU threads (0 = auto)
+            - numStreams: Number of inference streams (0 = auto)
+            - performanceHint: 'LATENCY' or 'THROUGHPUT'
+            - enableHyperThreading: Enable hyper-threading
+            - enableCpuPinning: Pin threads to CPU cores
         
     Returns:
         IDetector: Detector instance implementing IDetector interface.
@@ -57,13 +64,17 @@ def createDetector(
         ...     isSegmentation=True
         ... )
         
-        >>> # Create OpenVINO detector
+        >>> # Create OpenVINO detector with performance config
         >>> detector = createDetector(
         ...     backend="openvino",
         ...     modelPath="models/yolo11n-seg.xml",
         ...     inputSize=640,
         ...     classNames=["label"],
-        ...     isSegmentation=True
+        ...     isSegmentation=True,
+        ...     openvinoConfig={
+        ...         "numThreads": 4,
+        ...         "performanceHint": "LATENCY"
+        ...     }
         ... )
     """
     # Normalize backend name
@@ -85,7 +96,8 @@ def createDetector(
             modelPath=modelPath,
             inputSize=inputSize,
             classNames=classNames,
-            isSegmentation=isSegmentation
+            isSegmentation=isSegmentation,
+            openvinoConfig=openvinoConfig
         )
     
     elif backend == "onnx":
@@ -104,7 +116,8 @@ def _createOpenVINODetector(
     modelPath: str,
     inputSize: int,
     classNames: Optional[List[str]],
-    isSegmentation: bool
+    isSegmentation: bool,
+    openvinoConfig: Optional[dict] = None
 ) -> IDetector:
     """
     Create OpenVINO detector instance.
@@ -114,6 +127,7 @@ def _createOpenVINODetector(
         inputSize: Model input size.
         classNames: List of class names.
         isSegmentation: Enable segmentation mode.
+        openvinoConfig: OpenVINO performance configuration dict.
         
     Returns:
         IDetector: OpenVINO detector instance.
@@ -124,11 +138,27 @@ def _createOpenVINODetector(
     try:
         from core.detector.openvino_detector import OpenVINODetector
         
-        logger.info(f"Creating OpenVINO detector (inputSize={inputSize}, segmentation={isSegmentation})")
+        # Extract OpenVINO config with defaults
+        config = openvinoConfig or {}
+        numThreads = config.get("numThreads", 0)
+        numStreams = config.get("numStreams", 0)
+        performanceHint = config.get("performanceHint", "LATENCY")
+        enableHyperThreading = config.get("enableHyperThreading", False)
+        enableCpuPinning = config.get("enableCpuPinning", True)
+        
+        logger.info(
+            f"Creating OpenVINO detector (inputSize={inputSize}, segmentation={isSegmentation}, "
+            f"threads={numThreads}, streams={numStreams}, hint={performanceHint})"
+        )
         detector = OpenVINODetector(
             inputSize=inputSize,
             classNames=classNames,
-            isSegmentation=isSegmentation
+            isSegmentation=isSegmentation,
+            numThreads=numThreads,
+            numStreams=numStreams,
+            performanceHint=performanceHint,
+            enableHyperThreading=enableHyperThreading,
+            enableCpuPinning=enableCpuPinning
         )
         
         # Load model if path is provided
