@@ -44,7 +44,7 @@
         "topNDetections": 2,
         "openvino": {
             "_description": "OpenVINO Runtime performance optimization settings",
-            "numThreads": 4,
+            "numThreads": 2,
             "_comment_numThreads": "Number of CPU threads for inference. 0 = use all available cores. Reduce to lower system load.",
             "numStreams": 1,
             "_comment_numStreams": "Number of parallel inference streams. 1 = single stream for low latency. 0 = auto.",
@@ -83,6 +83,10 @@
         "aiOrientationFix": true,
         "aiConfidenceThreshold": 0.6,
         "paddleModelPath": "models/paddle/PP-LCNet_x1_0_doc_ori",
+        "orientationCpuThreads": 2,
+        "_comment_orientationCpuThreads": "Number of CPU threads for orientation classifier. Reduce to lower system load.",
+        "orientationEnableMkldnn": true,
+        "_comment_orientationEnableMkldnn": "Enable MKL-DNN acceleration for orientation classifier.",
         "displayWidth": 230,
         "displayHeight": 100
     },
@@ -127,7 +131,7 @@
         "precision": "fp32",
         "enableMkldnn": true,
         "mkldnnCacheCapacity": 10,
-        "cpuThreads": 4,
+        "cpuThreads": 2,
         
         "textDetLimitType": "max",
         "textDetLimitSideLen": 960,

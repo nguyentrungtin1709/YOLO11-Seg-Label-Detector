@@ -122,6 +122,8 @@ class PipelineOrchestrator:
             aiOrientationFix=self._configService.isAiOrientationFix(),
             aiConfidenceThreshold=self._configService.getAiConfidenceThreshold(),
             paddleModelPath=self._configService.getPaddleModelPath(),
+            orientationCpuThreads=self._configService.getOrientationCpuThreads(),
+            orientationEnableMkldnn=self._configService.getOrientationEnableMkldnn(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )

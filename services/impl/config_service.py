@@ -306,6 +306,14 @@ class ConfigService(IConfigService):
         """Get preprocessing display height."""
         return self.get("s3_preprocessing.displayHeight", 100)
     
+    def getOrientationCpuThreads(self) -> int:
+        """Get number of CPU threads for orientation classifier."""
+        return self.get("s3_preprocessing.orientationCpuThreads", 4)
+    
+    def getOrientationEnableMkldnn(self) -> bool:
+        """Check if MKL-DNN is enabled for orientation classifier."""
+        return self.get("s3_preprocessing.orientationEnableMkldnn", True)
+
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S4 Enhancement Settings
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
