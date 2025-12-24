@@ -140,7 +140,8 @@ output/debug/s6_component_extraction/*
 
 # Notebook directory (training notebook - separate project)
 notebook/
-samples
+samples/
+template/
 
 # Temporary files
 temp/
