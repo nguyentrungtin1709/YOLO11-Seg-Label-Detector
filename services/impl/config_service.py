@@ -358,18 +358,58 @@ class ConfigService(IConfigService):
         """Check if QR detection is enabled."""
         return self.get("s5_qr_detection.enabled", True)
     
-    def isQrTryRotate(self) -> bool:
-        """Check if QR try rotate is enabled."""
-        return self.get("s5_qr_detection.tryRotate", True)
+    def getQrBackend(self) -> str:
+        """Get QR detection backend: 'zxing' or 'wechat'."""
+        return self.get("s5_qr_detection.backend", "zxing")
     
-    def isQrTryDownscale(self) -> bool:
-        """Check if QR try downscale is enabled."""
-        return self.get("s5_qr_detection.tryDownscale", True)
+    # ZXing settings (prefixed with 'Zxing')
+    def getQrZxingConfig(self) -> Dict[str, Any]:
+        """Get ZXing backend config."""
+        return self.get("s5_qr_detection.zxing", {})
     
+    def getQrZxingTryRotate(self) -> bool:
+        """Check if ZXing should try rotated barcodes."""
+        return self.get("s5_qr_detection.zxing.tryRotate", True)
+    
+    def getQrZxingTryDownscale(self) -> bool:
+        """Check if ZXing should try downscaled versions."""
+        return self.get("s5_qr_detection.zxing.tryDownscale", True)
+    
+    # WeChat settings (prefixed with 'Wechat')
+    def getQrWechatConfig(self) -> Dict[str, Any]:
+        """Get WeChat backend config."""
+        return self.get("s5_qr_detection.wechat", {})
+    
+    def getQrWechatModelDir(self) -> str:
+        """Get WeChat model directory path."""
+        return self.get("s5_qr_detection.wechat.modelDir", "models/wechat")
+    
+    # Preprocessing settings (prefixed with 'Preprocessing')
+    def getQrPreprocessingConfig(self) -> Dict[str, Any]:
+        """Get QR preprocessing config."""
+        return self.get("s5_qr_detection.preprocessing", {})
+    
+    def isQrPreprocessingEnabled(self) -> bool:
+        """Check if QR preprocessing is enabled."""
+        return self.get("s5_qr_detection.preprocessing.enabled", False)
+    
+    def getQrPreprocessingMode(self) -> str:
+        """
+        Get QR preprocessing mode.
+        
+        Returns:
+            "minimal" or "full"
+        """
+        return self.get("s5_qr_detection.preprocessing.mode", "full")
+    
+    def getQrPreprocessingScaleFactor(self) -> float:
+        """Get preprocessing scale factor."""
+        return self.get("s5_qr_detection.preprocessing.scaleFactor", 1.5)
+
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S6 Component Extraction Settings
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    
+
     def getComponentExtractionConfig(self) -> Dict[str, Any]:
         """Get component extraction configuration."""
         return self.getServiceConfig("s6_component_extraction")

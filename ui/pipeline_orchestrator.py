@@ -150,8 +150,17 @@ class PipelineOrchestrator:
         # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         self._s5QrDetectionService = S5QrDetectionService(
             enabled=self._configService.isQrDetectionEnabled(),
-            tryRotate=self._configService.isQrTryRotate(),
-            tryDownscale=self._configService.isQrTryDownscale(),
+            backend=self._configService.getQrBackend(),
+            # ZXing params (prefixed with 'zxing')
+            zxingTryRotate=self._configService.getQrZxingTryRotate(),
+            zxingTryDownscale=self._configService.getQrZxingTryDownscale(),
+            # WeChat params (prefixed with 'wechat')
+            wechatModelDir=self._configService.getQrWechatModelDir(),
+            # Preprocessing params (prefixed with 'preprocessing')
+            preprocessingEnabled=self._configService.isQrPreprocessingEnabled(),
+            preprocessingMode=self._configService.getQrPreprocessingMode(),
+            preprocessingScaleFactor=self._configService.getQrPreprocessingScaleFactor(),
+            # Debug settings
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )

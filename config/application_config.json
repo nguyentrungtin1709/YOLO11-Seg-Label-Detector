@@ -102,16 +102,44 @@
     },
     
     "s5_qr_detection": {
-        "_description": "Step 5: QR code detection using ZXing",
+        "_description": "Step 5: QR code detection",
         "enabled": true,
-        "tryRotate": true,
-        "tryDownscale": true
+        
+        "backend": "wechat",
+        "_comment_backend": "Backend for QR detection: 'zxing' (zxing-cpp, fast) or 'wechat' (OpenCV WeChat QRCode, deep learning). Default: 'zxing'",
+        
+        "zxing": {
+            "_description": "ZXing-cpp backend settings",
+            "tryRotate": true,
+            "_comment_tryRotate": "Try rotated barcodes (90/270 degrees)",
+            "tryDownscale": true,
+            "_comment_tryDownscale": "Try downscaled versions for better detection"
+        },
+        
+        "wechat": {
+            "_description": "OpenCV WeChat QRCode backend settings",
+            "modelDir": "models/wechat",
+            "_comment_modelDir": "Directory containing WeChat QR model files (detect.prototxt, detect.caffemodel, sr.prototxt, sr.caffemodel)"
+        },
+        
+        "preprocessing": {
+            "_description": "QR image preprocessing settings (applied before detection)",
+            
+            "enabled": true,
+            "_comment_enabled": "Enable/disable preprocessing. When enabled, applies pipeline based on mode.",
+            
+            "mode": "full",
+            "_comment_mode": "Preprocessing mode: 'minimal' (scale only) or 'full' (scale → denoise → binary → morph → invert)",
+            
+            "scaleFactor": 1.5,
+            "_comment_scaleFactor": "Scale image by this factor (used in both modes)"
+        }
     },
     
     "s6_component_extraction": {
         "_description": "Step 6: Extract label components relative to QR position",
         "aboveQrWidthRatio": 0.35,
-        "aboveQrHeightRatio": 0.14,
+        "aboveQrHeightRatio": 0.18,
         "belowQrWidthRatio": 0.65,
         "belowQrHeightRatio": 0.55,
         "padding": 5,
