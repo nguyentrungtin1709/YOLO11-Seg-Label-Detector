@@ -46,7 +46,7 @@ class LabelTextProcessor(ITextProcessor):
     
     # Pattern for recovery: "/" misread as "1", "|", "l", "I", "!", "t", "i", "j"
     # Examples: "313" -> "3/3", "21|5" -> "2/5"
-    POSITION_RECOVERY_SEPARATORS = ['1', '|', 'l', 'I', '!', 't', 'i', 'j']
+    POSITION_RECOVERY_SEPARATORS = ['1', '|', 'l', 'I', '!', 't', 'i', 'j', '7']
     
     # Regex patterns verified from actual data
     # Product: 3-9 chars, alphanumeric, supports lowercase (e.g., "3001rcy", "ic47mr")
