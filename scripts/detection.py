@@ -76,16 +76,16 @@ def loadImages(inputDir: str) -> List[Path]:
         logger.error(f"Input path is not a directory: {inputDir}")
         return []
     
-    # Find all supported image files
+    # Find all supported image files recursively
     imageFiles = []
     for ext in SUPPORTED_EXTENSIONS:
-        imageFiles.extend(inputPath.glob(f"*{ext}"))
-        imageFiles.extend(inputPath.glob(f"*{ext.upper()}"))
+        imageFiles.extend(inputPath.rglob(f"*{ext}"))
+        imageFiles.extend(inputPath.rglob(f"*{ext.upper()}"))
     
-    # Sort by filename and remove duplicates
-    imageFiles = sorted(set(imageFiles), key=lambda p: p.name.lower())
+    # Sort by path and remove duplicates
+    imageFiles = sorted(set(imageFiles), key=lambda p: str(p).lower())
     
-    logger.info(f"Found {len(imageFiles)} images in {inputDir}")
+    logger.info(f"Found {len(imageFiles)} images in {inputDir} (recursive)")
     return imageFiles
 
 
@@ -279,21 +279,28 @@ def processAll(
     batchStartTime = time.time()
     
     for idx, imagePath in enumerate(imageFiles, 1):
-        logger.info(f"[{idx}/{totalCount}] Processing: {imagePath.name}")
+        # Calculate relative path for display and frameId
+        try:
+            relativePath = imagePath.relative_to(inputDir)
+            displayPath = str(relativePath)
+            # Create frameId: sub/dir/file.jpg -> sub_dir_file
+            frameId = str(relativePath.with_suffix('')).replace(os.sep, '_')
+        except ValueError:
+            displayPath = imagePath.name
+            frameId = imagePath.stem
+
+        logger.info(f"[{idx}/{totalCount}] Processing: {displayPath}")
         
         # Read image
         image = cv2.imread(str(imagePath))
         if image is None:
             logger.error(f"  ✗ Failed to read image")
             results.append({
-                "frameId": imagePath.stem,
+                "frameId": frameId,
                 "success": False,
                 "error": "Failed to read image"
             })
             continue
-        
-        # Use filename (without extension) as frameId
-        frameId = imagePath.stem
         
         # Process image
         result = processImage(orchestrator, image, frameId)
