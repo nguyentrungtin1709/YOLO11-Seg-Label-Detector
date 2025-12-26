@@ -21,12 +21,13 @@ class LabelData:
     
     Attributes:
         # QR Code Information
-        fullOrderCode: Full QR code content (e.g., "110125-VA-M-000002-2")
+        fullOrderCode: Full QR code content (e.g., "110125-VA-M-000002-2/1")
         dateCode: Date code from QR (MMDDYY)
         facility: Facility code from QR (VA, GA, ...)
         orderType: Order type from QR (M, S, ...)
         orderNumber: Order number from QR
         qrPosition: Position from QR code
+        qrRevisionCount: Revision count from QR code (0 if not present)
         
         # OCR Information
         positionQuantity: Position/quantity string (e.g., "1/1")
@@ -47,6 +48,7 @@ class LabelData:
     orderType: str = ""
     orderNumber: str = ""
     qrPosition: int = 0
+    qrRevisionCount: int = 0
     
     # OCR Information
     positionQuantity: str = ""

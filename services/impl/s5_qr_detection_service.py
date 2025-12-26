@@ -2,22 +2,25 @@
 S5 QR Detection Service Implementation.
 
 Step 5 of the pipeline: QR code detection and decoding.
-Creates and manages ZxingQrDetector from core layer.
+Creates and manages QR detector from core layer using factory pattern.
 
 Follows:
 - SRP: Only handles QR detection operations
 - DIP: Depends on IQrDetector abstraction (interface)
 - OCP: Extends without modifying existing code
+- Factory Pattern: Uses createQrDetector() for backend selection
 """
 
+import os
 import time
 import logging
 from typing import Optional
 
+import cv2
 import numpy as np
 
 from core.interfaces.qr_detector_interface import IQrDetector, QrDetectionResult
-from core.qr.zxing_qr_detector import ZxingQrDetector
+from core.qr import createQrDetector, QrImagePreprocessor
 from services.interfaces.qr_detection_service_interface import (
     IQrDetectionService,
     QrDetectionServiceResult
@@ -32,16 +35,37 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
     Detects and decodes QR codes from label images.
     The QR code contains order information used for validation.
     
-    Creates ZxingQrDetector internally with provided parameters.
+    Supports multiple backends (ZXing, WeChat) via factory pattern.
+    Optionally applies preprocessing to improve detection rate.
+    
+    Preprocessing modes:
+    - "minimal": Scale only (fast)
+    - "full": Scale → Denoise (thorough)
     """
     
     SERVICE_NAME = "s5_qr_detection"
     
     def __init__(
         self,
+        # Basic settings
         enabled: bool = True,
-        tryRotate: bool = True,
-        tryDownscale: bool = True,
+        
+        # Backend selection
+        backend: str = "zxing",
+        
+        # ZXing params (prefixed with 'zxing')
+        zxingTryRotate: bool = True,
+        zxingTryDownscale: bool = True,
+        
+        # WeChat params (prefixed with 'wechat')
+        wechatModelDir: str = "models/wechat",
+        
+        # Preprocessing params (prefixed with 'preprocessing')
+        preprocessingEnabled: bool = False,
+        preprocessingMode: str = "full",
+        preprocessingTargetWidth: int = 480,
+        
+        # Debug settings
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -50,8 +74,13 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
         
         Args:
             enabled: Whether QR detection is enabled.
-            tryRotate: Try rotated barcodes (90/270 degrees).
-            tryDownscale: Try downscaled versions for better detection.
+            backend: QR detection backend ("zxing" or "wechat").
+            zxingTryRotate: (ZXing) Try rotated barcodes (90/270 degrees).
+            zxingTryDownscale: (ZXing) Try downscaled versions for better detection.
+            wechatModelDir: (WeChat) Directory containing model files.
+            preprocessingEnabled: Enable image preprocessing before detection.
+            preprocessingMode: Preprocessing mode ("minimal" or "full").
+            preprocessingTargetWidth: Target width for preprocessing (default: 480).
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -62,17 +91,36 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
             debugEnabled=debugEnabled
         )
         
-        # Create core QR detector implementation
-        self._qrDetector: IQrDetector = ZxingQrDetector(
-            tryRotate=tryRotate,
-            tryDownscale=tryDownscale
+        # Create QR detector using factory
+        self._qrDetector: IQrDetector = createQrDetector(
+            backend=backend,
+            zxingTryRotate=zxingTryRotate,
+            zxingTryDownscale=zxingTryDownscale,
+            wechatModelDir=wechatModelDir
         )
         
+        # Create preprocessor (optional)
+        self._preprocessor: Optional[QrImagePreprocessor] = None
+        self._preprocessingMode = preprocessingMode
+        if preprocessingEnabled:
+            self._preprocessor = QrImagePreprocessor(
+                enabled=preprocessingEnabled,
+                mode=preprocessingMode,
+                targetWidth=preprocessingTargetWidth
+            )
+        
         self._enabled = enabled
+        self._backend = backend
+        
+        # Ensure debug input directory exists
+        self._debugInputPath = os.path.join(debugBasePath, self.SERVICE_NAME, "inputs")
+        if debugEnabled:
+            os.makedirs(self._debugInputPath, exist_ok=True)
         
         self._logger.info(
             f"S5QrDetectionService initialized "
-            f"(tryRotate={tryRotate}, tryDownscale={tryDownscale})"
+            f"(backend={backend}, preprocessing={preprocessingEnabled}, "
+            f"mode={preprocessingMode if preprocessingEnabled else 'none'})"
         )
     
     def detectQr(
@@ -80,7 +128,19 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
         image: np.ndarray,
         frameId: str
     ) -> QrDetectionServiceResult:
-        """Detect and decode QR code from an image."""
+        """
+        Detect and decode QR code from an image.
+        
+        Timing includes both preprocessing and detection.
+        Debug image saving is NOT included in timing.
+        
+        Args:
+            image: Input image (grayscale from S4).
+            frameId: Frame identifier.
+            
+        Returns:
+            QrDetectionServiceResult with detection result.
+        """
         startTime = time.time()
         
         # Check if QR detection is enabled
@@ -102,13 +162,38 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
             )
         
         try:
-            # Run QR detection
-            qrResult = self._qrDetector.detect(image)
+            # Step 1: Preprocessing (included in timing)
+            if self._preprocessor is not None:
+                processedImage = self._preprocessor.preprocess(image)
+            else:
+                processedImage = image
             
+            # Step 2: QR Detection (included in timing)
+            qrResult = self._qrDetector.detect(processedImage)
+            
+            # Step 3: Scale back coordinates if preprocessing was applied
+            # QR coordinates are detected on scaled image, need to convert back to original size
+            if qrResult is not None and self._preprocessor is not None:
+                scaleFactor = self._preprocessor.scaleFactor
+                if scaleFactor != 1.0:
+                    qrResult = self._scaleBackCoordinates(qrResult, scaleFactor)
+                    self._logger.debug(
+                        f"[{frameId}] Scaled back QR coordinates by 1/{scaleFactor}"
+                    )
+            
+            # Measure time BEFORE debug saving
             processingTimeMs = self._measureTime(startTime)
             
+            # Step 4: Debug input saving (NOT included in timing)
+            self._saveDebugInput(frameId, processedImage)
+            
             if qrResult is None:
-                self._logger.warning(f"[{frameId}] No QR code detected")
+                self._logger.warning(
+                    f"[{frameId}] No QR code detected "
+                    f"(preprocessing={self._preprocessor is not None}, "
+                    f"mode={self._preprocessingMode if self._preprocessor else 'none'}, "
+                    f"time={processingTimeMs:.2f}ms)"
+                )
                 return QrDetectionServiceResult(
                     qrData=None,
                     frameId=frameId,
@@ -116,12 +201,17 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
                     processingTimeMs=processingTimeMs
                 )
             
-            # Save debug output
+            # Save debug output (NOT included in timing)
             self._saveDebugOutput(frameId, qrResult)
             
-            # Log timing
+            # Log timing and result
             self._logTiming(frameId, processingTimeMs)
-            self._logger.info(f"[{frameId}] QR detected: {qrResult.text}")
+            self._logger.info(
+                f"[{frameId}] QR detected: {qrResult.text} "
+                f"(preprocessing={self._preprocessor is not None}, "
+                f"mode={self._preprocessingMode if self._preprocessor else 'none'}, "
+                f"time={processingTimeMs:.2f}ms)"
+            )
             
             return QrDetectionServiceResult(
                 qrData=qrResult,
@@ -148,6 +238,103 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
         """Check if QR detection is enabled."""
         return self._enabled
     
+    def getBackend(self) -> str:
+        """Get current QR detection backend."""
+        return self._backend
+    
+    def isPreprocessingEnabled(self) -> bool:
+        """Check if preprocessing is enabled."""
+        return self._preprocessor is not None and self._preprocessor.isEnabled()
+    
+    def getPreprocessingMode(self) -> str:
+        """Get current preprocessing mode."""
+        if self._preprocessor is not None:
+            return self._preprocessor.mode
+        return "none"
+    
+    def _saveDebugInput(
+        self,
+        frameId: str,
+        inputImage: np.ndarray
+    ) -> None:
+        """
+        Save input image before QR detection for debugging.
+        
+        Saves to: output/debug/s5_qr_detection/inputs/
+        
+        Args:
+            frameId: Frame identifier.
+            inputImage: Preprocessed image to save.
+        """
+        if not self._debugEnabled:
+            return
+        
+        if inputImage is None:
+            return
+        
+        try:
+            # Create inputs directory if not exists
+            os.makedirs(self._debugInputPath, exist_ok=True)
+            
+            # Generate filename with mode info
+            modeStr = self._preprocessingMode if self._preprocessor else "raw"
+            filename = f"{frameId}_{modeStr}.png"
+            filepath = os.path.join(self._debugInputPath, filename)
+            
+            # Save image
+            cv2.imwrite(filepath, inputImage)
+            self._logger.debug(f"[{frameId}] Saved debug input: {filepath}")
+            
+        except Exception as e:
+            self._logger.error(f"[{frameId}] Failed to save debug input: {e}")
+    
+    def _scaleBackCoordinates(
+        self,
+        qrResult: QrDetectionResult,
+        scaleFactor: float
+    ) -> QrDetectionResult:
+        """
+        Scale QR coordinates back to original image size.
+        
+        When preprocessing scales the image, QR detection returns coordinates
+        relative to the scaled image. This method converts them back to the
+        original image coordinate system for use by S6 Component Extraction.
+        
+        Args:
+            qrResult: QR detection result with coordinates on scaled image.
+            scaleFactor: The scale factor that was applied during preprocessing.
+            
+        Returns:
+            New QrDetectionResult with coordinates scaled back to original size.
+        """
+        # Scale polygon coordinates back
+        scaledPolygon = [
+            (int(x / scaleFactor), int(y / scaleFactor))
+            for (x, y) in qrResult.polygon
+        ]
+        
+        # Scale rect (x, y, w, h) back
+        scaledRect = (
+            int(qrResult.rect[0] / scaleFactor),
+            int(qrResult.rect[1] / scaleFactor),
+            int(qrResult.rect[2] / scaleFactor),
+            int(qrResult.rect[3] / scaleFactor)
+        )
+        
+        # Return new QrDetectionResult with adjusted coordinates
+        return QrDetectionResult(
+            text=qrResult.text,
+            polygon=scaledPolygon,
+            rect=scaledRect,
+            confidence=qrResult.confidence,
+            dateCode=qrResult.dateCode,
+            facility=qrResult.facility,
+            orderType=qrResult.orderType,
+            orderNumber=qrResult.orderNumber,
+            position=qrResult.position,
+            revisionCount=qrResult.revisionCount
+        )
+    
     def _saveDebugOutput(
         self,
         frameId: str,
@@ -164,12 +351,16 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
             "polygon": qrResult.polygon,
             "rect": qrResult.rect,
             "confidence": qrResult.confidence,
+            "backend": self._backend,
+            "preprocessingEnabled": self._preprocessor is not None,
+            "preprocessingMode": self._preprocessingMode if self._preprocessor else None,
             "parsed": {
                 "dateCode": qrResult.dateCode,
                 "facility": qrResult.facility,
                 "orderType": qrResult.orderType,
                 "orderNumber": qrResult.orderNumber,
-                "position": qrResult.position
+                "position": qrResult.position,
+                "revisionCount": qrResult.revisionCount
             }
         }
         self._saveDebugJson(frameId, data, "qr")

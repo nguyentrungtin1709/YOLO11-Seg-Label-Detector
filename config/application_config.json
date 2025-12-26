@@ -42,6 +42,19 @@
         "confidenceThreshold": 0.5,
         "maxAreaRatio": 0.40,
         "topNDetections": 2,
+        "openvino": {
+            "_description": "OpenVINO Runtime performance optimization settings",
+            "numThreads": 2,
+            "_comment_numThreads": "Number of CPU threads for inference. 0 = use all available cores. Reduce to lower system load.",
+            "numStreams": 1,
+            "_comment_numStreams": "Number of parallel inference streams. 1 = single stream for low latency. 0 = auto.",
+            "performanceHint": "LATENCY",
+            "_comment_performanceHint": "Performance mode: 'LATENCY' (single request, low latency) or 'THROUGHPUT' (parallel requests, high throughput).",
+            "enableHyperThreading": false,
+            "_comment_enableHyperThreading": "Use hyper-threading logical cores. false = use physical cores only for lower latency.",
+            "enableCpuPinning": true,
+            "_comment_enableCpuPinning": "Pin threads to CPU cores for consistent performance. Disable if running multiple workloads."
+        },
         "visualization": {
             "boxColor": [0, 255, 0],
             "textColor": [0, 0, 0],
@@ -70,6 +83,10 @@
         "aiOrientationFix": true,
         "aiConfidenceThreshold": 0.6,
         "paddleModelPath": "models/paddle/PP-LCNet_x1_0_doc_ori",
+        "orientationCpuThreads": 2,
+        "_comment_orientationCpuThreads": "Number of CPU threads for orientation classifier. Reduce to lower system load.",
+        "orientationEnableMkldnn": true,
+        "_comment_orientationEnableMkldnn": "Enable MKL-DNN acceleration for orientation classifier.",
         "displayWidth": 230,
         "displayHeight": 100
     },
@@ -79,16 +96,44 @@
         "brightnessEnabled": true,
         "brightnessClipLimit": 2.5,
         "brightnessTileSize": 8,
-        "sharpnessEnabled": true,
+        "sharpnessEnabled": false,
         "sharpnessSigma": 1.0,
         "sharpnessAmount": 1.5
     },
     
     "s5_qr_detection": {
-        "_description": "Step 5: QR code detection using ZXing",
+        "_description": "Step 5: QR code detection",
         "enabled": true,
-        "tryRotate": true,
-        "tryDownscale": true
+        
+        "backend": "wechat",
+        "_comment_backend": "Backend for QR detection: 'zxing' (zxing-cpp, fast) or 'wechat' (OpenCV WeChat QRCode, deep learning). Default: 'zxing'",
+        
+        "zxing": {
+            "_description": "ZXing-cpp backend settings",
+            "tryRotate": true,
+            "_comment_tryRotate": "Try rotated barcodes (90/270 degrees)",
+            "tryDownscale": true,
+            "_comment_tryDownscale": "Try downscaled versions for better detection"
+        },
+        
+        "wechat": {
+            "_description": "OpenCV WeChat QRCode backend settings",
+            "modelDir": "models/wechat",
+            "_comment_modelDir": "Directory containing WeChat QR model files (detect.prototxt, detect.caffemodel, sr.prototxt, sr.caffemodel)"
+        },
+        
+        "preprocessing": {
+            "_description": "QR image preprocessing settings (applied before detection)",
+            
+            "enabled": true,
+            "_comment_enabled": "Enable/disable preprocessing. When enabled, applies pipeline based on mode.",
+            
+            "mode": "minimal",
+            "_comment_mode": "Preprocessing mode: 'minimal' (scale only) or 'full' (scale → denoise)",
+            
+            "targetWidth": 640,
+            "_comment_targetWidth": "Target width for scaling. Image will be resized to this width, maintaining aspect ratio. Scale factor is computed dynamically."
+        }
     },
     
     "s6_component_extraction": {
@@ -98,8 +143,8 @@
         "belowQrWidthRatio": 0.65,
         "belowQrHeightRatio": 0.55,
         "padding": 5,
-        "grayscalePreprocessing": true,
-        "_comment_grayscale": "Convert merged components to grayscale before OCR. Output is still BGR format (3 channels) for compatibility."
+        "aboveQrScaleFactor": 2.0,
+        "_comment_aboveQrScaleFactor": "Scale factor for above-QR region before merging (improves OCR accuracy for small text)"
     },
     
     "s7_ocr": {
@@ -114,10 +159,10 @@
         "precision": "fp32",
         "enableMkldnn": true,
         "mkldnnCacheCapacity": 10,
-        "cpuThreads": 4,
+        "cpuThreads": 2,
         
         "textDetLimitType": "max",
-        "textDetLimitSideLen": 960,
+        "textDetLimitSideLen": 640,
         "textDetThresh": 0.15,
         "textDetBoxThresh": 0.15,
         "textDetUnclipRatio": 2.0,
@@ -128,7 +173,7 @@
     
     "s8_postprocessing": {
         "_description": "Step 8: Text postprocessing - fuzzy matching and validation",
-        "minFuzzyScore": 0.80,
+        "minFuzzyScore": 0.90,
         "productsJsonPath": "data/products.json",
         "sizesJsonPath": "data/sizes.json",
         "colorsJsonPath": "data/colors.json"

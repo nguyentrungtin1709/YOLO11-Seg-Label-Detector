@@ -21,12 +21,14 @@ class PyzbarQrDetector(IQrDetector):
     QR code detector using pyzbar library.
     
     Detects QR codes and parses content according to the format:
-    MMDDYY-FACILITY-TYPE-ORDER-POSITION
-    Example: 110125-VA-M-000002-2
+    MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
+    Examples:
+        110125-VA-M-000002-2      (no revision)
+        110125-VA-M-000002-2/1    (revised once)
     """
     
-    # Pattern: MMDDYY-FACILITY-TYPE-ORDER-POSITION
-    QR_PATTERN = re.compile(r'^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)$')
+    # Pattern: MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
+    QR_PATTERN = re.compile(r'^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$')
     
     def __init__(
         self, 
@@ -99,11 +101,13 @@ class PyzbarQrDetector(IQrDetector):
             result.orderType = match.group(3)    # M
             result.orderNumber = match.group(4)  # 000002
             result.position = int(match.group(5)) # 2
+            result.revisionCount = int(match.group(6)) if match.group(6) else 0  # 1, 2, ... or 0
             
+            revInfo = f", rev={result.revisionCount}" if result.revisionCount > 0 else ""
             self._logger.debug(
                 f"Parsed QR: date={result.dateCode}, facility={result.facility}, "
                 f"type={result.orderType}, order={result.orderNumber}, "
-                f"position={result.position}"
+                f"position={result.position}{revInfo}"
             )
         else:
             self._logger.warning(f"QR content does not match expected pattern: {text}")

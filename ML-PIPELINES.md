@@ -69,9 +69,15 @@ Phát hiện vùng chứa nhãn trong ảnh bằng mô hình YOLO11 Instance Seg
 ### Xử lý
 
 1. **Nạp mô hình YOLO**
-   - Sử dụng `YOLODetector` với ONNX Runtime để chạy inference.
+   - Hệ thống hỗ trợ 2 backend:
+     - **ONNX Runtime**: Cross-platform, sử dụng file `.onnx` (FP32, ~5.8MB)
+     - **OpenVINO Runtime**: Intel-optimized, sử dụng file `.xml` + `.bin` (INT8, ~1.6MB)
+   - Backend được chọn qua config: `s2_detection.backend` ("onnx" hoặc "openvino")
+   - Factory pattern tự động tạo detector phù hợp:
+     - `YOLODetector` cho ONNX Runtime
+     - `OpenVINODetector` cho OpenVINO Runtime
    - Cấu hình: `inputSize` (640), `isSegmentation` (True), `classNames` (["label"]).
-   - Nạp mô hình từ file `.onnx` khi khởi động service.
+   - Nạp mô hình từ file khi khởi động service.
 
 2. **Tiền xử lý ảnh (Preprocess)**
    - Resize ảnh về kích thước input của model (640x640).
@@ -261,38 +267,72 @@ Tăng cường chất lượng ảnh để cải thiện độ chính xác OCR.
 
 Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàng.
 
+### Backend Selection
+
+Hệ thống hỗ trợ 2 backend QR detection:
+
+| Backend | Thư viện | Ưu điểm | Nhược điểm |
+|---------|----------|---------|------------|
+| **zxing** | zxing-cpp | Tốc độ nhanh, lightweight | Độ chính xác thấp hơn với QR nhỏ/mờ |
+| **wechat** | OpenCV WeChat QRCode | Deep learning, super-resolution, độ chính xác cao | Cần model files, chậm hơn |
+
+Backend được chọn qua config: `s5_qr_detection.backend` ("zxing" hoặc "wechat")
+
 ### Xử lý
 
-1. **Tiền xử lý ảnh**
-   - Kiểm tra số kênh màu của ảnh.
+1. **Tiền xử lý ảnh (Preprocessing)**
+   - Nếu `preprocessing.enabled = true`:
+     - **Minimal mode**: Chỉ scale ảnh về `targetWidth` (mặc định: 640)
+     - **Full mode**: Scale → Denoise
    - Chuyển ảnh từ BGR sang Grayscale với `cv2.cvtColor()` nếu cần.
-   - Ảnh grayscale giúp tăng tốc độ và độ chính xác phát hiện.
+   - Preprocessing giúp tăng tốc độ và độ chính xác phát hiện.
 
 2. **Phát hiện mã QR**
-   - Sử dụng `ZxingQrDetector` với thư viện zxing-cpp:
-     - Gọi `read_barcodes()` với format `QRCode`.
-     - `try_rotate`: Thử xoay barcode (90/270 độ) nếu cấu hình.
-     - `try_downscale`: Thử giảm kích thước để phát hiện QR nhỏ.
+   
+   **ZXing Backend (zxing-cpp):**
+   - Gọi `read_barcodes()` với format `QRCode`.
+   - `try_rotate`: Thử xoay barcode (90/270 độ) nếu cấu hình.
+   - `try_downscale`: Thử giảm kích thước để phát hiện QR nhỏ.
    - Duyệt qua danh sách barcode phát hiện được.
    - Chỉ chấp nhận barcode có `valid = True`.
+   
+   **WeChat Backend (OpenCV WeChat QRCode):**
+   - Sử dụng deep learning model với super-resolution.
+   - Model files: `detect.prototxt`, `detect.caffemodel`, `sr.prototxt`, `sr.caffemodel`.
+   - Đường dẫn model: `s5_qr_detection.wechat.modelDir` (mặc định: `models/wechat`)
+   - Tự động resize ảnh nhỏ về kích thước phù hợp.
 
 3. **Trích xuất vị trí QR**
-   - Lấy 4 góc của mã QR từ `barcode.position`:
-     - `top_left`, `top_right`, `bottom_right`, `bottom_left`.
+   - Lấy 4 góc của mã QR từ detection result.
    - Chuyển thành polygon list: `[(x1, y1), (x2, y2), (x3, y3), (x4, y4)]`.
    - Tính bounding box: `(left, top, width, height)`.
 
 4. **Giải mã và parse nội dung**
-   - Lấy text từ `barcode.text`.
-   - Parse theo regex pattern: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)$`
-   - Format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
-   - Ví dụ: `110125-VA-M-000002-2`
+   - Lấy text từ QR code.
+   - Parse theo regex pattern: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$`
+   - Format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
+   - Ví dụ: 
+     - `110125-VA-M-000002-2` (chưa sửa lần nào)
+     - `110125-VA-M-000002-2/1` (đã sửa 1 lần)
    - Trích xuất các trường:
      - `dateCode`: 6 ký tự đầu (MMDDYY) - Ngày tạo đơn
      - `facility`: 2 ký tự (VA, CA, ...) - Mã cơ sở
      - `orderType`: 1 ký tự (M: Multi, S: Single) - Loại đơn
      - `orderNumber`: Chuỗi số - Số đơn hàng
      - `position`: Số nguyên - Vị trí sản phẩm trong đơn
+     - `revisionCount`: Số nguyên - Số lần sửa chữa (0 nếu không có)
+
+### Cấu hình
+
+| Tham số | Mặc định | Mô tả |
+|---------|----------|-------|
+| `backend` | "wechat" | Backend QR detection: "zxing" hoặc "wechat" |
+| `preprocessing.enabled` | true | Bật/tắt tiền xử lý ảnh |
+| `preprocessing.mode` | "minimal" | Chế độ tiền xử lý: "minimal" hoặc "full" |
+| `preprocessing.targetWidth` | 640 | Chiều rộng ảnh sau scale |
+| `zxing.tryRotate` | true | Thử xoay 90/270 độ (ZXing) |
+| `zxing.tryDownscale` | true | Thử giảm kích thước (ZXing) |
+| `wechat.modelDir` | "models/wechat" | Thư mục model WeChat QR |
 
 ### Đầu ra
 
@@ -301,7 +341,7 @@ Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàn
   - `polygon`: 4 góc của mã QR [(x, y), ...]
   - `rect`: Bounding box (left, top, width, height)
   - `confidence`: Độ tin cậy (1.0 với zxing-cpp)
-  - `dateCode`, `facility`, `orderType`, `orderNumber`, `position`: Dữ liệu đã parse
+  - `dateCode`, `facility`, `orderType`, `orderNumber`, `position`, `revisionCount`: Dữ liệu đã parse
 
 ### Ví dụ Debug Output
 
@@ -380,6 +420,15 @@ Trích xuất các vùng chứa text dựa trên vị trí tương đối với 
    - Căn trái vùng Below QR theo targetWidth (pad trắng bên phải).
    - Thêm đường kẻ ngăn cách (separator) giữa 2 vùng.
    - Ghép theo chiều dọc: `np.vstack([aboveQr, separator, belowQr])`.
+
+5. **Grayscale Preprocessing (Tùy chọn)**
+   - Nếu `grayscalePreprocessing = true`:
+     - Chuyển merged image sang grayscale với `cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)`.
+     - Chuyển lại sang BGR format (3 channels) để tương thích với OCR: `cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)`.
+   - Grayscale giúp:
+     - Tăng tốc độ xử lý OCR (giảm noise từ màu sắc).
+     - Cải thiện độ chính xác nhận dạng text trên nền phức tạp.
+   - Output vẫn giữ format BGR 3 channels để tương thích với PaddleOCR.
 
 ### Đầu ra
 
@@ -648,7 +697,7 @@ Mỗi service chỉ đảm nhận một nhiệm vụ duy nhất:
 - Các service phụ thuộc vào abstraction (interface) thay vì implementation cụ thể.
 - Ví dụ:
   - `S2DetectionService` phụ thuộc vào `IDetector`, không phụ thuộc trực tiếp vào `YOLODetector`.
-  - `S5QrDetectionService` phụ thuộc vào `IQrDetector`, có thể swap giữa `ZxingQrDetector` và `PyzbarQrDetector`.
+  - `S5QrDetectionService` phụ thuộc vào `IQrDetector`, có thể swap giữa `ZxingQrDetector`, `WechatQrDetector` và `PyzbarQrDetector`.
   - `S7OcrService` phụ thuộc vào `IOcrExtractor`, có thể thay đổi OCR engine.
 
 ### Open/Closed Principle (OCP)
@@ -671,7 +720,7 @@ Mỗi service chỉ đảm nhận một nhiệm vụ duy nhất:
 | S2 | modelPath, inputSize, confidenceThreshold, maxAreaRatio, topNDetections |
 | S3 | forceLandscape, aiOrientationFix, aiConfidenceThreshold, paddleModelPath |
 | S4 | brightnessClipLimit, brightnessTileSize, sharpnessSigma, sharpnessAmount |
-| S5 | tryRotate, tryDownscale |
+| S5 | backend, preprocessing.enabled/mode/targetWidth, zxing.tryRotate/tryDownscale, wechat.modelDir |
 | S6 | aboveQrWidthRatio, aboveQrHeightRatio, belowQrWidthRatio, belowQrHeightRatio, padding |
 | S7 | lang, textDetThresh, textDetBoxThresh, textRecScoreThresh, device |
 | S8 | minFuzzyScore, productsJsonPath, sizesJsonPath, colorsJsonPath |

@@ -48,7 +48,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
         belowQrWidthRatio: float = 0.65,
         belowQrHeightRatio: float = 0.45,
         padding: int = 5,
-        grayscalePreprocessing: bool = False,
+        aboveQrScaleFactor: float = 2.0,
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -62,7 +62,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             belowQrWidthRatio: Width ratio of below-QR region.
             belowQrHeightRatio: Height ratio of below-QR region.
             padding: Padding around extracted regions.
-            grayscalePreprocessing: Convert merged image to grayscale before OCR.
+            aboveQrScaleFactor: Scale factor for above-QR region (default: 2.0).
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -80,7 +80,7 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             belowQrWidthRatio=belowQrWidthRatio,
             belowQrHeightRatio=belowQrHeightRatio,
             padding=padding,
-            grayscalePreprocessing=grayscalePreprocessing
+            aboveQrScaleFactor=aboveQrScaleFactor
         )
         
         self._enabled = enabled
@@ -89,7 +89,8 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
             f"S6ComponentExtractionService initialized "
             f"(aboveQr={aboveQrWidthRatio}x{aboveQrHeightRatio}, "
             f"belowQr={belowQrWidthRatio}x{belowQrHeightRatio}, "
-            f"grayscale={grayscalePreprocessing})"
+            f"scale={aboveQrScaleFactor}x, "
+            f"input=grayscale)"
         )
     
     def extractComponents(
@@ -98,7 +99,16 @@ class S6ComponentExtractionService(IComponentExtractionService, BaseService):
         qrPolygon: List[List[int]],
         frameId: str
     ) -> ComponentExtractionServiceResult:
-        """Extract and merge text components from an image."""
+        """Extract and merge text components from a grayscale image.
+        
+        Args:
+            image: Grayscale image from S4 enhancement (H, W)
+            qrPolygon: QR code polygon coordinates
+            frameId: Frame identifier
+            
+        Returns:
+            ComponentExtractionServiceResult with grayscale merged image
+        """
         startTime = time.time()
         
         # Check if component extraction is enabled

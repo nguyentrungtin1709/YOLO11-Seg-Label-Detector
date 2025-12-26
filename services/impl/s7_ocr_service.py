@@ -120,7 +120,19 @@ class S7OcrService(IOcrService, BaseService):
         image: np.ndarray,
         frameId: str
     ) -> OcrServiceResult:
-        """Extract text from an image."""
+        """Extract text from a grayscale image.
+        
+        Args:
+            image: Grayscale merged image from S6 (H, W)
+            frameId: Frame identifier
+            
+        Returns:
+            OcrServiceResult with text blocks
+            
+        Note:
+            PaddleOCR requires BGR input. Automatic conversion from grayscale
+            to BGR is handled internally by the core PaddleOcrExtractor.
+        """
         startTime = time.time()
         
         # Check if OCR is enabled

@@ -31,10 +31,11 @@ class S4EnhancementService(IEnhancementService, BaseService):
     """
     Step 4: Enhancement Service Implementation.
     
-    Applies brightness enhancement (CLAHE on LAB color space)
-    and sharpness enhancement (Unsharp Masking).
+    Converts BGR to grayscale and applies brightness enhancement (CLAHE)
+    and sharpness enhancement (Unsharp Masking) on grayscale image.
     
     Creates ImageEnhancer internally with provided parameters.
+    Output is grayscale for downstream processing (S5, S6, S7).
     """
     
     SERVICE_NAME = "s4_enhancement"
@@ -93,7 +94,8 @@ class S4EnhancementService(IEnhancementService, BaseService):
         
         self._logger.info(
             f"S4EnhancementService initialized "
-            f"(brightness={brightnessEnabled}, sharpness={sharpnessEnabled})"
+            f"(brightness={brightnessEnabled}, sharpness={sharpnessEnabled}, "
+            f"output=grayscale)"
         )
     
     def enhance(
@@ -101,7 +103,15 @@ class S4EnhancementService(IEnhancementService, BaseService):
         image: np.ndarray,
         frameId: str
     ) -> EnhancementServiceResult:
-        """Enhance an image with brightness and sharpness."""
+        """Enhance an image with brightness and sharpness on grayscale.
+        
+        Args:
+            image: BGR image from S3 preprocessing (H, W, 3)
+            frameId: Frame identifier
+            
+        Returns:
+            EnhancementServiceResult with grayscale enhanced image (H, W)
+        """
         startTime = time.time()
         
         # Check if enhancement is enabled

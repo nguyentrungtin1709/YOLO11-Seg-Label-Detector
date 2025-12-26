@@ -12,6 +12,7 @@ import logging
 from typing import Optional
 
 import numpy as np
+import cv2
 
 from core.interfaces.ocr_extractor_interface import (
     IOcrExtractor, 
@@ -141,8 +142,32 @@ class PaddleOcrExtractor(IOcrExtractor):
         Returns:
             OcrResult with list of text blocks containing text,
             confidence scores, and bounding boxes
+            
+        Note:
+            PaddleOCR requires BGR input. Grayscale images are automatically
+            converted to BGR format.
         """
         self._ensureOcrEngine()
+        
+        # Log input image info for debugging
+        if image is not None and image.size > 0:
+            self._logger.debug(
+                f"OCR input: shape={image.shape}, dtype={image.dtype}, "
+                f"min={image.min()}, max={image.max()}"
+            )
+        
+        # Check if input is grayscale and convert to BGR if needed
+        if image is not None and image.size > 0:
+            if len(image.shape) == 2:
+                # Grayscale 2D array (H, W)
+                self._logger.debug("Converting grayscale (2D) to BGR for OCR")
+                image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+                self._logger.debug(f"After conversion: shape={image.shape}")
+            elif len(image.shape) == 3 and image.shape[2] == 1:
+                # Grayscale with single channel (H, W, 1)
+                self._logger.debug("Converting grayscale (3D single channel) to BGR for OCR")
+                image = cv2.cvtColor(image[:, :, 0], cv2.COLOR_GRAY2BGR)
+                self._logger.debug(f"After conversion: shape={image.shape}")
         
         textBlocks = []
         rawResult = None
@@ -151,6 +176,10 @@ class PaddleOcrExtractor(IOcrExtractor):
             # Run OCR - PaddleOCR 3.x uses predict() method
             rawResult = self._ocrEngine.predict(image)
             
+            self._logger.debug(f"OCR raw result type: {type(rawResult)}")
+            if rawResult:
+                self._logger.debug(f"OCR raw result length: {len(rawResult)}")
+            
             # Parse results based on PaddleOCR 3.x format
             if rawResult:
                 for res in rawResult:
@@ -158,6 +187,10 @@ class PaddleOcrExtractor(IOcrExtractor):
                     recTexts = res.get('rec_texts', [])
                     recScores = res.get('rec_scores', [])
                     dtPolys = res.get('dt_polys', [])
+                    
+                    self._logger.debug(
+                        f"Result keys: {res.keys() if isinstance(res, dict) else 'not a dict'}"
+                    )
                     
                     for i, text in enumerate(recTexts):
                         confidence = recScores[i] if i < len(recScores) else 0.0
@@ -176,7 +209,7 @@ class PaddleOcrExtractor(IOcrExtractor):
                 self._logger.debug("OCR returned no results")
                 
         except Exception as e:
-            self._logger.error(f"Error during OCR extraction: {e}")
+            self._logger.error(f"Error during OCR extraction: {e}", exc_info=True)
         
         self._logger.info(f"OCR extracted {len(textBlocks)} text blocks")
         

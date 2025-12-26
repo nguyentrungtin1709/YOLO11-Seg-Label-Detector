@@ -17,7 +17,7 @@ class QrDetectionResult:
     Result of QR code detection.
     
     Attributes:
-        text: Full QR code content (e.g., "110125-VA-M-000002-2")
+        text: Full QR code content (e.g., "110125-VA-M-000002-2/1")
         polygon: Four corners of QR code [(x,y), ...]
         rect: Bounding rectangle (left, top, width, height)
         confidence: Detection confidence score (0-1)
@@ -26,18 +26,20 @@ class QrDetectionResult:
         orderType: Parsed order type (M, S, ...)
         orderNumber: Parsed order number
         position: Parsed position number from QR
+        revisionCount: Revision count (0 if not present, 1+ if revised)
     """
     text: str
     polygon: List[Tuple[int, int]]
     rect: Tuple[int, int, int, int]
     confidence: float
     
-    # Parsed fields from QR code (format: MMDDYY-FACILITY-TYPE-ORDER-POSITION)
+    # Parsed fields from QR code (format: MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION])
     dateCode: str = ""
     facility: str = ""
     orderType: str = ""
     orderNumber: str = ""
     position: int = 0
+    revisionCount: int = 0
 
 
 class IQrDetector(ABC):

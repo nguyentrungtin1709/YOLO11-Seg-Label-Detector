@@ -61,7 +61,7 @@ The application is organized into four main layers:
   - `core/detector/`: YOLO detectors (ONNX, OpenVINO)
   - `core/preprocessor/`: Geometric transformation, orientation correction
   - `core/enhancer/`: Brightness, sharpness enhancement
-  - `core/qr/`: QR code detection (pyzbar, zxing)
+  - `core/qr/`: QR code detection (ZXing, WeChat, Pyzbar) with preprocessing pipeline
   - `core/ocr/`: OCR extraction (PaddleOCR)
   - `core/processor/`: Fuzzy matching, text processing
   - `core/extractor/`: Label component extraction

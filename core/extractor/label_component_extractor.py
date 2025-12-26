@@ -45,7 +45,7 @@ class LabelComponentExtractor(IComponentExtractor):
         belowQrWidthRatio: float = 0.65,
         belowQrHeightRatio: float = 0.45,
         padding: int = 5,
-        grayscalePreprocessing: bool = False,
+        aboveQrScaleFactor: float = 2.0,
         logger: Optional[logging.Logger] = None
     ):
         """
@@ -57,7 +57,7 @@ class LabelComponentExtractor(IComponentExtractor):
             belowQrWidthRatio: Width of below-QR region as ratio of image width
             belowQrHeightRatio: Height of below-QR region as ratio of image height
             padding: Padding around extracted regions
-            grayscalePreprocessing: Convert merged image to grayscale before returning
+            aboveQrScaleFactor: Scale factor for above-QR region before merging (default: 2.0)
             logger: Logger instance for debug output
         """
         self._aboveQrWidthRatio = aboveQrWidthRatio
@@ -65,7 +65,7 @@ class LabelComponentExtractor(IComponentExtractor):
         self._belowQrWidthRatio = belowQrWidthRatio
         self._belowQrHeightRatio = belowQrHeightRatio
         self._padding = padding
-        self._grayscalePreprocessing = grayscalePreprocessing
+        self._aboveQrScaleFactor = aboveQrScaleFactor
         self._logger = logger or logging.getLogger(__name__)
     
     def extractAndMerge(
@@ -238,14 +238,35 @@ class LabelComponentExtractor(IComponentExtractor):
         """
         Merge above-QR and below-QR regions into a single image.
         
+        The above-QR region is SCALED by aboveQrScaleFactor before merging
+        to improve OCR accuracy for position/quantity text.
+        
         Regions are stacked vertically with above-QR on top.
         Above-QR region is centered horizontally relative to below-QR region.
+        
+        Note: Input is expected to be grayscale from S4 Enhancement.
         """
-        # Convert to same number of channels if needed
+        # Handle grayscale images - convert to BGR for consistent processing
         if len(aboveQrRoi.shape) == 2:
             aboveQrRoi = cv2.cvtColor(aboveQrRoi, cv2.COLOR_GRAY2BGR)
         if len(belowQrRoi.shape) == 2:
             belowQrRoi = cv2.cvtColor(belowQrRoi, cv2.COLOR_GRAY2BGR)
+        
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        # SCALE ABOVE QR REGION (Improve OCR accuracy for small text)
+        # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        if self._aboveQrScaleFactor != 1.0:
+            newWidth = int(aboveQrRoi.shape[1] * self._aboveQrScaleFactor)
+            newHeight = int(aboveQrRoi.shape[0] * self._aboveQrScaleFactor)
+            aboveQrRoi = cv2.resize(
+                aboveQrRoi,
+                (newWidth, newHeight),
+                interpolation=cv2.INTER_CUBIC  # High-quality upscaling
+            )
+            self._logger.debug(
+                f"Scaled above-QR region by {self._aboveQrScaleFactor}x: "
+                f"{newWidth}x{newHeight}"
+            )
         
         # Use max width for canvas
         targetWidth = max(aboveQrRoi.shape[1], belowQrRoi.shape[1])
@@ -279,11 +300,7 @@ class LabelComponentExtractor(IComponentExtractor):
         # Stack vertically
         merged = np.vstack([aboveQrRoi, separator, belowQrRoi])
         
-        # Apply grayscale preprocessing if enabled
-        if self._grayscalePreprocessing:
-            # Convert to grayscale
-            merged_gray = cv2.cvtColor(merged, cv2.COLOR_BGR2GRAY)
-            # Convert back to BGR format (3 channels) for OCR compatibility
-            merged = cv2.cvtColor(merged_gray, cv2.COLOR_GRAY2BGR)
+        # Convert back to grayscale (input was grayscale from S4)
+        mergedGray = cv2.cvtColor(merged, cv2.COLOR_BGR2GRAY)
         
-        return merged
+        return mergedGray

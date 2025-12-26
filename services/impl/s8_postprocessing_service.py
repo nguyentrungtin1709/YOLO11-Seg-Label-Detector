@@ -43,7 +43,7 @@ class S8PostprocessingService(IPostprocessingService, BaseService):
     def __init__(
         self,
         enabled: bool = True,
-        minFuzzyScore: float = 0.80,
+        minFuzzyScore: float = 0.90,
         productsJsonPath: Optional[str] = None,
         sizesJsonPath: Optional[str] = None,
         colorsJsonPath: Optional[str] = None,

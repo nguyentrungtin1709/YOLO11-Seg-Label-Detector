@@ -7,6 +7,81 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.6.0] - 2025-12-27
+
+### Tổng quan
+Phiên bản thêm hỗ trợ **WeChat QRCode backend** cho QR detection với deep learning và super-resolution, cùng với cải tiến hiệu năng và cấu hình preprocessing.
+
+### Added
+- **WeChat QR Backend**: Hỗ trợ OpenCV WeChat QRCode detector
+  - `core/qr/wechat_qr_detector.py`: Implementation IQrDetector sử dụng WeChat deep learning model
+  - `core/qr/qr_detector_factory.py`: Factory pattern để tạo QR detector dựa trên backend
+  - Super-resolution cho QR codes nhỏ hoặc mờ
+  - Model files: `detect.prototxt`, `detect.caffemodel`, `sr.prototxt`, `sr.caffemodel`
+- **QR Preprocessing Pipeline**: Tiền xử lý ảnh trước khi detect QR
+  - `core/qr/qr_image_preprocessor.py`: Scale và denoise ảnh
+  - Chế độ: "minimal" (scale only) hoặc "full" (scale → denoise)
+  - Cấu hình `targetWidth` thay vì `scaleFactor` để dễ kiểm soát
+- **MKL-DNN Support**: Tăng tốc orientation classifier với MKL-DNN
+  - Config: `s3_preprocessing.orientationEnableMkldnn`
+  - Config: `s3_preprocessing.orientationCpuThreads`
+
+### Changed
+- **QR Backend Selection**: Có thể chọn backend qua config `s5_qr_detection.backend`
+  - `"zxing"`: zxing-cpp (nhanh, lightweight)
+  - `"wechat"`: WeChat QRCode (deep learning, chính xác hơn với QR nhỏ/mờ)
+- **QR Preprocessing Config**: Sử dụng `targetWidth` thay vì `scaleFactor`
+  - Ảnh sẽ được resize về chiều rộng cố định, giữ nguyên tỷ lệ
+  - Mặc định: 640 pixels
+- **Above QR Scale Factor**: Thêm config `s6_component_extraction.aboveQrScaleFactor`
+  - Scale vùng above-QR trước khi merge để cải thiện OCR accuracy
+  - Mặc định: 2.0
+- **Position Recovery Separators**: Thêm các ký tự recovery mới
+
+### Technical Details
+- WeChat QR sử dụng 4 model files từ thư mục `models/wechat/`
+- QR preprocessing hỗ trợ 2 modes: minimal (scale) và full (scale + denoise)
+- MKL-DNN được bật mặc định cho orientation classifier
+- Config structure cập nhật với nested `zxing` và `wechat` sections
+
+### Documentation
+- Cập nhật `ML-PIPELINES.md`: Thêm thông tin về WeChat backend và preprocessing
+- Cập nhật `ARCHITECTURE.md`: Cập nhật danh sách QR detectors
+- Cập nhật `config/QR-DETECTION-DOCS.md`: Hướng dẫn cấu hình backends
+
+---
+
+## [1.5.0] - 2025-12-23
+
+### Tổng quan
+Phiên bản cập nhật QR code format để hỗ trợ **revision count** (số lần sửa chữa sản phẩm). Phần `/REVISION` là tùy chọn (optional), backward compatible với format cũ.
+
+### Changed
+- **QR Code Format**: Cập nhật hỗ trợ revision count (optional)
+  - Format cũ: `MMDDYY-FACILITY-TYPE-ORDER-POSITION`
+  - Format mới: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
+  - Ví dụ: 
+    - `110125-VA-M-000002-2` (chưa sửa lần nào)
+    - `110125-VA-M-000002-2/1` (đã sửa 1 lần)
+    - `110125-VA-M-000002-2/2` (đã sửa 2 lần)
+  - Phần `/REVISION` là optional, phần lớn sản phẩm vẫn là format cũ
+  - Backward compatible: Format cũ vẫn hoạt động bình thường
+- **QrDetectionResult**: Thêm field `revisionCount: int = 0`
+- **LabelData**: Thêm field `qrRevisionCount: int = 0`
+- **QR Detectors**: Cập nhật regex pattern và parsing logic
+  - `ZxingQrDetector`: Regex pattern `(?:/(\d+))?$` cho revision optional
+  - `PyzbarQrDetector`: Tương tự cập nhật
+- **Debug Output**: Tất cả debug JSON bây giờ include field `revisionCount`
+- **LabelTextProcessor**: Copy `revisionCount` từ QR result vào label data
+
+### Technical Details
+- Regex pattern mới: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$`
+- Group 6 (optional): Revision count
+- Nếu không có `/REVISION`, `revisionCount` = 0
+- Debug logs hiển thị revision count khi > 0
+
+---
+
 ## [1.4.0] - 2025-12-21
 
 ### Tổng quan
