@@ -1,34 +1,35 @@
 # Label Detector
 
-Ứng dụng desktop phát hiện và phân đoạn nhãn sản phẩm (product labels) trong thời gian thực sử dụng mô hình YOLO11n-seg (Instance Segmentation).
+Ứng dụng desktop phát hiện, phân đoạn nhãn sản phẩm (product labels) và trích xuất thông tin bằng OCR trong thời gian thực. Sử dụng mô hình YOLO11n-seg (Instance Segmentation) để phát hiện nhãn và PaddleOCR để nhận dạng văn bản.
 
 ![Label Detector UI](assets/template.png)
 
 ## Tính năng
 
-- **Camera Management**: Tự động phát hiện và chọn camera, bật/tắt camera
-- **Instance Segmentation**: Phát hiện và phân đoạn nhãn với YOLO11n-seg (ONNX Runtime hoặc OpenVINO Runtime)
+### Cấu hình linh hoạt
+- Tất cả tham số có thể cấu hình qua file JSON
+- Debug mode với auto-save ảnh theo pipeline
+- Dark theme, thân thiện với mắt
+
+### Quản lý Camera
+- Tự động phát hiện và chọn camera
+- Hỗ trợ USB camera và built-in camera
+- Capture và lưu ảnh gốc
+
+### Phát hiện nhãn (Label Detection)
+- **Instance Segmentation** với YOLO11n-seg (ONNX Runtime hoặc OpenVINO Runtime)
 - **Mask Visualization**: Hiển thị segmentation mask với màu sắc và opacity tùy chỉnh
-- **Image Preprocessing**: Crop, rotate và sửa hướng ảnh nhãn tự động
-  - Crop theo minimum area rectangle từ segmentation mask
-  - Force landscape orientation (width >= height)
-  - AI 180° fix sử dụng PaddleOCR (PP-LCNet)
-- **Image Enhancement**: Cải thiện chất lượng ảnh nhãn
-  - Brightness Enhancement (CLAHE) - tăng cường độ sáng ảnh tối
-  - Sharpness Enhancement (Unsharp Mask) - làm sắc nét ảnh mờ
-- **OCR Pipeline**: Trích xuất thông tin từ nhãn sản phẩm
-  - QR Code Detection (ZXing-cpp hoặc WeChat QRCode) - phát hiện và parse QR code
-  - Component Extraction - cắt vùng text dựa trên vị trí QR
-  - Text Extraction (PaddleOCR) - trích xuất text từ vùng đã cắt
-  - Fuzzy Matching - so khớp với database products/sizes/colors
-  - Validation - kiểm tra position từ QR khớp với OCR
-- **Adjustable Threshold**: Điều chỉnh ngưỡng confidence (0.0 - 1.0)
-- **Size Filtering**: Lọc bỏ đối tượng quá lớn theo tỷ lệ diện tích
-- **Top N Selection**: Chỉ hiển thị N đối tượng có confidence cao nhất
-- **Image Capture**: Chụp và lưu ảnh gốc
-- **Debug Mode**: Tự động lưu ảnh có annotation và ảnh đã xử lý khi phát hiện đối tượng
-- **Dark Theme**: Giao diện tối, thân thiện với mắt
-- **Configurable**: Tất cả màu sắc và tham số có thể cấu hình từ file JSON
+- **Smart Filtering**: Lọc theo confidence threshold, kích thước và Top N detection
+
+### Xử lý ảnh (Image Processing)
+- **Preprocessing**: Crop theo mask, xoay về landscape, AI sửa hướng 180°
+- **Enhancement**: Tăng cường độ sáng (CLAHE) và độ nét (Unsharp Mask)
+
+### Trích xuất thông tin (Information Extraction)
+- **QR Code Detection**: Hỗ trợ ZXing-cpp (nhanh) và WeChat QRCode (chính xác)
+- **OCR Pipeline**: Trích xuất text với PaddleOCR
+- **Fuzzy Matching**: So khớp thông minh với database products/sizes/colors
+- **Validation**: Xác thực dữ liệu giữa QR code và OCR
 
 ## Yêu cầu hệ thống
 
@@ -102,74 +103,6 @@ python main.py
 4. **Điều chỉnh threshold**: Thay đổi giá trị "Confidence" nếu cần
 5. **Chụp ảnh**: Nhấn nút "Capture Image" để lưu ảnh gốc
 6. **Debug mode**: Bật toggle "Debug Mode" để tự động lưu ảnh có annotation
-
-## Cấu trúc thư mục
-
-```
-label-detector/
-├── config/
-│   └── application_config.json   # Cấu hình ứng dụng
-├── core/                     # Core layer (interfaces & implementations)
-│   ├── interfaces/           # Abstraction layer (ICameraCapture, IDetector, IImageWriter, IImagePreprocessor, IImageEnhancer, IQrDetector, IComponentExtractor, IOcrExtractor, ITextProcessor)
-│   ├── camera/               # Camera implementation (OpenCVCamera)
-│   ├── detector/             # YOLO detector implementation (YOLODetector, OpenVINODetector)
-│   ├── preprocessor/         # Preprocessing (GeometricTransformer, OrientationCorrector, DocumentPreprocessor)
-│   ├── enhancer/             # Enhancement (BrightnessEnhancer, SharpnessEnhancer, ImageEnhancer)
-│   ├── qr/                   # QR detection (ZxingQrDetector, WechatQrDetector, QrImagePreprocessor)
-│   ├── extractor/            # Component extraction (LabelComponentExtractor)
-│   ├── ocr/                  # OCR extraction (PaddleOcrExtractor)
-│   ├── processor/            # Text processing (FuzzyMatcher, LabelTextProcessor)
-│   └── writer/               # File writer implementation (LocalImageWriter)
-├── data/                     # Reference data for fuzzy matching
-│   ├── colors.json           # Valid colors database (4904 entries)
-│   ├── products.json         # Valid product codes database (2172 entries)
-│   └── sizes.json            # Valid sizes database (138 entries)
-├── services/                 # Service layer (business logic)
-│   ├── interfaces/           # Service interfaces (DIP)
-│   │   ├── camera_service_interface.py
-│   │   ├── detection_service_interface.py
-│   │   ├── preprocessing_service_interface.py
-│   │   ├── enhancement_service_interface.py
-│   │   ├── qr_detection_service_interface.py
-│   │   ├── component_extraction_service_interface.py
-│   │   ├── ocr_service_interface.py
-│   │   └── postprocessing_service_interface.py
-│   └── impl/                 # Service implementations
-│       ├── s1_camera_service.py
-│       ├── s2_detection_service.py
-│       ├── s3_preprocessing_service.py
-│       ├── s4_enhancement_service.py
-│       ├── s5_qr_detection_service.py
-│       ├── s6_component_extraction_service.py
-│       ├── s7_ocr_service.py
-│       └── s8_postprocessing_service.py
-├── ui/                       # UI layer (PySide6 widgets)
-│   ├── main_window.py
-│   ├── pipeline_orchestrator.py  # Pipeline coordination
-│   └── widgets/
-│       ├── camera_widget.py  # Video display with overlays
-│       ├── config_panel.py   # Control panel
-│       ├── preprocessed_image_widget.py  # Preprocessed image display
-│       ├── ocr_result_widget.py  # OCR results display
-│       └── toggle_switch.py  # Custom toggle widget
-├── models/
-│   ├── yolo11n-seg-version-x-x-x.onnx  # YOLO11n-seg model
-│   └── paddle/
-│       └── PP-LCNet_x1_0_doc_ori/      # PaddleOCR orientation model
-├── output/
-│   ├── captures/             # Ảnh chụp thủ công (raw)
-│   └── debug/                # Ảnh debug tự động
-│       ├── display/          # Ảnh có annotation (bbox + mask)
-│       ├── original/         # Ảnh gốc (PNG)
-│       ├── bbox/             # Crop theo bounding box
-│       ├── mask/             # Crop theo mask (PNG với alpha)
-│       ├── cropped/          # Ảnh sau crop, rotate, orientation fix
-│       ├── preprocessing/    # Ảnh sau enhancement (kết quả cuối cùng)
-│       └── txt/              # Tọa độ contour của mask
-├── main.py                   # Entry point với Dependency Injection
-├── requirements.txt          # Dependencies
-└── README.md
-```
 
 ## Cấu hình
 
@@ -321,49 +254,6 @@ Cấu hình được tổ chức theo 8 bước trong pipeline:
 | `s2_detection.visualization.textColor` | Màu text label (BGR) | `[0, 0, 0]` |
 | `s2_detection.visualization.lineThickness` | Độ dày đường viền | `2` |
 | `s2_detection.visualization.fontSize` | Kích thước font chữ | `0.8` |
-
-## Debug Mode
-
-Khi bật Debug Mode (`debug.enabled: true`), ứng dụng tự động lưu ảnh debug theo từng bước trong pipeline:
-
-### Debug Directory Structure
-
-```
-output/debug/
-├── s2_detection/
-│   ├── annotated/           # Ảnh có annotation (bbox + mask + label)
-│   ├── cropped/             # Ảnh crop theo mask (PNG với alpha channel)
-│   └── masks/               # Tọa độ contour của mask (TXT)
-├── s3_preprocessing/
-│   ├── rotated/             # Ảnh sau khi rotate về landscape
-│   ├── orientation/         # Ảnh sau AI orientation fix
-│   └── final/               # Ảnh sau preprocessing hoàn chỉnh
-├── s4_enhancement/
-│   ├── brightness/          # Ảnh sau CLAHE
-│   ├── sharpness/           # Ảnh sau sharpen
-│   └── final/               # Ảnh sau enhancement hoàn chỉnh
-├── s5_qr_detection/
-│   ├── inputs/              # Ảnh input sau preprocessing
-│   └── qr/                  # Kết quả QR detection (JSON)
-├── s6_component_extraction/
-│   ├── above_qr/            # Vùng trên QR
-│   ├── below_qr/            # Vùng dưới QR
-│   └── merged/              # Vùng merged đầy đủ
-├── s7_ocr/
-│   └── results/             # Kết quả OCR (JSON)
-└── s8_postprocessing/
-    └── results/             # Kết quả fuzzy matching (JSON)
-```
-
-### Debug Save Cooldown
-
-Để tránh lưu quá nhiều ảnh, debug mode có cooldown time (`debug.saveCooldown: 2.0` giây) giữa các lần lưu.
-
-## Performance Logging
-
-Khi bật `debug.performanceLogging.enabled`, ứng dụng hiển thị:
-- FPS thời gian thực trên status bar
-- Thời gian xử lý từng bước: S1 (Camera) → S2 (Detection) → S3 (Preprocessing) → S4 (Enhancement) → S5 (QR) → S6 (Extraction) → S7 (OCR) → S8 (Postprocessing)
 
 ## Tài liệu bổ sung
 
