@@ -369,7 +369,6 @@ Khi bật `debug.performanceLogging.enabled`, ứng dụng hiển thị:
 
 - [QR-DETECTION-DOCS.md](config/QR-DETECTION-DOCS.md) - Hướng dẫn cấu hình QR Detection backends
 - [YOLOv11-DOCS.md](config/YOLOv11-DOCS.md) - Hướng dẫn cấu hình YOLO Detection backends
-- [SPECIFICATION.md](SPECIFICATION.md) - Đặc tả hệ thống
 - [CHANGELOG.md](CHANGELOG.md) - Lịch sử thay đổi
 - [VERSIONS.md](metadata/VERSIONS.md) - Thông tin phiên bản các tài nguyên ML
 

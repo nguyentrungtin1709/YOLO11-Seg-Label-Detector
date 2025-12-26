@@ -267,29 +267,48 @@ Tăng cường chất lượng ảnh để cải thiện độ chính xác OCR.
 
 Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàng.
 
+### Backend Selection
+
+Hệ thống hỗ trợ 2 backend QR detection:
+
+| Backend | Thư viện | Ưu điểm | Nhược điểm |
+|---------|----------|---------|------------|
+| **zxing** | zxing-cpp | Tốc độ nhanh, lightweight | Độ chính xác thấp hơn với QR nhỏ/mờ |
+| **wechat** | OpenCV WeChat QRCode | Deep learning, super-resolution, độ chính xác cao | Cần model files, chậm hơn |
+
+Backend được chọn qua config: `s5_qr_detection.backend` ("zxing" hoặc "wechat")
+
 ### Xử lý
 
-1. **Tiền xử lý ảnh**
-   - Kiểm tra số kênh màu của ảnh.
+1. **Tiền xử lý ảnh (Preprocessing)**
+   - Nếu `preprocessing.enabled = true`:
+     - **Minimal mode**: Chỉ scale ảnh về `targetWidth` (mặc định: 640)
+     - **Full mode**: Scale → Denoise
    - Chuyển ảnh từ BGR sang Grayscale với `cv2.cvtColor()` nếu cần.
-   - Ảnh grayscale giúp tăng tốc độ và độ chính xác phát hiện.
+   - Preprocessing giúp tăng tốc độ và độ chính xác phát hiện.
 
 2. **Phát hiện mã QR**
-   - Sử dụng `ZxingQrDetector` với thư viện zxing-cpp:
-     - Gọi `read_barcodes()` với format `QRCode`.
-     - `try_rotate`: Thử xoay barcode (90/270 độ) nếu cấu hình.
-     - `try_downscale`: Thử giảm kích thước để phát hiện QR nhỏ.
+   
+   **ZXing Backend (zxing-cpp):**
+   - Gọi `read_barcodes()` với format `QRCode`.
+   - `try_rotate`: Thử xoay barcode (90/270 độ) nếu cấu hình.
+   - `try_downscale`: Thử giảm kích thước để phát hiện QR nhỏ.
    - Duyệt qua danh sách barcode phát hiện được.
    - Chỉ chấp nhận barcode có `valid = True`.
+   
+   **WeChat Backend (OpenCV WeChat QRCode):**
+   - Sử dụng deep learning model với super-resolution.
+   - Model files: `detect.prototxt`, `detect.caffemodel`, `sr.prototxt`, `sr.caffemodel`.
+   - Đường dẫn model: `s5_qr_detection.wechat.modelDir` (mặc định: `models/wechat`)
+   - Tự động resize ảnh nhỏ về kích thước phù hợp.
 
 3. **Trích xuất vị trí QR**
-   - Lấy 4 góc của mã QR từ `barcode.position`:
-     - `top_left`, `top_right`, `bottom_right`, `bottom_left`.
+   - Lấy 4 góc của mã QR từ detection result.
    - Chuyển thành polygon list: `[(x1, y1), (x2, y2), (x3, y3), (x4, y4)]`.
    - Tính bounding box: `(left, top, width, height)`.
 
 4. **Giải mã và parse nội dung**
-   - Lấy text từ `barcode.text`.
+   - Lấy text từ QR code.
    - Parse theo regex pattern: `^(\d{6})-([A-Z]{2})-([A-Z])-(\d+)-(\d+)(?:/(\d+))?$`
    - Format: `MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]`
    - Ví dụ: 
@@ -302,6 +321,18 @@ Phát hiện và giải mã mã QR trên nhãn để lấy thông tin đơn hàn
      - `orderNumber`: Chuỗi số - Số đơn hàng
      - `position`: Số nguyên - Vị trí sản phẩm trong đơn
      - `revisionCount`: Số nguyên - Số lần sửa chữa (0 nếu không có)
+
+### Cấu hình
+
+| Tham số | Mặc định | Mô tả |
+|---------|----------|-------|
+| `backend` | "wechat" | Backend QR detection: "zxing" hoặc "wechat" |
+| `preprocessing.enabled` | true | Bật/tắt tiền xử lý ảnh |
+| `preprocessing.mode` | "minimal" | Chế độ tiền xử lý: "minimal" hoặc "full" |
+| `preprocessing.targetWidth` | 640 | Chiều rộng ảnh sau scale |
+| `zxing.tryRotate` | true | Thử xoay 90/270 độ (ZXing) |
+| `zxing.tryDownscale` | true | Thử giảm kích thước (ZXing) |
+| `wechat.modelDir` | "models/wechat" | Thư mục model WeChat QR |
 
 ### Đầu ra
 
@@ -666,7 +697,7 @@ Mỗi service chỉ đảm nhận một nhiệm vụ duy nhất:
 - Các service phụ thuộc vào abstraction (interface) thay vì implementation cụ thể.
 - Ví dụ:
   - `S2DetectionService` phụ thuộc vào `IDetector`, không phụ thuộc trực tiếp vào `YOLODetector`.
-  - `S5QrDetectionService` phụ thuộc vào `IQrDetector`, có thể swap giữa `ZxingQrDetector` và `PyzbarQrDetector`.
+  - `S5QrDetectionService` phụ thuộc vào `IQrDetector`, có thể swap giữa `ZxingQrDetector`, `WechatQrDetector` và `PyzbarQrDetector`.
   - `S7OcrService` phụ thuộc vào `IOcrExtractor`, có thể thay đổi OCR engine.
 
 ### Open/Closed Principle (OCP)
@@ -689,7 +720,7 @@ Mỗi service chỉ đảm nhận một nhiệm vụ duy nhất:
 | S2 | modelPath, inputSize, confidenceThreshold, maxAreaRatio, topNDetections |
 | S3 | forceLandscape, aiOrientationFix, aiConfidenceThreshold, paddleModelPath |
 | S4 | brightnessClipLimit, brightnessTileSize, sharpnessSigma, sharpnessAmount |
-| S5 | tryRotate, tryDownscale |
+| S5 | backend, preprocessing.enabled/mode/targetWidth, zxing.tryRotate/tryDownscale, wechat.modelDir |
 | S6 | aboveQrWidthRatio, aboveQrHeightRatio, belowQrWidthRatio, belowQrHeightRatio, padding |
 | S7 | lang, textDetThresh, textDetBoxThresh, textRecScoreThresh, device |
 | S8 | minFuzzyScore, productsJsonPath, sizesJsonPath, colorsJsonPath |
