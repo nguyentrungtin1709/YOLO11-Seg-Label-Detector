@@ -47,6 +47,8 @@ class S3PreprocessingService(IPreprocessingService, BaseService):
         aiOrientationFix: bool = True,
         aiConfidenceThreshold: float = 0.6,
         paddleModelPath: Optional[str] = None,
+        orientationCpuThreads: int = 4,
+        orientationEnableMkldnn: bool = True,
         debugBasePath: str = "output/debug",
         debugEnabled: bool = False
     ):
@@ -59,6 +61,8 @@ class S3PreprocessingService(IPreprocessingService, BaseService):
             aiOrientationFix: Use AI for 180° orientation fix.
             aiConfidenceThreshold: Confidence threshold for AI orientation.
             paddleModelPath: Path to Paddle orientation model.
+            orientationCpuThreads: Number of CPU threads for orientation classifier.
+            orientationEnableMkldnn: Enable MKL-DNN for orientation classifier.
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -72,7 +76,9 @@ class S3PreprocessingService(IPreprocessingService, BaseService):
         # Create core preprocessor implementation
         orientationCorrector = OrientationCorrector(
             aiConfidenceThreshold=aiConfidenceThreshold,
-            modelPath=paddleModelPath
+            modelPath=paddleModelPath,
+            cpuThreads=orientationCpuThreads,
+            enableMkldnn=orientationEnableMkldnn
         )
         
         self._preprocessor: IImagePreprocessor = DocumentPreprocessor(

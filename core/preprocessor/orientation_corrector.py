@@ -45,7 +45,9 @@ class OrientationCorrector:
     def __init__(
         self, 
         aiConfidenceThreshold: float = 0.6,
-        modelPath: Optional[str] = None
+        modelPath: Optional[str] = None,
+        cpuThreads: int = 4,
+        enableMkldnn: bool = True
     ):
         """
         Initialize OrientationCorrector.
@@ -53,26 +55,34 @@ class OrientationCorrector:
         Args:
             aiConfidenceThreshold: Minimum confidence score to apply AI rotation fix.
             modelPath: Path to local model directory. If None, uses default download.
+            cpuThreads: Number of CPU threads for orientation classification (default: 4).
+            enableMkldnn: Enable MKL-DNN acceleration (default: True).
         """
         self._aiConfidenceThreshold = aiConfidenceThreshold
         self._angleClassifier = None
         self._aiAvailable = False
+        self._cpuThreads = cpuThreads
+        self._enableMkldnn = enableMkldnn
         
         if PADDLE_AVAILABLE:
             try:
-                # Initialize the orientation classifier
+                # Initialize the orientation classifier with CPU optimization
                 if modelPath and os.path.exists(modelPath):
                     # Load from local model directory
                     self._angleClassifier = DocImgOrientationClassification(
-                        model_dir=modelPath
+                        model_dir=modelPath,
+                        cpu_threads=cpuThreads,
+                        enable_mkldnn=enableMkldnn
                     )
-                    logger.info(f"PaddleOCR classifier loaded from local: {modelPath}")
+                    logger.info(f"PaddleOCR classifier loaded from local: {modelPath} (threads={cpuThreads}, mkldnn={enableMkldnn})")
                 else:
                     # Fallback to downloading model
                     self._angleClassifier = DocImgOrientationClassification(
-                        model_name="PP-LCNet_x1_0_doc_ori"
+                        model_name="PP-LCNet_x1_0_doc_ori",
+                        cpu_threads=cpuThreads,
+                        enable_mkldnn=enableMkldnn
                     )
-                    logger.info("PaddleOCR classifier loaded from cache/download")
+                    logger.info(f"PaddleOCR classifier loaded from cache/download (threads={cpuThreads}, mkldnn={enableMkldnn})")
                 
                 self._aiAvailable = True
             except Exception as e:

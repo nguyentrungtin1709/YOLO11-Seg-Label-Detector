@@ -107,6 +107,7 @@ class PipelineOrchestrator:
             confidenceThreshold=self._configService.getConfidenceThreshold(),
             maxAreaRatio=self._configService.getMaxAreaRatio(),
             topNDetections=self._configService.getTopNDetections(),
+            openvinoConfig=self._configService.getOpenvinoConfig(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )
@@ -121,6 +122,8 @@ class PipelineOrchestrator:
             aiOrientationFix=self._configService.isAiOrientationFix(),
             aiConfidenceThreshold=self._configService.getAiConfidenceThreshold(),
             paddleModelPath=self._configService.getPaddleModelPath(),
+            orientationCpuThreads=self._configService.getOrientationCpuThreads(),
+            orientationEnableMkldnn=self._configService.getOrientationEnableMkldnn(),
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )
@@ -147,8 +150,17 @@ class PipelineOrchestrator:
         # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         self._s5QrDetectionService = S5QrDetectionService(
             enabled=self._configService.isQrDetectionEnabled(),
-            tryRotate=self._configService.isQrTryRotate(),
-            tryDownscale=self._configService.isQrTryDownscale(),
+            backend=self._configService.getQrBackend(),
+            # ZXing params (prefixed with 'zxing')
+            zxingTryRotate=self._configService.getQrZxingTryRotate(),
+            zxingTryDownscale=self._configService.getQrZxingTryDownscale(),
+            # WeChat params (prefixed with 'wechat')
+            wechatModelDir=self._configService.getQrWechatModelDir(),
+            # Preprocessing params (prefixed with 'preprocessing')
+            preprocessingEnabled=self._configService.isQrPreprocessingEnabled(),
+            preprocessingMode=self._configService.getQrPreprocessingMode(),
+            preprocessingTargetWidth=self._configService.getQrPreprocessingTargetWidth(),
+            # Debug settings
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled
         )
