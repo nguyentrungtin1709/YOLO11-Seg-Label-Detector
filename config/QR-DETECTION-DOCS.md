@@ -4,9 +4,32 @@
 
 This document explains how to configure the QR code detector to switch between two detection backends: ZXing-cpp and OpenCV WeChat QRCode. It also covers the optional preprocessing pipeline.
 
+## QR Code Format
+
+The system expects QR codes in the following format:
+
+```
+MMDDYY-FACILITY-TYPE-ORDER-POSITION[/REVISION]
+```
+
+**Format Details:**
+- `MMDDYY`: Date code (6 digits)
+- `FACILITY`: Facility code (2 uppercase letters)
+- `TYPE`: Order type (1 uppercase letter)
+- `ORDER`: Order number (numeric, variable length)
+- `POSITION`: Position number (numeric, variable length)
+- `/REVISION`: Optional revision count (numeric)
+
+**Examples:**
+- `110125-VA-M-000002-2` (no revision)
+- `110125-VA-M-000002-2/1` (revised once)
+- `110125-VA-M-000002-2/2` (revised twice)
+
+The detection system automatically parses this format and validates the structure using regex pattern matching.
+
 ## Backend Options
 
-### ZXing-cpp (Default)
+### ZXing-cpp
 - **Library**: `zxing-cpp` (C++ library with Python bindings)
 - **Type**: Traditional image processing
 - **Speed**: Very fast (~5-15ms per detection)
@@ -16,11 +39,11 @@ This document explains how to configure the QR code detector to switch between t
 
 ### OpenCV WeChat QRCode
 - **Library**: OpenCV's `wechat_qrcode` module
-- **Type**: Deep learning based (CNN)
+- **Type**: Deep learning based (CNN with super-resolution)
 - **Speed**: Moderate (~20-50ms per detection)
 - **Accuracy**: Better for difficult/damaged QR codes
 - **Dependencies**: OpenCV with contrib modules + model files
-- **Use case**: Challenging conditions, low quality images
+- **Use case**: Challenging conditions, low quality images, small QR codes
 
 ## Configuration File
 
@@ -81,6 +104,12 @@ Edit the file: `config/application_config.json`
 
 The preprocessing pipeline improves detection rate on difficult images. It runs **before** QR detection and applies image processing techniques.
 
+**Important Notes:**
+- Input from S4 Enhancement Service is already grayscale with CLAHE brightness enhancement applied
+- Preprocessing here focuses on scaling and denoising only
+- Scale factor is computed dynamically based on input image width and target width
+- QR coordinates detected on scaled images are automatically scaled back to original size for S6 Component Extraction
+
 ### Preprocessing Modes
 
 #### Disabled (Default)
@@ -89,38 +118,36 @@ The preprocessing pipeline improves detection rate on difficult images. It runs 
     "enabled": false
 }
 ```
-No preprocessing - uses image directly from S4 Enhancement.
+No preprocessing - uses image directly from S4 Enhancement (grayscale with CLAHE).
 
 #### Minimal Mode
 ```json
 "preprocessing": {
     "enabled": true,
     "mode": "minimal",
-    "scaleFactor": 1.5
+    "targetWidth": 640
 }
 ```
 **Pipeline**: Scale only (fast)
 
-- Scales image by `scaleFactor` (default 1.5x)
-- Useful for small QR codes
+- Scales image to target width (maintains aspect ratio)
+- Scale factor computed dynamically: `targetWidth / originalWidth`
+- Useful for small QR codes without adding extra processing overhead
 
 #### Full Mode
 ```json
 "preprocessing": {
     "enabled": true,
     "mode": "full",
-    "scaleFactor": 1.5
+    "targetWidth": 640
 }
 ```
-**Pipeline**: Scale → Denoise → Binary → Morph → Invert
+**Pipeline**: Scale → Denoise
 
 | Step | Operation | Purpose |
 |------|-----------|---------|
-| 1. Scale | Resize by factor | Enlarge small QR codes |
+| 1. Scale | Resize to target width | Enlarge small QR codes for better detection |
 | 2. Denoise | Median blur (3x3) | Remove salt-and-pepper noise |
-| 3. Binary | Adaptive threshold | Convert to black/white |
-| 4. Morph | Morphological closing | Fill small holes |
-| 5. Invert | Bitwise NOT | Handle white-on-black QR |
 
 ### Preprocessing Parameters
 
@@ -128,7 +155,7 @@ No preprocessing - uses image directly from S4 Enhancement.
 |-----------|------|---------|-------------|
 | `enabled` | Boolean | `false` | Enable/disable preprocessing |
 | `mode` | String | `"full"` | Mode: `"minimal"` or `"full"` |
-| `scaleFactor` | Float | `1.5` | Scale factor for image resize |
+| `targetWidth` | Integer | `640` | Target width for scaling (pixels). Scale factor computed dynamically as `targetWidth / originalWidth` |
 
 ## Requirements
 
@@ -166,10 +193,10 @@ models/wechat/
 |--------|-----------|---------------|
 | Average detection time | 5-15 ms | 20-50 ms |
 | First detection (cold) | 10-20 ms | 100-200 ms |
-| Standard QR accuracy | ✅ Excellent | ✅ Excellent |
-| Damaged QR accuracy | ⚠️ Good | ✅ Better |
-| Low light accuracy | ⚠️ Good | ✅ Better |
-| Small QR accuracy | ⚠️ Good | ✅ Better |
+| Standard QR accuracy | Excellent | Excellent |
+| Damaged QR accuracy | Good | Better |
+| Low light accuracy | Good | Better |
+| Small QR accuracy | Good | Better |
 | Memory usage | Low | Higher |
 | Model files required | No | Yes (4 files) |
 
@@ -206,7 +233,7 @@ Best for difficult images, damaged/small QR codes:
         "preprocessing": {
             "enabled": true,
             "mode": "full",
-            "scaleFactor": 1.5
+            "targetWidth": 640
         }
     }
 }
@@ -226,7 +253,7 @@ Good balance between speed and accuracy:
         "preprocessing": {
             "enabled": true,
             "mode": "minimal",
-            "scaleFactor": 1.5
+            "targetWidth": 640
         }
     }
 }
@@ -252,20 +279,17 @@ output/debug/s5_qr_detection/
 ```json
 {
     "frameId": "frame_001",
-    "text": "241023-V-BULK-123456-001-R0",
-    "polygon": [[x1,y1], [x2,y2], [x3,y3], [x4,y4]],
-    "rect": [x, y, w, h],
+    "text": "110125-VA-M-000002-2",
+    "polygon": [[x1, y1], [x2, y2], [x3, y3], [x4, y4]],
+    "rect": [x, y, width, height],
     "confidence": 1.0,
-    "backend": "zxing",
-    "preprocessingEnabled": true,
-    "preprocessingMode": "full",
     "parsed": {
-        "dateCode": "241023",
-        "facility": "V",
-        "orderType": "BULK",
-        "orderNumber": "123456",
-        "position": "001",
-        "revisionCount": "R0"
+        "dateCode": "110125",
+        "facility": "VA",
+        "orderType": "M",
+        "orderNumber": "000002",
+        "position": "2",
+        "revisionCount": null
     }
 }
 ```
@@ -288,13 +312,14 @@ Error: Could not load WeChat QR model from models/wechat
 ### No QR detected
 1. Check if QR is visible and not too small
 2. Try enabling preprocessing with `"mode": "full"`
-3. Try switching to WeChat backend
-4. Enable debug to inspect preprocessed images
+3. Increase `targetWidth` to 800 or 1024 for very small QR codes
+4. Try switching to WeChat backend (better for difficult conditions)
+5. Enable debug to inspect preprocessed images
 
 ### Slow detection
-- Switch from WeChat to ZXing backend
+- Switch from WeChat to ZXing backend (3-5x faster)
 - Disable preprocessing or use `"mode": "minimal"`
-- Reduce `scaleFactor` if using preprocessing
+- Reduce `targetWidth` if using preprocessing (e.g., 480 instead of 640)
 
 ## Best Practices
 
@@ -304,18 +329,22 @@ Error: Could not load WeChat QR model from models/wechat
    - Poor quality → WeChat with preprocessing (more robust)
 3. **Testing**: Enable debug to inspect preprocessing results
 4. **Optimization**: Start with preprocessing disabled, enable only if needed
+5. **Small QR codes**: Use preprocessing with higher `targetWidth` (800 or 1024)
 
 ## Pipeline Integration
 
 QR detection is Step 5 in the processing pipeline:
 
 ```
-S4 Enhancement (Grayscale)
+S4 Enhancement (Grayscale + CLAHE)
     ↓
 S5 QR Detection
     ├── Preprocessing (optional)
-    │   └── Scale → Denoise → Binary → Morph → Invert
+    │   ├── Minimal: Scale
+    │   └── Full: Scale → Denoise
     └── Detection (ZXing or WeChat)
+        ↓
+        Coordinates scaled back to original size
     ↓
 S6 Component Extraction
 ```
