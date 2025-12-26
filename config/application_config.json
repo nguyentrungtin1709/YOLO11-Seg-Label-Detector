@@ -162,7 +162,7 @@
         "cpuThreads": 2,
         
         "textDetLimitType": "max",
-        "textDetLimitSideLen": 960,
+        "textDetLimitSideLen": 640,
         "textDetThresh": 0.15,
         "textDetBoxThresh": 0.15,
         "textDetUnclipRatio": 2.0,
