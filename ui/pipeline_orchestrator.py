@@ -159,7 +159,7 @@ class PipelineOrchestrator:
             # Preprocessing params (prefixed with 'preprocessing')
             preprocessingEnabled=self._configService.isQrPreprocessingEnabled(),
             preprocessingMode=self._configService.getQrPreprocessingMode(),
-            preprocessingScaleFactor=self._configService.getQrPreprocessingScaleFactor(),
+            preprocessingTargetWidth=self._configService.getQrPreprocessingTargetWidth(),
             # Debug settings
             debugBasePath=debugBasePath,
             debugEnabled=debugEnabled

@@ -128,11 +128,11 @@
             "enabled": true,
             "_comment_enabled": "Enable/disable preprocessing. When enabled, applies pipeline based on mode.",
             
-            "mode": "full",
-            "_comment_mode": "Preprocessing mode: 'minimal' (scale only) or 'full' (scale → denoise → binary → morph → invert)",
+            "mode": "minimal",
+            "_comment_mode": "Preprocessing mode: 'minimal' (scale only) or 'full' (scale → denoise)",
             
-            "scaleFactor": 1.5,
-            "_comment_scaleFactor": "Scale image by this factor (used in both modes)"
+            "targetWidth": 640,
+            "_comment_targetWidth": "Target width for scaling. Image will be resized to this width, maintaining aspect ratio. Scale factor is computed dynamically."
         }
     },
     

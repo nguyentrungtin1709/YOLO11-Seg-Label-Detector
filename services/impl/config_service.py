@@ -402,9 +402,17 @@ class ConfigService(IConfigService):
         """
         return self.get("s5_qr_detection.preprocessing.mode", "full")
     
-    def getQrPreprocessingScaleFactor(self) -> float:
-        """Get preprocessing scale factor."""
-        return self.get("s5_qr_detection.preprocessing.scaleFactor", 1.5)
+    def getQrPreprocessingTargetWidth(self) -> int:
+        """
+        Get preprocessing target width.
+        
+        Image will be resized to this width before QR detection.
+        Scale factor is computed dynamically based on input image width.
+        
+        Returns:
+            int: Target width in pixels (default: 480)
+        """
+        return self.get("s5_qr_detection.preprocessing.targetWidth", 480)
 
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # S6 Component Extraction Settings

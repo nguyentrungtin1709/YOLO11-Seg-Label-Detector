@@ -40,7 +40,7 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
     
     Preprocessing modes:
     - "minimal": Scale only (fast)
-    - "full": Scale → Denoise → Binary → Morph → Invert (thorough)
+    - "full": Scale → Denoise (thorough)
     """
     
     SERVICE_NAME = "s5_qr_detection"
@@ -63,7 +63,7 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
         # Preprocessing params (prefixed with 'preprocessing')
         preprocessingEnabled: bool = False,
         preprocessingMode: str = "full",
-        preprocessingScaleFactor: float = 1.5,
+        preprocessingTargetWidth: int = 480,
         
         # Debug settings
         debugBasePath: str = "output/debug",
@@ -80,7 +80,7 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
             wechatModelDir: (WeChat) Directory containing model files.
             preprocessingEnabled: Enable image preprocessing before detection.
             preprocessingMode: Preprocessing mode ("minimal" or "full").
-            preprocessingScaleFactor: Scale factor for preprocessing.
+            preprocessingTargetWidth: Target width for preprocessing (default: 480).
             debugBasePath: Base path for debug output.
             debugEnabled: Whether to save debug output.
         """
@@ -106,7 +106,7 @@ class S5QrDetectionService(IQrDetectionService, BaseService):
             self._preprocessor = QrImagePreprocessor(
                 enabled=preprocessingEnabled,
                 mode=preprocessingMode,
-                scaleFactor=preprocessingScaleFactor
+                targetWidth=preprocessingTargetWidth
             )
         
         self._enabled = enabled
