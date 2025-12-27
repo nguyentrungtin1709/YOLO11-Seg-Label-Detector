@@ -16,7 +16,7 @@ import numpy as np
 import cv2
 
 try:
-    from openvino.runtime import Core, Model, CompiledModel, InferRequest
+    from openvino import Core, Model, CompiledModel, InferRequest
     import openvino.properties as props
     import openvino.properties.hint as hints
 except ImportError:

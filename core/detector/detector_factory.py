@@ -259,7 +259,7 @@ def isBackendAvailable(backend: str) -> bool:
     
     elif backend == "openvino":
         try:
-            from openvino.runtime import Core
+            from openvino import Core
             return True
         except ImportError:
             return False
