@@ -1,0 +1,31 @@
+======================================================================
+YOLOv11 Segmentation Model Evaluation Report
+Model: yolo11n-seg-version-1-0-0
+Date: 2025-12-27 15:43:18
+======================================================================
+
+1. MODEL CONFIGURATIONS
+------------------------------
+PyTorch:       Original FP32
+OpenVINO FP16: Half-precision floating point
+OpenVINO INT8: 8-bit Integer Quantization (Calibrated on /content/Label-Segmentation-4/data.yaml)
+
+2. METRICS COMPARISON (TEST DATASET)
+------------------------------
+Metric               PyTorch      FP16         INT8         Diff(INT8-PT)  
+---------------------------------------------------------------------------
+Box_mAP50-95         0.9641       0.9583       0.9517       -0.0124        
+Box_mAP50            0.9918       0.9886       0.9851       -0.0067        
+Box_mAP75            0.9883       0.9761       0.9736       -0.0147        
+Box_Precision        0.9628       1.0000       0.9980       +0.0352        
+Box_Recall           0.9703       0.9374       0.9375       -0.0328        
+Mask_mAP50-95        0.9689       0.9605       0.9548       -0.0142        
+Mask_mAP50           0.9918       0.9886       0.9851       -0.0067        
+Mask_mAP75           0.9918       0.9853       0.9826       -0.0092        
+Mask_Precision       0.9628       1.0000       0.9980       +0.0352        
+Mask_Recall          0.9703       0.9374       0.9375       -0.0328        
+
+3. DEGRADATION ANALYSIS (INT8 vs PyTorch)
+------------------------------
+Box mAP50-95 Change:  -1.28%
+Mask mAP50-95 Change: -1.46%
